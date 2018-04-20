@@ -1,0 +1,97 @@
+openapi: 3.0.0
+
+info:
+  title: Nomics API
+  version: 1.0.0
+  description: >
+    Welcome to the Nomics API. Early access is currently underway. If you're interested in
+    our API please [contact us](https://p.nomics.com/contact/).
+
+servers:
+  - url: https://api.nomics.com/v1
+    description: API Server
+
+paths:
+  /markets:
+    get:
+      summary: Markets
+      description: >
+        The markets endpoint returns information on the exchanges and markets that Nomics supports,
+        in addition to the Nomics currency identifiers for the base and quote currency.
+      responses:
+        '200':
+          description: A list of markets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Market'
+            text/csv:
+              schema:
+                type: string
+              example: "bitfinex,avtbtc,AVT,BTC"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /prices:
+    get:
+      summary: Prices
+      description: >
+        The prices endpoint returns current prices for all currencies.
+      responses:
+        '200':
+          description: A list of currencies with their price
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Price'
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: >
+        You can use HTTP basic authentication to access the Nomics API.
+        Set the `user` to your API Key, and leave the `password` blank.
+    apiKeyAuth:
+      type: apiKey
+      in: query
+      name: key
+      description: >
+        You can include your API Key as the parameter `key` in any request.
+  schemas:
+    Market:
+      type: object
+      properties:
+        exchange:
+          type: string
+        market:
+          type: string
+        base:
+          type: string
+        quote:
+          type: string
+      example:
+        exchange: bitfinex
+        market: avtbtc
+        base: AVT
+        quote: BTC
+    Price:
+      type: object
+      properties:
+        currency:
+          type: string
+        price:
+          type: string
+  responses:
+    UnauthorizedError:
+      description: Authentication information is missing or invalid
+
+security:
+  - basicAuth: []
+  - apiKeyAuth: []
