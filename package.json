@@ -1,0 +1,13 @@
+{
+  "name": "nomics-api-docs",
+  "version": "1.0.0",
+  "description": "Nomics API Documentation",
+  "scripts": {
+    "bundle": "redoc-cli bundle spec.yaml",
+    "serve": "redoc-cli serve spec.yaml --port=$PORT --ssr",
+    "watch": "redoc-cli serve spec.yaml --watch"
+  },
+  "devDependencies": {
+    "redoc-cli": "^0.3.5"
+  }
+}
