@@ -74,6 +74,7 @@ paths:
   /markets:
     get:
       summary: Markets
+      operationId: getMarkets
       description: |
         The markets endpoint returns information on the exchanges and markets that Nomics supports,
         in addition to the Nomics currency identifiers for the base and quote currency.
@@ -95,6 +96,7 @@ paths:
   /prices:
     get:
       summary: Prices
+      operationId: getPrices
       description: |
         The prices endpoint returns current prices for all currencies. Prices are updated every 10 seconds.
       responses:
@@ -115,6 +117,7 @@ paths:
   /candles:
     get:
       summary: Candles
+      operationId: getCandles
       description: |
         The candles endpoint returns aggregated open, high, low, close, and volume information for Nomics currencies.
         When asking for candles, a currency is provided as a parameter. Nomics aggregates all markets where the given
@@ -149,6 +152,7 @@ paths:
   /exchange_candles:
     get:
       summary: Exchange Candles
+      operationId: getExchangeCandles
       description: |
         The exchange candles endpoint returns raw open, close, high, low, and volume information for Nomics Markets.
         The data is not aggregated, therefore prices are in the quote currency of the market and volume is in the base
@@ -183,6 +187,7 @@ paths:
   /dashboard:
     get:
       summary: Dashboard
+      operationId: getDashboard
       description: |
         The dashboard endpoint is a high level view of the current state of the market. It contains a wide
         variety of information and is updated every 10 seconds.
@@ -204,6 +209,7 @@ paths:
   /sparkline:
     get:
       summary: Sparkline
+      operationId: getSparkline
       description: |
         The sparkline endpoint is a high level view of currency performance over a variety of intervals.
       responses:
@@ -239,6 +245,7 @@ paths:
   /market-cap/sparkline:
     get:
       summary: Market Cap Sparkline
+      operationId: getMarketCapSparkline
       description: |
         The Market Cap Sparkline is a high level history of the market cap for all assets.
       responses:
@@ -274,6 +281,7 @@ paths:
   /exchange-rates:
     get:
       summary: Exchange Rates
+      operationId: getExchangeRates
       description: |
         The exchange rates endpoint returns the current exchange rates used by Nomics to convert prices from markets
         into USD. This contains Fiat currencies as well as a BTC and ETH quote prices. This endpoint helps normalize
