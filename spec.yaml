@@ -11,6 +11,11 @@ info:
     we've done on [nomics.com](https://nomics.com) you can do with our API. There are
     no internal api endpoints.
 
+    # API Server URL
+
+    The Nomics API runs at `https://api.nomics.com/v1`. All requests should be prefixed
+    by the server URL.
+
     # Errors
 
     The Nomics API uses standard HTTP status codes to indicate success or failure. 200
