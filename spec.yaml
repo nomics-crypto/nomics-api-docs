@@ -1,7 +1,5 @@
 openapi: 3.0.0
-servers:
-  - url: https://api.nomics.com/v1
-    description: Nomics API Server V1
+
 info:
   title: Nomics API
   version: 1.0.0
@@ -12,14 +10,6 @@ info:
     [nomics.com](https://nomics.com) is built entirely with the Nomics API. Everything
     we've done on [nomics.com](https://nomics.com) you can do with our API. There are
     no internal api endpoints.
-
-    # Server URL
-
-    The Nomics API Server runs at:
-
-    ```
-    https://api.nomics.com/v1
-    ```
 
     # Errors
 
@@ -68,6 +58,10 @@ info:
     we can whitelist them for CORS access.
 
     Requests from `localhost`, `127.0.0.1`, and `0.0.0.0` will always succeed to aid in development.
+
+servers:
+  - url: https://api.nomics.com/v1
+    description: API Server
 
 paths:
   /markets:
