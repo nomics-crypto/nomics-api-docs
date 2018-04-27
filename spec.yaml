@@ -161,6 +161,23 @@ paths:
                   $ref: "#/components/schemas/Candle"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /dashboard:
+    get:
+      summary: Dashboard
+      description: |
+        The dashboard endpoint is a high level view of the current state of the market. It contains a wide
+        variety of information and is updated every 10 seconds.
+      responses:
+        '200':
+          description: A list of currency summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dashboard"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
 
 components:
   securitySchemes:
@@ -237,6 +254,90 @@ components:
         close: "8281.17307"
         high: "8566.43000"
         volume: "59624801"
+    Dashboard:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency ID
+        dayOpen:
+          type: string
+          description: Price one day ago
+        dayVolume:
+          type: string
+          description: Volume over the past day
+        dayOpenVolume:
+          type: string
+          description: Volume over the previous day
+        weekOpen:
+          type: string
+          description: Price one week ago
+        weekVolume:
+          type: string
+          description: Volume over the past week
+        weekOpenVolume:
+          type: string
+          description: Volume over the previous week
+        monthOpen:
+          type: string
+          description: Price one month ago
+        monthVolume:
+          type: string
+          description: Volume over the past 30 days
+        monthOpenVolume:
+          type: string
+          description: Volume over the previous 30 days
+        yearOpen:
+          type: string
+          description: Price one year ago
+        yearVolume:
+          type: string
+          description: Volume over the past year
+        yearOpenVolume:
+          type: string
+          description: Volume over the previous year
+        close:
+          type: string
+          description: Current price
+        high:
+          type: string
+          description: Highest price
+        highTimestamp:
+          type: string
+          description: Timestamp of the highest price
+        highExchange:
+          type: string
+          description: Exchange on which the highest price occurred
+        highQuoteCurrency:
+          type: string
+          description: Quote currency against which highest price was recorded
+        availableSupply:
+          type: string
+          description: Circulating supply
+        maxSupply:
+          type: string
+          description: Maximum supply
+      example:
+        currency: "BTC"
+        dayOpen: "7436.82313"
+        dayVolume: "1017039454.62165"
+        dayOpenVolume: "1013499101.75834"
+        weekOpen: "7123.20591"
+        weekVolume: "7856259697.70049"
+        weekOpenVolume: "7139283718.53940"
+        monthOpen: "10769.08245"
+        monthVolume: "41483988434.15605"
+        monthOpenVolume: "50120582053.23234"
+        yearOpen: "1144.85801"
+        yearVolume: "385101925394.80138"
+        yearOpenVolume: "16773015388.14144"
+        close: "6888.45685"
+        high: "24436.29525"
+        highTimestamp: "2018-01-05T00:00:00Z"
+        highExchange: "bithumb"
+        highQuoteCurrency: "KRW"
+        availableSupply: "16957550.0"
+        maxSupply: "21000000.0"
   parameters:
     candle-interval:
       name: interval
