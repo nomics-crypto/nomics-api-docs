@@ -9,4 +9,4 @@ This is a work in progress. For our current documentation, visit:
 ## Development
 
 1. `bundle install`
-2. `jekyll serve`
+2. `bundle exec jekyll serve`
