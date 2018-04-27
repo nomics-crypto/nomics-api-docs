@@ -3,9 +3,61 @@ openapi: 3.0.0
 info:
   title: Nomics API
   version: 1.0.0
-  description: >
+  description: |
     Welcome to the Nomics API. Early access is currently underway. If you're interested in
     our API please [contact us](https://p.nomics.com/contact/).
+
+    [nomics.com](https://nomics.com) is built entirely with the Nomics API. Everything
+    we've done on [nomics.com](https://nomics.com) you can do with our API. There are
+    no internal api endpoints.
+
+    # Errors
+
+    The Nomics API uses standard HTTP status codes to indicate success or failure. 200
+    represents success, 4xx represents a user error (such as a problem with your key),
+    and 5xx represents a problem with our API.
+
+    # Versioning
+
+    We follow Semantic Versioning. That means our API is versioned as Major.Minor.Patch.
+    For example, Version 1.2.3 has major version 1, minor version 2, and patch version 3.
+    
+    Major version changes indicate that we have altered
+    the API significantly and it is no longer compatible with a previous version. Major
+    versions are also used as the API url prefix.
+
+    When we update the major version, we will not remove the previous version without notice
+    to API customers and a deprecation period to allow everyone to smoothly update to the new
+    version.
+
+    Minor version changes indicate that we have added new functionality without breaking
+    any existing functionality. An API client is compatible with future minor versions. Note
+    that a minor version update may add a new field to an existing API endpoint's response. Your
+    API client must ignore fields it does not understand in order to be compatible with future
+    minor versions.
+
+    Patch version changes indicate we fixed a bug or security vulnerability. Patch versions
+    don't add new functionality.
+
+    # JSON and CSV Support
+
+    By default, all endpoints serve data as JSON. However, by passing `format=csv` in the URL,
+    an endpoint will return CSV data. This can be used in Google Sheets via the `IMPORTDATA`
+    function.
+
+    CSV responses will not contain a header row, this is so that data can be easily concatenated
+    from multiple requests. The fields will be rendered in the same order as the JSON fields. See
+    the endpoint's documentation for an example.
+
+    # Cross Origin Resource Sharing (CORS)
+
+    This API supports Cross Origin Resource Sharing, which allows you to make API requests directly
+    from your user's browser.
+
+    To use CORS, you must provide Nomics with the domains on which your application will run so that
+    we can whitelist them for CORS access.
+
+    Requests from `localhost`, `127.0.0.1`, and `0.0.0.0` will always succeed to aid in development.
 
 servers:
   - url: https://api.nomics.com/v1
@@ -55,14 +107,14 @@ components:
     basicAuth:
       type: http
       scheme: basic
-      description: >
+      description: |
         You can use HTTP basic authentication to access the Nomics API.
         Set the `user` to your API Key, and leave the `password` blank.
     apiKeyAuth:
       type: apiKey
       in: query
       name: key
-      description: >
+      description: |
         You can include your API Key as the parameter `key` in any request.
   schemas:
     Market:
