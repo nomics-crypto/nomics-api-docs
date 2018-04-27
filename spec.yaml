@@ -101,6 +101,48 @@ paths:
                   $ref: '#/components/schemas/Price'
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /candles:
+    get:
+      summary: Candles
+      description: |
+        The candles endpoint returns aggregated open, high, low, close, and volume information for Nomics currencies.
+        When asking for candles, a currency is provided as a parameter. Nomics aggregates all markets where the given
+        currency is the base currency and the quote currency is a fiat currency, BTC, or ETH and returns all values in
+        USD.
+
+        Candles are aggregated across all markets for the base currencies, which necessitates converting to a common
+        quote currency. Nomics converts all markets into USD in order to aggregated candles.
+
+        Candles have the following history based on size:
+
+        * `1d`: Inception
+        * `1h`: 30 days
+      parameters:
+        - name: interval
+          in: query
+          description: Time interval of the candle
+          required: true
+          schema:
+            type: string
+            enum:
+              - 1d
+              - 1h
+        - name: currency
+          in: query
+          description: Currency ID
+          required: true
+          schema:
+            type: string
+          example: BTC
+      responses:
+        '200':
+          description: A list of candles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Candle"
 
 components:
   securitySchemes:
@@ -122,12 +164,16 @@ components:
       properties:
         exchange:
           type: string
+          description: Nomics Exchange ID
         market:
           type: string
+          description: The Exchange's Market ID (usable on Exchange's API)
         base:
           type: string
+          description: Nomics Currency ID of the asset being traded
         quote:
           type: string
+          description: Nomics Currency ID of the asset used to quote a price
       example:
         exchange: bitfinex
         market: avtbtc
@@ -138,11 +184,41 @@ components:
       properties:
         currency:
           type: string
+          description: Currency ID
         price:
           type: string
+          description: Price in quote currency
       example:
         currency: BTC
         price: "10000.00000"
+    Candle:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          description: Start time of the candle
+        low:
+          type: string
+          description: Lowest price in quote currency
+        open:
+          type: string
+          description: First trade price in quote currency
+        close:
+          type: string
+          description: Last trade price in quote currency
+        high:
+          type: string
+          description: Highest price in quote currency
+        volume:
+          type: string
+          description: Volume in base currency
+      example:
+        timestamp: "2018-03-19T10:00:00Z"
+        low: "7024.32225"
+        open: "8276.19407"
+        close: "8281.17307"
+        high: "8566.43000"
+        volume: "59624801"
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
