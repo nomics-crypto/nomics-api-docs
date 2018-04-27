@@ -67,7 +67,7 @@ paths:
   /markets:
     get:
       summary: Markets
-      description: >
+      description: |
         The markets endpoint returns information on the exchanges and markets that Nomics supports,
         in addition to the Nomics currency identifiers for the base and quote currency.
       responses:
@@ -88,8 +88,8 @@ paths:
   /prices:
     get:
       summary: Prices
-      description: >
-        The prices endpoint returns current prices for all currencies.
+      description: |
+        The prices endpoint returns current prices for all currencies. Prices are updated every 10 seconds.
       responses:
         '200':
           description: A list of currencies with their price
@@ -140,6 +140,9 @@ components:
           type: string
         price:
           type: string
+      example:
+        currency: BTC
+        price: "10000.00000"
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
