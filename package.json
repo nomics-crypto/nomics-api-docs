@@ -7,7 +7,7 @@
     "serve": "redoc-cli serve spec.yaml --template=template.hbs --port=$PORT --ssr",
     "watch": "redoc-cli serve spec.yaml --template=template.hbs --watch"
   },
-  "devDependencies": {
+  "dependencies": {
     "redoc-cli": "^0.3.5"
   }
 }
