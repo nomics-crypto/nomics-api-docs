@@ -99,6 +99,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Price'
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,10000.00000"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /candles:
@@ -129,6 +133,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Candle"
+            text/csv:
+              schema:
+                type: string
+              example: "2018-03-19T10:00:00Z,7024.32225,8276.19407,8281.17307,8566.43000,59624801"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /exchange_candles:
@@ -159,6 +167,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Candle"
+            text/csv:
+              schema:
+                type: string
+              example: "2018-03-19T10:00:00Z,7024.32225,8276.19407,8281.17307,8566.43000,59624801"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /dashboard:
@@ -176,6 +188,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Dashboard"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,7436.82313,1017039454.62165,1013499101.75834,7123.20591,7856259697.70049,7139283718.53940,10769.08245,41483988434.15605,50120582053.23234,1144.85801,385101925394.80138,16773015388.14144,6888.45685,24436.29525,2018-01-05T00:00:00Z,bithumb,KRW,16957550.0,21000000.0"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /sparkline:
@@ -266,6 +282,10 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ExchangeRate"
+            text/csv:
+              schema:
+                type: string
+              example: "AUD,0.76953,2018-04-04T00:00:00Z"
                 
         '401':
            $ref: '#/components/responses/UnauthorizedError'
