@@ -299,12 +299,6 @@ paths:
 
 components:
   securitySchemes:
-    basicAuth:
-      type: http
-      scheme: basic
-      description: |
-        You can use HTTP basic authentication to access the Nomics API.
-        Set the `user` to your API Key, and leave the `password` blank.
     apiKeyAuth:
       type: apiKey
       in: query
@@ -566,5 +560,4 @@ components:
       description: Authentication information is missing or invalid
 
 security:
-  - basicAuth: []
   - apiKeyAuth: []
