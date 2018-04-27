@@ -248,6 +248,27 @@ paths:
                       $ref: "#/components/schemas/MarketCapSparklineRow"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /exchange-rates:
+    get:
+      summary: Exchange Rates
+      description: |
+        The exchange rates endpoint returns the current exchange rates used by Nomics to convert prices from markets
+        into USD. This contains Fiat currencies as well as a BTC and ETH quote prices. This endpoint helps normalize
+        data across markets as well as to provide localization for users.
+
+        Currently, this endpoint does not support historical data, but this feature is planned.
+      responses:
+        '200':
+          description: List of exchange rates into USD
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExchangeRate"
+                
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
 
 components:
   securitySchemes:
@@ -450,6 +471,21 @@ components:
             type: string
             description: Market Cap in USD
             example: "7436.82313"
+    ExchangeRate:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency ID
+          example: AUD
+        rate:
+          type: string
+          description: Exchange rate to USD (Currency * Rate = USD)
+          example: "0.76953"
+        timestamp:
+          type: string
+          description: Timestamp this rate was updated at
+          example: "2018-04-04T00:00:00Z"
   parameters:
     candle-interval:
       name: interval
