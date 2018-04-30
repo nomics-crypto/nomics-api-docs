@@ -304,10 +304,98 @@ paths:
                 
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /trades:
+    get:
+      summary: Trades
+      operationId: getTrades
+      description: |
+        ### !! In Development: This API is not yet released
 
+        The trades endpoint returns individual trades in a normalized format for an individual
+        exchange market.
+
+        ### Getting the most recent trades
+
+        By default, the trades endpoint returns the 100 most recent trades in descending order.
+        You only need to provide the required parameters.
+        
+        ### Sequential ingestion
+        
+        If you want to page through trades sequentially for ingestion, follow these steps:
+
+        1. Get the first page of trades `by=timestamp&order=asc&from=0`
+        2. Get the id of the last trade in the page, let's call it `last`
+        3. Get the next page of trades `by=id&order=asc&from=<last>`
+        4. Repeat 2 and 3
+
+        To reverse chronologically ingest, make a request for the most recent trades, and
+        proceed as above but with `order=desc`.
+
+        ### Building your own candles
+
+        If you want to build your own candles, follow the steps for sequential ingestion, but start
+        with `from=<start>` in step 1, where `start` is the start of your candle.
+
+        Then, stop when you see a trade past your candle's `end` timestamp, discard trades past
+        `end` and perform your aggregation.
+      parameters:
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/market'
+        - name: limit
+          in: query
+          description: Maximum number of trades returned
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 100
+        - name: by
+          in: query
+          description: >
+            Defines which field is used to limit trades with `from`.
+          schema:
+            type: string
+            enum:
+              - id
+              - timestamp
+            default: timestamp
+        - name: order
+          in: query
+          description: >
+            Defines the sort order of returned trades and the direction from `from`.
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+        - name: from
+          in: query
+          description: >
+            Reference `id` or `timestamp` when using `order`. Use `by` to determine if `from` is an
+            `id` or `timestamp`. If using a timestamp, it should be a unix epoch with millisecond
+            precision.
+          schema:
+            type: string
+            example: "3608432558"
+      responses:
+        '200':
+          description: List of trades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Trade"
+            text/csv:
+              schema:
+                type: string
+              example: "3608432558,1525097064944,9271.73,0.02122885"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
 components:
   securitySchemes:
-    apiKeyAuth:
+    Key:
       type: apiKey
       in: query
       name: key
@@ -515,6 +603,25 @@ components:
           type: string
           description: Timestamp this rate was updated at
           example: "2018-04-04T00:00:00Z"
+    Trade:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Exchange's ID of the trade (or synthetic ID when not available)
+          example: "3608432558"
+        timestamp:
+          type: integer
+          description: Unix epoch timestamp in milliseconds
+          example: 1525097064944
+        price:
+          type: string
+          description: Price of the trade in the quote currency of the market
+          example: "9271.73"
+        volume:
+          type: string
+          description: Volume of the trade in the base currency of the market
+          example: "0.02122885"
   parameters:
     candle-interval:
       name: interval
@@ -568,4 +675,4 @@ components:
       description: Authentication information is missing or invalid
 
 security:
-  - apiKeyAuth: []
+  - Key: []
