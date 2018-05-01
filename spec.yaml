@@ -323,9 +323,9 @@ paths:
         
         If you want to page through trades sequentially for ingestion, follow these steps:
 
-        1. Get the first page of trades `by=timestamp&order=asc&from=0`
-        2. Get the id of the last trade in the page, let's call it `last`
-        3. Get the next page of trades `by=id&order=asc&from=<last>`
+        1. Get the first page of trades `order=asc`
+        2. Get the timestamp of the last trade in the page, let's call it `last`
+        3. Get the next page of trades `order=asc&from=<last>`
         4. Repeat 2 and 3
 
         To reverse chronologically ingest, make a request for the most recent trades, and
@@ -349,16 +349,6 @@ paths:
             minimum: 1
             maximum: 1000
             default: 100
-        - name: by
-          in: query
-          description: >
-            Defines which field is used to limit trades with `from`.
-          schema:
-            type: string
-            enum:
-              - id
-              - timestamp
-            default: timestamp
         - name: order
           in: query
           description: >
@@ -372,12 +362,11 @@ paths:
         - name: from
           in: query
           description: >
-            Reference `id` or `timestamp` when using `order`. Use `by` to determine if `from` is an
-            `id` or `timestamp`. If using a timestamp, it should be a unix epoch with millisecond
-            precision.
+            Timestamp from which results should start in RFC3339. Please ensure you URI encode the timestamp.
+            From is inclusive.
           schema:
             type: string
-            example: "3608432558"
+            example: "1970-01-01T00%3A00%3A00Z"
       responses:
         '200':
           description: List of trades
@@ -390,7 +379,7 @@ paths:
             text/csv:
               schema:
                 type: string
-              example: "3608432558,1525097064944,9271.73,0.02122885"
+              example: "1,12/01/2014 05:33:56,300.00000000,0.01000000"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
 components:
@@ -439,7 +428,7 @@ components:
       properties:
         timestamp:
           type: string
-          description: Start time of the candle
+          description: Start time of the candle in RFC3339
         low:
           type: string
           description: Lowest price in quote currency
@@ -512,7 +501,7 @@ components:
           description: Highest price
         highTimestamp:
           type: string
-          description: Timestamp of the highest price
+          description: Timestamp of the highest price in RFC3339
         highExchange:
           type: string
           description: Exchange on which the highest price occurred
@@ -558,7 +547,7 @@ components:
           description: Time values matching the close values
           items:
             type: string
-            description: Timestamp of the start of the candle
+            description: Timestamp of the start of the candle in RFC3339
             example: "2018-04-03T16:00:00Z"
         closes:
           type: array
@@ -579,7 +568,7 @@ components:
           description: Time values matching the close values
           items:
             type: string
-            description: Timestamp of the start of the candle
+            description: Timestamp of the start of the candle in RFC3339
             example: "2018-04-03T16:00:00Z"
         closes:
           type: array
@@ -601,7 +590,7 @@ components:
           example: "0.76953"
         timestamp:
           type: string
-          description: Timestamp this rate was updated at
+          description: Timestamp this rate was updated at in RFC3339
           example: "2018-04-04T00:00:00Z"
     Trade:
       type: object
@@ -611,9 +600,9 @@ components:
           description: Exchange's ID of the trade (or synthetic ID when not available)
           example: "3608432558"
         timestamp:
-          type: integer
-          description: Unix epoch timestamp in milliseconds
-          example: 1525097064944
+          type: string
+          description: Timestamp in RFC3339
+          example: "2014-12-01T05:33:56.761199Z"
         price:
           type: string
           description: Price of the trade in the quote currency of the market
