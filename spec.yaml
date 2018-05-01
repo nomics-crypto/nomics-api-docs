@@ -309,7 +309,7 @@ paths:
       summary: Trades
       operationId: getTrades
       description: |
-        ### !! In Development: This API is not yet released
+        ### !! This API has not been released to all users.  If you'd like access to this endpoint, please contact cdc@nomics.com and request access.
 
         The trades endpoint returns individual trades in a normalized format for an individual
         exchange market.
