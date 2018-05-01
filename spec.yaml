@@ -323,7 +323,7 @@ paths:
         
         If you want to page through trades sequentially for ingestion, follow these steps:
 
-        1. Get the first page of trades `by=timestamp&order=asc&from=0`
+        1. Get the first page of trades `by=timestamp&order=asc`
         2. Get the id of the last trade in the page, let's call it `last`
         3. Get the next page of trades `by=id&order=asc&from=<last>`
         4. Repeat 2 and 3
