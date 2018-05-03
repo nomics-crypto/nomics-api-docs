@@ -93,6 +93,44 @@ paths:
               example: "bitfinex,avtbtc,AVT,BTC"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /markets/interval:
+    get:
+      summary: Market Interval
+      operationId: getMarketInterval
+      description: |
+        The market interval endpoint returns a summary of information about all markets for a given currency over
+        a configurable time interval.
+      parameters:
+        - name: currency
+          in: query
+          description: Nomics Currency ID to query information for
+          required: true
+          schema:
+            type: string
+        - name: hours
+          in: query
+          description: Number of hours back to calculate data
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 8760
+            default: 1
+      responses:
+        '200':
+          description: A list of markets with price and volume information for a currency
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MarketInterval'
+            text/csv:
+              schema:
+                type: string
+              example: "bitfinex,EUR,5107055.26765,9484.34395,05/03/2018 15:00:00,9671.60953,05/03/2018 20:31:24"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
   /prices:
     get:
       summary: Prices
@@ -411,6 +449,38 @@ components:
         market: avtbtc
         base: AVT
         quote: BTC
+    MarketInterval:
+      type: object
+      properties:
+        exchange:
+          type: string
+          description: Nomics Exchange ID
+        quote:
+          type: string
+          description: Nomics Currency ID of the assed used to quote a price
+        volume:
+          type: string
+          description: Total volume in USD
+        open:
+          type: string
+          description: Open price in USD
+        open_timestamp:
+          type: string
+          description: Timestamp of the open price in RFC 3339
+        close:
+          type: string
+          description: Close price in USD
+        close_timestamp:
+          type: string
+          description: Timestamp of the close price in RFC 3339
+      example:
+        exchange: "bitfinex"
+        quote: "EUR"
+        volume: "4986395.59716"
+        open: "9484.34395"
+        open_timestamp: "2018-05-03T15:00:00Z"
+        close: "9671.60953"
+        close_timestamp: "2018-05-03T20:31:24.737Z"
     Price:
       type: object
       properties:
