@@ -7,11 +7,11 @@ info:
     # Introduction
 
     Welcome to the Nomics API. Early access is currently underway. If you're interested in
-    our API please [contact us](https://p.nomics.com/contact/).
+    our API, please [contact us](https://p.nomics.com/contact/).
 
     [nomics.com](https://nomics.com) is built entirely with the Nomics API. Everything
     we've done on [nomics.com](https://nomics.com) you can do with our API. There are
-    no internal api endpoints.
+    no internal API endpoints.
 
     # API Server URL
 
@@ -31,7 +31,7 @@ info:
     
     Major version changes indicate that we have altered
     the API significantly and it is no longer compatible with a previous version. Major
-    versions are also used as the API url prefix.
+    versions are also used as the API URL prefix.
 
     When we update the major version, we will not remove the previous version without notice
     to API customers and a deprecation period to allow everyone to smoothly update to the new
@@ -347,7 +347,7 @@ paths:
       summary: Trades
       operationId: getTrades
       description: |
-        ### !! In Development: This API is not yet released
+        ### !! This API has not been released to all users.  If you'd like access to this endpoint, please contact cdc@nomics.com and request access.
 
         The trades endpoint returns individual trades in a normalized format for an individual
         exchange market.
