@@ -420,6 +420,49 @@ paths:
               example: "1,12/01/2014 05:33:56,300.00000000,0.01000000"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /currencies/highs:
+    get:
+      summary: All Time Highs
+      operationId: getCurrencyHighs
+      description: |
+        Returns all time high information for all currencies.
+      responses:
+        '200':
+          description: All time highs for all currencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    price:
+                      type: string
+                      description: Highest price of the currency in USD
+                    timestamp:
+                      type: string
+                      description: Timestamp of the high price in RFC3339
+                    exchange:
+                      type: string
+                      description: Exchange ID on which the high occurred
+                    quote:
+                      type: string
+                      description: Quote currency against which the high occurred
+                  example:
+                    currency: "BTC"
+                    price: "24436.29525"
+                    timestamp: "2018-01-05T00:00:00Z"
+                    exchange: "bithumb"
+                    quote: "KRW"
+            test/csv:
+              schema:
+                type: string
+              example: "BTC,24436.29525,01/05/2018 00:00:00,bithumb,KRW"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
 components:
   securitySchemes:
     Key:
