@@ -557,6 +557,59 @@ paths:
               example: "BTC,7042240511.06433,8746.03472,05/14/2018 00:00:00,7498.07225,05/24/2018 00:00:00"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /supplies/interval:
+    get:
+      summary: Supplies Interval
+      operationId: getSuppliesInterval
+      description: |
+        Open and close supply information for all currencies between a customizable time interval.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    open_available:
+                      type: string
+                      description: Open available supply
+                    open_max:
+                      type: string
+                      description: Open max supply
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open supply information
+                    close_available:
+                      type: string
+                      description: Close available supply
+                    close_max:
+                      type: string
+                      description: Close max supply
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the close supply information
+                  example:
+                    currency: "BTC"
+                    open_available: "17032187.0"
+                    open_max: "21000000.0"
+                    open_timestamp: "2018-05-14T00:04:31Z"
+                    close_available: "17052037.0"
+                    close_max: "21000000.0"
+                    close_timestamp: "2018-05-24T14:19:34Z"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
 components:
   securitySchemes:
     Key:
