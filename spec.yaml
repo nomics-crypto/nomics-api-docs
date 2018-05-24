@@ -341,6 +341,52 @@ paths:
                 
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /exchange-rates/interval:
+    get:
+      summary: Exchange Rates Interval
+      operationId: getExchangeRatesInterval
+      description: |
+        Exchange rates to convert from USD over a time interval. This endpoint can be used with other interval endpoints
+        to convert values into a desired quote currency.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    open:
+                      type: string
+                      description: Open rate of exchange
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open rate
+                    close:
+                      type: string
+                      description: Close rate of exchange
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open rate
+                  example:
+                    currency: "EUR"
+                    open: "1.1934028689404969"
+                    open_timestamp: "2018-05-14T00:00:00Z"
+                    close: "1.1707956727391936"
+                    close_timestamp: "2018-05-24T00:00:00Z"
+            text/csv:
+              schema:
+                type: string
+              example: "EUR,1.1934028689404969,05/14/2018 00:00:00,1.1707956727391936,05/24/2018 00:00:00"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
   /trades:
     get:
       summary: Trades
@@ -462,6 +508,108 @@ paths:
               example: "BTC,24436.29525,01/05/2018 00:00:00,bithumb,KRW"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /currencies/interval:
+    get:
+      summary: Currencies Interval
+      operationId: getCurrenciesInterval
+      description: |
+        Open and close prices and volume for all currencies between a customizable time range.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    volume:
+                      type: string
+                      description: Total volume in USD over the time range
+                    open:
+                      type: string
+                      description: Open price in USD
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open price
+                    close:
+                      type: string
+                      description: Close price in USD
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open price
+                  example:
+                    currency: "BTC"
+                    volume: "7039575495.41955"
+                    open: "8746.03472"
+                    open_timestamp: "2018-05-14T00:00:00Z"
+                    close: "7509.12469"
+                    close_timestamp: "2018-05-24T00:00:00Z"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,7042240511.06433,8746.03472,05/14/2018 00:00:00,7498.07225,05/24/2018 00:00:00"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /supplies/interval:
+    get:
+      summary: Supplies Interval
+      operationId: getSuppliesInterval
+      description: |
+        Open and close supply information for all currencies between a customizable time interval.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    open_available:
+                      type: string
+                      description: Open available supply
+                    open_max:
+                      type: string
+                      description: Open max supply
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open supply information
+                    close_available:
+                      type: string
+                      description: Close available supply
+                    close_max:
+                      type: string
+                      description: Close max supply
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the close supply information
+                  example:
+                    currency: "BTC"
+                    open_available: "17032187.0"
+                    open_max: "21000000.0"
+                    open_timestamp: "2018-05-14T00:04:31Z"
+                    close_available: "17052037.0"
+                    close_max: "21000000.0"
+                    close_timestamp: "2018-05-24T14:19:34Z"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
 components:
   securitySchemes:
     Key:
@@ -771,6 +919,24 @@ components:
       schema:
         type: string
       example: avtbtc
+    interval-start:
+      name: start
+      in: query
+      description: Start time of the interval in RFC3339 (URI escaped)
+      required: true
+      schema:
+        type: string
+      example: "2018-05-14T00%3A00%3A00Z"
+    interval-end:
+      name: end
+      in: query
+      description: |
+        End time of the interval in RFC3339 (URI escaped). If not provided,
+        the current time is used.
+      required: false
+      schema:
+        type: string
+      example: "2018-05-14T00%3A00%3A00Z"
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
