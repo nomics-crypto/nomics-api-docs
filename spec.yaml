@@ -462,6 +462,51 @@ paths:
               example: "BTC,24436.29525,01/05/2018 00:00:00,bithumb,KRW"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /currencies/interval:
+    get:
+      summary: Currencies Interval
+      description: |
+        Open and close prices and volume for all currencies between a customizable time range.
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    volume:
+                      type: string
+                      description: Total volume in USD over the time range
+                    open:
+                      type: string
+                      description: Open price in USD
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open price
+                    close:
+                      type: string
+                      description: Close price in USD
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open price
+                  example:
+                    currency: "BTC"
+                    volume: "7039575495.41955"
+                    open: "8746.03472"
+                    open_timestamp: "2018-05-14T00:00:00Z"
+                    close: "7509.12469"
+                    close_timestamp: "2018-05-24T00:00:00Z"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,7042240511.06433,8746.03472,05/14/2018 00:00:00,7498.07225,05/24/2018 00:00:00"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
 components:
   securitySchemes:
     Key:
