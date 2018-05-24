@@ -341,6 +341,52 @@ paths:
                 
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /exchange-rates/interval:
+    get:
+      summary: Exchange Rates Interval
+      operationId: getExchangeRatesInterval
+      description: |
+        Exchange rates to convert from USD over a time interval. This endpoint can be used with other interval endpoints
+        to convert values into a desired quote currency.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    open:
+                      type: string
+                      description: Open rate of exchange
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open rate
+                    close:
+                      type: string
+                      description: Close rate of exchange
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open rate
+                  example:
+                    currency: "EUR"
+                    open: "1.1934028689404969"
+                    open_timestamp: "2018-05-14T00:00:00Z"
+                    close: "1.1707956727391936"
+                    close_timestamp: "2018-05-24T00:00:00Z"
+            text/csv:
+              schema:
+                type: string
+              example: "EUR,1.1934028689404969,05/14/2018 00:00:00,1.1707956727391936,05/24/2018 00:00:00"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
   /trades:
     get:
       summary: Trades
@@ -465,8 +511,12 @@ paths:
   /currencies/interval:
     get:
       summary: Currencies Interval
+      operationId: getCurrenciesInterval
       description: |
         Open and close prices and volume for all currencies between a customizable time range.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
       responses:
         '200':
           content:
@@ -816,6 +866,24 @@ components:
       schema:
         type: string
       example: avtbtc
+    interval-start:
+      name: start
+      in: query
+      description: Start time of the interval in RFC3339 (URI escaped)
+      required: true
+      schema:
+        type: string
+      example: "2018-05-14T00%3A00%3A00Z"
+    interval-end:
+      name: end
+      in: query
+      description: |
+        End time of the interval in RFC3339 (URI escaped). If not provided,
+        the current time is used.
+      required: false
+      schema:
+        type: string
+      example: "2018-05-14T00%3A00%3A00Z"
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
