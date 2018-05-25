@@ -396,6 +396,44 @@ paths:
               example: "EUR,1.1934028689404969,05/14/2018 00:00:00,1.1707956727391936,05/24/2018 00:00:00"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /exchange-rates/history:
+    get:
+      summary: Exchange Rates History
+      operationId: getExchangeRatesHistory
+      description: |
+        Exchange rates for every point in a time range. This endpoint can be used with other interval endpoints
+        to convert values into a desired quote currency.
+
+        The currency parameter must be a Nomics Quote Currency, to get all Nomics Quote Currencies, use the
+        `/exchange-rates` endpoint for all current rates.
+      parameters:
+        - $ref: '#/components/parameters/currency'
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the rate
+                    rate:
+                      type: string
+                      description: Rate of exchange to USD
+                  example:
+                    timestamp: "2018-05-01T00:00:00Z"
+                    rate: "1.2079045272261680"
+            text/csv:
+              schema:
+                type: string
+              example: "05/01/2018 00:00:00,1.2079045272261680"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
   /trades:
     get:
       summary: Trades
