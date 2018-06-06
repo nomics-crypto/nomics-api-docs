@@ -1,12 +1,12 @@
 openapi: 3.0.0
 
 info:
-  title: Nomics API
+  title: Nomics Cryptocurrency & Bitcoin API
   version: 1.0.0
   description: |
     # Introduction
 
-    Welcome to the Nomics API. To sign up for an API key please [go here](https://p.nomics.com/api/).
+    Welcome to the Nomics Cryptocurrency & Bitcoin API. To sign up for an API key please [go here](https://p.nomics.com/cryptocurrency-bitcoin-api/).
 
     [nomics.com](https://nomics.com) is built entirely with the Nomics API. Everything
     we've done on [nomics.com](https://nomics.com) you can do with our API. There are
