@@ -534,7 +534,7 @@ paths:
           schema:
             type: integer
             minimum: 1
-            maximum: 1000
+            maximum: 2500
             default: 100
         - name: order
           in: query
