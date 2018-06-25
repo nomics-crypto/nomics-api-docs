@@ -97,7 +97,7 @@ paths:
       summary: Market Interval
       operationId: getMarketInterval
       description: |
-        The market interval endpoint returns a summary of information about all markets for a given currency over
+        The market interval endpoint returns a summary of information about all markets based in a given currency over
         a configurable time interval.
       parameters:
         - name: currency
@@ -185,6 +185,128 @@ paths:
               schema:
                 type: string
               example: "bitfinex,USD,7419.69255,06/05/2018 13:23:18"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /exchange-markets/interval:
+    get:
+      summary: Exchange Market Interval
+      operationId: getExchangeMarketInterval
+      description: |
+        The exchange market interval endpoint returns a summary of information about all markets for a given currency
+        over a configurable time interval in their native values.
+      parameters:
+        - name: currency
+          in: query
+          description: Nomics Currency ID to query information for
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: Start time of the interval in RFC3339 (URI escaped).
+          required: true
+          schema:
+            type: string
+          example: "2018-05-14T00%3A00%3A00Z"
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          description: A list of markets with price and volume information for a currency
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    exchange:
+                      type: string
+                      description: Nomics Exchange ID
+                    base:
+                      type: string
+                      description: Nomics Currency ID of the asset being traded
+                    quote:
+                      type: string
+                      description: Nomics Currency ID of the asset used to quote a price
+                    volume_base:
+                      type: string
+                      description: Total volume in the base currency
+                    open_quote:
+                      type: string
+                      description: Open price in the quote currency
+                    open_timestamp:
+                      type: string
+                      description: Timestamp of the open price in RFC 3339
+                    close_quote:
+                      type: string
+                      description: Close price in the quote currency
+                    close_timestamp:
+                      type: string
+                      description: Timestamp of the close price in RFC 3339
+                  example:
+                    exchange: "binance"
+                    base: "ADA"
+                    quote: "BTC"
+                    volume_base: "105451372.00000000"
+                    open_quote: "0.00002228"
+                    open_timestamp: "2018-06-24T00:00:00Z"
+                    close_quote: "0.00002187"
+                    close_timestamp: "2018-06-25T14:00:00Z"
+            text/csv:
+              schema:
+                type: string
+              example: "binance,ADA,BTC,106633034.00000000,0.00002228,06/24/2018 00:00:00,0.00002177,06/25/2018 15:00:00"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /exchange-markets/prices:
+    get:
+      summary: Exchange Market Prices
+      operationId: getExchangeMarketPrices
+      description: |
+        The exchange market prices endpoint returns prices for the last trade in each market with the given currency
+        as either the base or quote currency in their native values.
+      parameters:
+        - name: currency
+          in: query
+          description: Nomics Currency ID of the desired currency
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of markets with their prices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    exchange:
+                      type: string
+                      description: Nomics ID of the exchange
+                    base:
+                      type: string
+                      description: Nomics ID of the base currency
+                    quote:
+                      type: string
+                      description: Nomics ID of the quote currency
+                    price_quote:
+                      type: string
+                      description: Price in the quote currency of the most recent trade
+                    timestamp:
+                      type: string
+                      description: RFC3339 Timestamp of the most recent trade
+                  example:
+                    exchange: "binance"
+                    base: "ADA"
+                    quote: "BTC"
+                    price_quote: "0.00002183"
+                    timestamp: "2018-06-25T15:13:21.304Z"
+            text/csv:
+              schema:
+                type: string
+              example: "binance,ADA,BTC,0.00002181,06/25/2018 15:17:06"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /prices:
@@ -751,7 +873,7 @@ components:
           description: Nomics Exchange ID
         quote:
           type: string
-          description: Nomics Currency ID of the assed used to quote a price
+          description: Nomics Currency ID of the asset used to quote a price
         volume:
           type: string
           description: Total volume in USD
