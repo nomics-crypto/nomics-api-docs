@@ -386,6 +386,7 @@ paths:
         Candles have the following history based on size:
 
         * `1d`: Inception
+        * `4h`: 120 days
         * `1h`: 30 days
         * `30m`: 14 days
         * `5m`: 3 days
@@ -1194,6 +1195,7 @@ components:
         type: string
         enum:
           - 1d
+          - 4h
           - 1h
           - 30m
           - 5m
