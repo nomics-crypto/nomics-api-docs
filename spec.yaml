@@ -332,7 +332,7 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /candles:
     get:
-      summary: Candles
+      summary: Aggregated OHLC Candles
       operationId: getCandles
       description: |
         The candles endpoint returns aggregated open, high, low, close, and volume information for Nomics currencies.
@@ -376,7 +376,7 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /exchange_candles:
     get:
-      summary: Exchange Candles
+      summary: Exchange OHLC Candles
       operationId: getExchangeCandles
       description: |
         The exchange candles endpoint returns raw open, close, high, low, and volume information for Nomics Markets.
