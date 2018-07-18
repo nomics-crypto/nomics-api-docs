@@ -437,6 +437,8 @@ paths:
       summary: Sparkline
       operationId: getSparkline
       description: |
+        **Deprecated in favor of [Currencies Sparkline](#operation/getCurrenciesSparkline)**
+
         The sparkline endpoint is a high level view of currency performance over a variety of intervals.
       responses:
         '200':
@@ -468,11 +470,53 @@ paths:
                       $ref: "#/components/schemas/SparklineRow"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /currencies/sparkline:
+    get:
+      summary: Currencies Sparkline
+      operationId: getCurrenciesSparkline
+      description: |
+        The currencies sparkline endpoint returns prices for all currencies within a customizable time interval
+        suitable for sparkline charts.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          description: Currency performance over time for all currencies over the requested time period.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Currency ID
+                      example: BTC
+                    timestamps:
+                      type: array
+                      description: Time values matching the price value of the same index
+                      items:
+                        type: string
+                        description: Timestamp of the start of the candle in RFC3339
+                        example: "2018-04-03T16:00:00Z"
+                    prices:
+                      type: array
+                      description: Price in USD corresponding to timestamp value of the same index
+                      items:
+                        type: string
+                        description: Price in USD
+                        example: "7436.82313"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /market-cap/sparkline:
     get:
       summary: Market Cap Sparkline
       operationId: getMarketCapSparkline
       description: |
+        **Deprecated in favor of [Market Cap History](#operation/getMarketCapHistory)**
+
         The Market Cap Sparkline is a high level history of the market cap for all assets.
       responses:
         '200':
@@ -502,6 +546,39 @@ paths:
                     description: Market performance over the past 365 days
                     items:
                       $ref: "#/components/schemas/MarketCapSparklineRow"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /market-cap/history:
+    get:
+      summary: Market Cap History
+      operationId: getMarketCapHistory
+      description: |
+        MarketCap History is the total market cap for all cryptoassets at intervals between the requested time period.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          description: Performance over time for the entire market.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: RFC3339 timestamp
+                      example: "2018-07-05T15:00:00Z"
+                    market_cap:
+                      type: string
+                      description: Total market cap in USD
+                      example: "269222501959"
+            test/csv:
+              schema:
+                type: string
+              example: "07/05/2018 15:00:00,269222501959"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /exchange-rates:
