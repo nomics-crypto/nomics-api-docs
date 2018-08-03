@@ -619,6 +619,7 @@ paths:
         - $ref: '#/components/parameters/interval-end'
       responses:
         '200':
+          description: List of exchange rates open and close information
           content:
             application/json:
               schema:
@@ -669,6 +670,7 @@ paths:
         - $ref: '#/components/parameters/interval-end'
       responses:
         '200':
+          description: Exchange rates for every point in a time range
           content:
             application/json:
               schema:
@@ -823,6 +825,7 @@ paths:
         - $ref: '#/components/parameters/interval-end'
       responses:
         '200':
+          description: Open, close, and volume for all currencies in a time range
           content:
             application/json:
               schema:
@@ -872,6 +875,7 @@ paths:
         - $ref: '#/components/parameters/interval-end'
       responses:
         '200':
+          description: Open and close supply information
           content:
             application/json:
               schema:
