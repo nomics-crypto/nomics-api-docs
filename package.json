@@ -8,6 +8,6 @@
     "watch": "redoc-cli serve spec.yaml --template=template.hbs --watch"
   },
   "dependencies": {
-    "redoc-cli": "^0.5.0"
+    "redoc-cli": "^0.6.1"
   }
 }

@@ -2,15 +2,6 @@
 # yarn lockfile v1
 
 
-ajv@^5.0.1:
-  version "5.5.2"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-5.5.2.tgz#73b5eeca3fab653e3d3f9422b341ad42205dc965"
-  dependencies:
-    co "^4.6.0"
-    fast-deep-equal "^1.0.0"
-    fast-json-stable-stringify "^2.0.0"
-    json-schema-traverse "^0.3.0"
-
 align-text@^0.1.1, align-text@^0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/align-text/-/align-text-0.1.4.tgz#0cd90a561093f35d0a99256c22b7069433fad117"
@@ -107,10 +98,6 @@ cliui@^4.0.0:
     strip-ansi "^4.0.0"
     wrap-ansi "^2.0.0"
 
-co@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/co/-/co-4.6.0.tgz#6ea6bdf3d853ae54ccb8e47bfa0bf3f9031fb184"
-
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
@@ -161,19 +148,15 @@ dom-walk@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/dom-walk/-/dom-walk-0.1.1.tgz#672226dc74c8f799ad35307df936aba11acd6018"
 
-dompurify@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-1.0.5.tgz#844ebcbf8465c8cb724291e63dbaf90ad525551c"
+dompurify@^1.0.6:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-1.0.7.tgz#33e5c4a5fc84df93b58ca162d1d3f28537aa3ec2"
 
 encoding@^0.1.11:
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.12.tgz#538b66f3ee62cd1ab51ec323829d1f9480c74beb"
   dependencies:
     iconv-lite "~0.4.13"
-
-es6-promise@^3.2.1:
-  version "3.3.1"
-  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-3.3.1.tgz#a08cdde84ccdbf34d027a1451bc91d4bcd28a613"
 
 esprima@^4.0.0:
   version "4.0.0"
@@ -194,14 +177,6 @@ execa@^0.7.0:
     p-finally "^1.0.0"
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
-
-fast-deep-equal@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-1.1.0.tgz#c053477817c86b51daa853c81e059b733d023614"
-
-fast-json-stable-stringify@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/fast-json-stable-stringify/-/fast-json-stable-stringify-2.0.0.tgz#d5142c0caee6b1189f87d3a76111064f86c8bbf2"
 
 fast-levenshtein@^2.0.6:
   version "2.0.6"
@@ -333,16 +308,9 @@ js-tokens@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
 
-js-yaml@^3.11.0:
+js-yaml@^3.12.0:
   version "3.12.0"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.12.0.tgz#eaed656ec8344f10f527c6bfa1b6e2244de167d1"
-  dependencies:
-    argparse "^1.0.7"
-    esprima "^4.0.0"
-
-js-yaml@^3.6.1:
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.11.0.tgz#597c1a8bd57152f26d622ce4117851a51f5ebaef"
   dependencies:
     argparse "^1.0.7"
     esprima "^4.0.0"
@@ -353,18 +321,14 @@ json-pointer@^0.6.0:
   dependencies:
     foreach "^2.0.4"
 
-json-schema-ref-parser@^5.0.0:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/json-schema-ref-parser/-/json-schema-ref-parser-5.0.3.tgz#5a8a7b4c865f840ee637c7a5f076421988eb8292"
+json-schema-ref-parser@^5.1.1:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/json-schema-ref-parser/-/json-schema-ref-parser-5.1.2.tgz#c9cdaec76ea894f71eb3776c3b3291dfa62e56c9"
   dependencies:
     call-me-maybe "^1.0.1"
     debug "^3.1.0"
-    js-yaml "^3.11.0"
-    ono "^4.0.3"
-
-json-schema-traverse@^0.3.0:
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/json-schema-traverse/-/json-schema-traverse-0.3.1.tgz#349a6d44c53a51de89b40805c5d5e59b417d3340"
+    js-yaml "^3.12.0"
+    ono "^4.0.5"
 
 kind-of@^3.0.2:
   version "3.2.2"
@@ -424,9 +388,9 @@ mem@^1.1.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-memoize-one@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-3.1.1.tgz#ef609811e3bc28970eac2884eece64d167830d17"
+memoize-one@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/memoize-one/-/memoize-one-4.0.0.tgz#fc5e2f1427a216676a62ec652cf7398cfad123db"
 
 mimic-fn@^1.0.0:
   version "1.2.0"
@@ -459,7 +423,7 @@ mobx-react@^5.2.3:
     hoist-non-react-statics "^2.5.0"
     react-lifecycles-compat "^3.0.2"
 
-mobx@^4.3.0:
+mobx@^4.2.0:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-4.3.1.tgz#334e5aab4916b1d43f0faf3605a64b1b4b3ccb8d"
 
@@ -473,16 +437,6 @@ node-fetch@^1.0.1:
   dependencies:
     encoding "^0.1.11"
     is-stream "^1.0.1"
-
-node-fetch@^2.0.0:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
-
-node-readfiles@^0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/node-readfiles/-/node-readfiles-0.2.0.tgz#dbbd4af12134e2e635c245ef93ffcf6f60673a5d"
-  dependencies:
-    es6-promise "^3.2.1"
 
 npm-run-path@^2.0.0:
   version "2.0.2"
@@ -498,7 +452,7 @@ object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
 
-ono@^4.0.3:
+ono@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/ono/-/ono-4.0.5.tgz#bc62740493a5c1c08b2c21e60cbb0e5c56ab7de2"
   dependencies:
@@ -557,9 +511,9 @@ perfect-scrollbar@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/perfect-scrollbar/-/perfect-scrollbar-1.4.0.tgz#5d014ef9775e1f43058a1dbae9ed1daf0e7091f1"
 
-polished@^1.9.2:
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/polished/-/polished-1.9.2.tgz#d705cac66f3a3ed1bd38aad863e2c1e269baf6b6"
+polished@^1.9.3:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/polished/-/polished-1.9.3.tgz#d61b8a0c4624efe31e2583ff24a358932b6b75e1"
 
 postcss-value-parser@^3.3.0:
   version "3.3.0"
@@ -654,38 +608,38 @@ react@^16.3.2:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-redoc-cli@^0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/redoc-cli/-/redoc-cli-0.5.0.tgz#413baa6df4cbd90513cd53f0b4f36b1cd16ae958"
+redoc-cli@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/redoc-cli/-/redoc-cli-0.6.1.tgz#497fd9d4c5f3aff7cb0d1b043222f2546789b48e"
   dependencies:
     handlebars "^4.0.11"
     isarray "^2.0.4"
     mkdirp "^0.5.1"
+    mobx "^4.2.0"
     react "^16.3.2"
     react-dom "^16.3.2"
-    redoc "^2.0.0-alpha.20"
+    redoc "^2.0.0-alpha.29"
     tslib "^1.9.0"
     yargs "^11.0.0"
 
-redoc@^2.0.0-alpha.20:
-  version "2.0.0-alpha.25"
-  resolved "https://registry.yarnpkg.com/redoc/-/redoc-2.0.0-alpha.25.tgz#b3ea45acc549f9b2f3e7af17ae54181dd81bb792"
+redoc@^2.0.0-alpha.29:
+  version "2.0.0-alpha.32"
+  resolved "https://registry.yarnpkg.com/redoc/-/redoc-2.0.0-alpha.32.tgz#3397ef04f3e119f14cfd87a8c42e2cce05703109"
   dependencies:
     classnames "^2.2.6"
     decko "^1.2.0"
-    dompurify "^1.0.5"
+    dompurify "^1.0.6"
     eventemitter3 "^3.0.0"
     json-pointer "^0.6.0"
-    json-schema-ref-parser "^5.0.0"
+    json-schema-ref-parser "^5.1.1"
     lunr "^2.3.0"
     mark.js "^8.11.1"
     marked "0.3.18"
-    memoize-one "^3.1.1"
-    mobx "^4.3.0"
+    memoize-one "^4.0.0"
     mobx-react "^5.2.3"
     openapi-sampler "1.0.0-beta.13"
     perfect-scrollbar "^1.4.0"
-    polished "^1.9.2"
+    polished "^1.9.3"
     prismjs "^1.15.0"
     prop-types "^15.6.2"
     react-dropdown "^1.3.0"
@@ -694,12 +648,7 @@ redoc@^2.0.0-alpha.20:
     slugify "^1.2.1"
     stickyfill "^1.1.1"
     styled-components "^3.3.3"
-    swagger2openapi "^2.11.0"
     tslib "^1.9.3"
-
-reftools@0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/reftools/-/reftools-0.0.20.tgz#011e00736e51c631149a3a22b4c05b7383bdee8c"
 
 repeat-string@^1.5.2:
   version "1.6.1"
@@ -748,44 +697,6 @@ shebang-command@^1.2.0:
 shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
-
-should-equal@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/should-equal/-/should-equal-2.0.0.tgz#6072cf83047360867e68e98b09d71143d04ee0c3"
-  dependencies:
-    should-type "^1.4.0"
-
-should-format@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/should-format/-/should-format-3.0.3.tgz#9bfc8f74fa39205c53d38c34d717303e277124f1"
-  dependencies:
-    should-type "^1.3.0"
-    should-type-adaptors "^1.0.1"
-
-should-type-adaptors@^1.0.1:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/should-type-adaptors/-/should-type-adaptors-1.1.0.tgz#401e7f33b5533033944d5cd8bf2b65027792e27a"
-  dependencies:
-    should-type "^1.3.0"
-    should-util "^1.0.0"
-
-should-type@^1.3.0, should-type@^1.4.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/should-type/-/should-type-1.4.0.tgz#0756d8ce846dfd09843a6947719dfa0d4cff5cf3"
-
-should-util@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/should-util/-/should-util-1.0.0.tgz#c98cda374aa6b190df8ba87c9889c2b4db620063"
-
-should@^13.0.1:
-  version "13.2.1"
-  resolved "https://registry.yarnpkg.com/should/-/should-13.2.1.tgz#84e6ebfbb145c79e0ae42307b25b3f62dcaf574e"
-  dependencies:
-    should-equal "^2.0.0"
-    should-format "^3.0.3"
-    should-type "^1.4.0"
-    should-type-adaptors "^1.0.1"
-    should-util "^1.0.0"
 
 signal-exit@^3.0.0:
   version "3.0.2"
@@ -872,20 +783,6 @@ supports-color@^3.2.3:
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-3.2.3.tgz#65ac0504b3954171d8a64946b2ae3cbb8a5f54f6"
   dependencies:
     has-flag "^1.0.0"
-
-swagger2openapi@^2.11.0:
-  version "2.11.16"
-  resolved "https://registry.yarnpkg.com/swagger2openapi/-/swagger2openapi-2.11.16.tgz#7614ed2ebe0617656f8777bf67a33e8b0fba4e9b"
-  dependencies:
-    ajv "^5.0.1"
-    call-me-maybe "^1.0.1"
-    co "^4.6.0"
-    js-yaml "^3.6.1"
-    node-fetch "^2.0.0"
-    node-readfiles "^0.2.0"
-    reftools "0.0.20"
-    should "^13.0.1"
-    yargs "^11.0.0"
 
 tiny-emitter@^2.0.0:
   version "2.0.2"
