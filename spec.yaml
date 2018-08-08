@@ -925,7 +925,11 @@ components:
       in: query
       name: key
       description: |
-        You can include your API Key as the parameter `key` in any request.
+        **You must include your API Key as a query parameter in every request you make.**
+
+        For example:
+
+        https://api.nomics.com/v1/markets?key=your-api-key-goes-here
   schemas:
     Market:
       type: object
