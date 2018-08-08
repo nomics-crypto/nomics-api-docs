@@ -74,6 +74,8 @@ paths:
     get:
       summary: Markets
       operationId: getMarkets
+      x-code-samples:
+        $ref: './samples/getMarkets.json'
       description: |
         The markets endpoint returns information on the exchanges and markets that Nomics supports,
         in addition to the Nomics currency identifiers for the base and quote currency.
@@ -96,6 +98,8 @@ paths:
     get:
       summary: Market Interval
       operationId: getMarketInterval
+      x-code-samples:
+        $ref: './samples/getMarketInterval.json'
       description: |
         The market interval endpoint returns a summary of information about all markets based in a given currency over
         a configurable time interval.
@@ -106,6 +110,7 @@ paths:
           required: true
           schema:
             type: string
+          example: BTC
         - name: hours
           in: query
           description: Number of hours back to calculate data
@@ -123,7 +128,7 @@ paths:
           required: false
           schema:
             type: string
-          example: "2018-05-14T00%3A00%3A00Z"
+          example: "2018-04-14T00%3A00%3A00Z"
         - $ref: '#/components/parameters/interval-end'
       responses:
         '200':
@@ -144,6 +149,8 @@ paths:
     get:
       summary: Market Prices
       operationId: getMarketPrices
+      x-code-samples:
+        $ref: './samples/getMarketPrices.json'
       description: |
         The market prices endpoint returns prices in USD for the last trade in each market with the given base
         currency.
@@ -154,6 +161,7 @@ paths:
           required: true
           schema:
             type: string
+          example: BTC
       responses:
         '200':
           description: A list of markets with their price
@@ -191,6 +199,8 @@ paths:
     get:
       summary: Exchange Market Interval
       operationId: getExchangeMarketInterval
+      x-code-samples:
+        $ref: './samples/getExchangeMarketInterval.json'
       description: |
         The exchange market interval endpoint returns a summary of information about all markets for a given currency
         over a configurable time interval in their native values.
@@ -201,13 +211,14 @@ paths:
           required: true
           schema:
             type: string
+          example: BTC
         - name: start
           in: query
           description: Start time of the interval in RFC3339 (URI escaped).
           required: true
           schema:
             type: string
-          example: "2018-05-14T00%3A00%3A00Z"
+          example: "2018-04-14T00%3A00%3A00Z"
         - $ref: '#/components/parameters/interval-end'
       responses:
         '200':
@@ -262,6 +273,8 @@ paths:
     get:
       summary: Exchange Market Prices
       operationId: getExchangeMarketPrices
+      x-code-samples:
+        $ref: './samples/getExchangeMarketPrices.json'
       description: |
         The exchange market prices endpoint returns prices for the last trade in each market with the given currency
         as either the base or quote currency in their native values.
@@ -272,6 +285,7 @@ paths:
           required: true
           schema:
             type: string
+          example: BTC
       responses:
         '200':
           description: A list of markets with their prices
@@ -313,6 +327,8 @@ paths:
     get:
       summary: Prices
       operationId: getPrices
+      x-code-samples:
+        $ref: './samples/getPrices.json'
       description: |
         The prices endpoint returns current prices for all currencies. Prices are updated every 10 seconds.
       responses:
@@ -334,6 +350,8 @@ paths:
     get:
       summary: Aggregated OHLC Candles
       operationId: getCandles
+      x-code-samples:
+        $ref: './samples/getCandles.json'
       description: |
         The candles endpoint returns aggregated open, high, low, close, and volume information for Nomics currencies.
         When asking for candles, a currency is provided as a parameter. Nomics aggregates all markets where the given
@@ -357,7 +375,7 @@ paths:
           required: false
           schema:
             type: string
-          example: "2018-05-14T00%3A00%3A00Z"
+          example: "2018-04-14T00%3A00%3A00Z"
         - $ref: '#/components/parameters/interval-end'
       responses:
         '200':
@@ -378,6 +396,8 @@ paths:
     get:
       summary: Exchange OHLC Candles
       operationId: getExchangeCandles
+      x-code-samples:
+        $ref: './samples/getExchangeCandles.json'
       description: |
         The exchange candles endpoint returns raw open, close, high, low, and volume information for Nomics Markets.
         The data is not aggregated, therefore prices are in the quote currency of the market and volume is in the base
@@ -414,6 +434,8 @@ paths:
     get:
       summary: Dashboard
       operationId: getDashboard
+      x-code-samples:
+        $ref: './samples/getDashboard.json'
       description: |
         The dashboard endpoint is a high level view of the current state of the market. It contains a wide
         variety of information and is updated every 10 seconds.
@@ -436,6 +458,8 @@ paths:
     get:
       summary: Sparkline
       operationId: getSparkline
+      x-code-samples:
+        $ref: './samples/getSparkline.json'
       description: |
         **Deprecated in favor of [Currencies Sparkline](#operation/getCurrenciesSparkline)**
 
@@ -474,6 +498,8 @@ paths:
     get:
       summary: Currencies Sparkline
       operationId: getCurrenciesSparkline
+      x-code-samples:
+        $ref: './samples/getCurrenciesSparkline.json'
       description: |
         The currencies sparkline endpoint returns prices for all currencies within a customizable time interval
         suitable for sparkline charts.
@@ -514,6 +540,8 @@ paths:
     get:
       summary: Market Cap Sparkline
       operationId: getMarketCapSparkline
+      x-code-samples:
+        $ref: './samples/getMarketCapSparkline.json'
       description: |
         **Deprecated in favor of [Market Cap History](#operation/getMarketCapHistory)**
 
@@ -552,6 +580,8 @@ paths:
     get:
       summary: Market Cap History
       operationId: getMarketCapHistory
+      x-code-samples:
+        $ref: './samples/getMarketCapHistory.json'
       description: |
         MarketCap History is the total market cap for all cryptoassets at intervals between the requested time period.
       parameters:
@@ -585,6 +615,8 @@ paths:
     get:
       summary: Exchange Rates
       operationId: getExchangeRates
+      x-code-samples:
+        $ref: './samples/getExchangeRates.json'
       description: |
         The exchange rates endpoint returns the current exchange rates used by Nomics to convert prices from markets
         into USD. This contains Fiat currencies as well as a BTC and ETH quote prices. This endpoint helps normalize
@@ -611,6 +643,8 @@ paths:
     get:
       summary: Exchange Rates Interval
       operationId: getExchangeRatesInterval
+      x-code-samples:
+        $ref: './samples/getExchangeRatesInterval.json'
       description: |
         Exchange rates to convert from USD over a time interval. This endpoint can be used with other interval endpoints
         to convert values into a desired quote currency.
@@ -658,6 +692,8 @@ paths:
     get:
       summary: Exchange Rates History
       operationId: getExchangeRatesHistory
+      x-code-samples:
+        $ref: './samples/getExchangeRatesHistory.json'
       description: |
         Exchange rates for every point in a time range. This endpoint can be used with other interval endpoints
         to convert values into a desired quote currency.
@@ -697,6 +733,8 @@ paths:
     get:
       summary: Trades
       operationId: getTrades
+      x-code-samples:
+        $ref: './samples/getTrades.json'
       description: |
         ### !! This API has not been released to all users.  If you'd like access to this endpoint, please contact cdc@nomics.com and request access.
 
@@ -738,6 +776,7 @@ paths:
             minimum: 1
             maximum: 2500
             default: 100
+          example: 100
         - name: order
           in: query
           description: >
@@ -748,6 +787,7 @@ paths:
               - asc
               - desc
             default: desc
+          example: asc
         - name: from
           in: query
           description: >
@@ -755,7 +795,7 @@ paths:
             From is inclusive.
           schema:
             type: string
-            example: "1970-01-01T00%3A00%3A00Z"
+          example: "1970-01-01T00%3A00%3A00Z"
       responses:
         '200':
           description: List of trades
@@ -775,6 +815,8 @@ paths:
     get:
       summary: All Time Highs
       operationId: getCurrencyHighs
+      x-code-samples:
+        $ref: './samples/getCurrencyHighs.json'
       description: |
         Returns all time high information for all currencies.
       responses:
@@ -818,6 +860,8 @@ paths:
     get:
       summary: Currencies Interval
       operationId: getCurrenciesInterval
+      x-code-samples:
+        $ref: './samples/getCurrenciesInterval.json'
       description: |
         Open and close prices and volume for all currencies between a customizable time range.
       parameters:
@@ -868,6 +912,8 @@ paths:
     get:
       summary: Supplies Interval
       operationId: getSuppliesInterval
+      x-code-samples:
+        $ref: './samples/getSuppliesInterval.json'
       description: |
         Open and close supply information for all currencies between a customizable time interval.
       parameters:
@@ -930,6 +976,9 @@ components:
         For example:
 
         https://api.nomics.com/v1/markets?key=your-api-key-goes-here
+
+        **The key used in the examples on this page is changed regularly** and is intended only as a demo.
+        [Get your free Nomics API key here](https://p.nomics.com/cryptocurrency-bitcoin-api/)
   schemas:
     Market:
       type: object
@@ -1194,6 +1243,7 @@ components:
         enum:
           - 1d
           - 1h
+      example: 1d
     exchange-candle-interval:
       name: interval
       in: query
@@ -1208,6 +1258,7 @@ components:
           - 30m
           - 5m
           - 1m
+      example: 1d
     currency:
       name: currency
       in: query
@@ -1239,7 +1290,7 @@ components:
       required: true
       schema:
         type: string
-      example: "2018-05-14T00%3A00%3A00Z"
+      example: "2018-04-14T00%3A00%3A00Z"
     interval-end:
       name: end
       in: query

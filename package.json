@@ -5,9 +5,13 @@
   "scripts": {
     "bundle": "redoc-cli bundle spec.yaml --template=template.hbs",
     "serve": "redoc-cli serve spec.yaml --template=template.hbs --port=$PORT --ssr",
-    "watch": "redoc-cli serve spec.yaml --template=template.hbs --watch"
+    "watch": "redoc-cli serve spec.yaml --template=template.hbs --watch",
+    "samples": "node ./generate_samples.js"
   },
   "dependencies": {
     "redoc-cli": "^0.6.1"
+  },
+  "devDependencies": {
+    "swagger-client": "^3.8.12"
   }
 }
