@@ -8,6 +8,22 @@ const spec = jsYaml.safeLoad(fs.readFileSync("./spec.yaml"))
 // https://p.nomics.com/cryptocurrency-bitcoin-api/
 const key = "2018-08-demo-dont-deploy-6eb4ce24acd11f08"
 
+const curlTemplate = (url) => `curl "${url}"`;
+
+const nodeTemplate = (url) => `require('axios').get(
+  "${url}"
+).then((response) => {
+  console.log(response)
+})`
+
+const pythonTemplate = (url) => `import urllib.request
+url = "${url}"
+print(urllib.request.urlopen(url).read())`
+
+const rubyTemplate = (url) => `require 'net/http'
+uri = URI("${url}")
+puts Net::HTTP.get(uri)`
+
 Swagger({spec}).then((jx) => {
   Object.keys(jx.spec.paths).forEach((k) => {
     const path = jx.spec.paths[k]
@@ -20,9 +36,11 @@ Swagger({spec}).then((jx) => {
       })
     }
     const url = `${jx.spec.servers[0].url}${k}?${params.join("&")}`
-    fs.writeFileSync(`./samples/${path.get.operationId}.json`, JSON.stringify([{
-      lang: "URL",
-      source: url,
-    }]))
+    fs.writeFileSync(`./samples/${path.get.operationId}.json`, JSON.stringify([
+      {lang: "Shell", source: curlTemplate(url)},
+      {lang: "JavaScript", source: nodeTemplate(url)},
+      {lang: "Ruby", source: rubyTemplate(url)},
+      {lang: "Python", source: pythonTemplate(url)},
+    ]))
   })
 })
