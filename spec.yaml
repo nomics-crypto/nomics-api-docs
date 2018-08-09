@@ -1040,7 +1040,7 @@ components:
           description: Currency ID
         price:
           type: string
-          description: Price in quote currency
+          description: Price
       example:
         currency: BTC
         price: "10000.00000"
@@ -1052,16 +1052,16 @@ components:
           description: Start time of the candle in RFC3339
         low:
           type: string
-          description: Lowest price in quote currency
+          description: Lowest price
         open:
           type: string
-          description: First trade price in quote currency
+          description: First trade price
         close:
           type: string
-          description: Last trade price in quote currency
+          description: Last trade price
         high:
           type: string
-          description: Highest price in quote currency
+          description: Highest price
         volume:
           type: string
           description: Volume in base currency
