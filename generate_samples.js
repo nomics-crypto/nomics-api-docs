@@ -6,7 +6,7 @@ const spec = jsYaml.safeLoad(fs.readFileSync("./spec.yaml"))
 
 // Rotated often! For demo use only! Get a free key here:
 // https://p.nomics.com/cryptocurrency-bitcoin-api/
-const key = "6eb4ce24acd11f0840e931f8e1158e1c"
+const key = "2018-08-demo-dont-deploy-6eb4ce24acd11f08"
 
 Swagger({spec}).then((jx) => {
   Object.keys(jx.spec.paths).forEach((k) => {
