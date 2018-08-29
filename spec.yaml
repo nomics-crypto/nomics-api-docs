@@ -65,6 +65,15 @@ info:
 
     Requests from `localhost`, `127.0.0.1`, and `0.0.0.0` will always succeed to aid in development.
 
+    # Demo
+
+    A demo application using the Nomics API, CORS, and React is available on Glitch.com. This can help
+    you get started using the Nomics API. Keep in mind it uses the demo key, which is rotated frequently.
+    You should get your own API key before deploying an app to production. Check it out:
+
+    <div class="glitch-embed-wrap" style="height: 420px; width: 100%;">
+      <iframe src="https://glitch.com/embed/#!/embed/nomics-api-demo?path=app/components/App.jsx" alt="nomics-api-demo on glitch" style="height: 100%; width: 100%; border: 0;"></iframe>
+    </div>
 servers:
   - url: https://api.nomics.com/v1
     description: API Server
