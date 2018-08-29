@@ -973,6 +973,57 @@ paths:
               example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /orders/snapshot:
+    get:
+      summary: Order Book Snapshot
+      operationId: getOrderBookSnapshot
+      x-code-samples:
+        $ref: './samples/getOrderBookSnapshot.json'
+      description: |
+        The most recent order book snapshot for the given exchange and market.
+        
+        CSV format is: `timestamp,bidPrice,bidAmount,askPrice,askAmount`
+
+        **Order books are currently only available for the following exchange IDs:**
+
+        * binance
+      parameters:
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/market'
+      responses:
+        '200':
+          description: Order book snapshot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    description: RFC3339 timestamp of the order book snapshot
+                    example: "2018-05-14T00:04:31Z"
+                  bids:
+                    description: Tuples of bids in descending order (first entry is best bid). First entry is price in the quote currency. Second entry is volume of the base currency.
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: double
+                    example: [[7017.98,0.18376],[7017.97,0.094285],[7017.95,2],[7017.87,0.214651],[7017.38,2]]
+                  asks:
+                    description: Tuples of asks in ascending order (first entry is best ask). First entry is price in the quote currency. Second entry is volume of the base currency.
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: double
+                    example: [[7020,4.77738],[7020.03,0.864663],[7020.26,2.856361],[7020.27,0.031258],[7021,3.076297]]
+            text/csv:
+              schema:
+                type: string
+              example: "08/29/2018 20:14:04,7014.31,0.178164,7015.99,0.000044"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
 components:
   securitySchemes:
     Key:
@@ -1283,7 +1334,7 @@ components:
       required: true
       schema:
         type: string
-      example: bitfinex
+      example: binance
     market:
       name: market
       in: query
@@ -1291,7 +1342,7 @@ components:
       required: true
       schema:
         type: string
-      example: avtbtc
+      example: BTCUSDT
     interval-start:
       name: start
       in: query
