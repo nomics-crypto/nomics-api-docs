@@ -986,7 +986,8 @@ paths:
 
         **Order books are currently only available for the following exchange IDs:**
 
-        * binance
+        * `binance`
+        * `bitfinex`
       parameters:
         - $ref: '#/components/parameters/exchange'
         - $ref: '#/components/parameters/market'
