@@ -357,7 +357,7 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /candles:
     get:
-      summary: Aggregated OHLC Candles
+      summary: Aggregated OHLCV Candles
       operationId: getCandles
       x-code-samples:
         $ref: './samples/getCandles.json'
