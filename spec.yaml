@@ -989,6 +989,7 @@ paths:
         * `binance`
         * `bitfinex`
         * `gdax`
+        * `bittrex`
       parameters:
         - $ref: '#/components/parameters/exchange'
         - $ref: '#/components/parameters/market'
