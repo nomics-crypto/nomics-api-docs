@@ -440,7 +440,7 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /exchange_candles:
     get:
-      summary: Exchange OHLC Candles
+      summary: Exchange OHLCV Candles
       operationId: getExchangeCandles
       x-code-samples:
         $ref: './samples/getExchangeCandles.json'
