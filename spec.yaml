@@ -88,6 +88,25 @@ paths:
       description: |
         The markets endpoint returns information on the exchanges and markets that Nomics supports,
         in addition to the Nomics currency identifiers for the base and quote currency.
+      parameters:
+        - name: exchange
+          in: query
+          description: Nomics Exchange ID to filter by
+          schema:
+            type: string
+          example: binance
+        - name: base
+          in: query
+          description: Comma separated list of base currencies to filter by
+          schema:
+            type: string
+          example: BTC,ETH,LTC,XMR
+        - name: quote
+          in: query
+          description: Comma separated list of quote currencies to filter by
+          schema:
+            type: string
+          example: BTC,ETH,BNB
       responses:
         '200':
           description: A list of markets
@@ -96,7 +115,25 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Market'
+                  type: object
+                  properties:
+                    exchange:
+                      type: string
+                      description: Nomics Exchange ID
+                    market:
+                      type: string
+                      description: The Exchange's Market ID (usable on Exchange's API)
+                    base:
+                      type: string
+                      description: Nomics Currency ID of the asset being traded
+                    quote:
+                      type: string
+                      description: Nomics Currency ID of the asset used to quote a price
+                  example:
+                    exchange: binance
+                    market: XMRBTC
+                    base: XMR
+                    quote: BTC
             text/csv:
               schema:
                 type: string
@@ -1043,26 +1080,6 @@ components:
         **The key used in the examples on this page is changed regularly** and is intended only as a demo.
         [Get your free Nomics API key here](https://p.nomics.com/cryptocurrency-bitcoin-api/)
   schemas:
-    Market:
-      type: object
-      properties:
-        exchange:
-          type: string
-          description: Nomics Exchange ID
-        market:
-          type: string
-          description: The Exchange's Market ID (usable on Exchange's API)
-        base:
-          type: string
-          description: Nomics Currency ID of the asset being traded
-        quote:
-          type: string
-          description: Nomics Currency ID of the asset used to quote a price
-      example:
-        exchange: bitfinex
-        market: avtbtc
-        base: AVT
-        quote: BTC
     MarketInterval:
       type: object
       properties:
