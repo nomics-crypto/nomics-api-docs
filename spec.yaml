@@ -79,6 +79,35 @@ servers:
     description: API Server
 
 paths:
+  /currencies:
+    get:
+      summary: Currencies
+      operationId: getCurrencies
+      x-code-samples:
+        $ref: './samples/getCurrencies.json'
+      description: |
+        The currencies endpoint returns all the currencies that Nomics supports.
+      responses:
+        '200':
+          description: A list of Nomics Currency IDs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Nomics Currency ID
+                  example:
+                    id: BTC
+            text/csv:
+              schema:
+                type: string
+              example: "BTC"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /markets:
     get:
       summary: Markets
