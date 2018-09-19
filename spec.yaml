@@ -558,6 +558,12 @@ paths:
       description: |
         The currencies sparkline endpoint returns prices for all currencies within a customizable time interval
         suitable for sparkline charts.
+
+        **Note** the timestamps and prices are built off of OHLCV candles using the close price. This means that the timestamp
+        represents the start of the candle, and the price is the close price of that candle. This means the response's final timestamp
+        and price value are always as current as possible, but also that the price is effectively "off" by one candle. This endpoint
+        is designed to serve as a convenient way to render sparklines, if you need exactly aligned times and prices you can use the
+        [Aggregated OHLCV Candles endpoint](#operation/getCandles).
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
