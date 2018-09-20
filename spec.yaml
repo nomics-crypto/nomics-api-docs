@@ -460,7 +460,33 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Candle"
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: Start time of the candle in RFC3339
+                    low:
+                      type: string
+                      description: Lowest price in USD
+                    open:
+                      type: string
+                      description: First trade price in USD
+                    close:
+                      type: string
+                      description: Last trade price in USD
+                    high:
+                      type: string
+                      description: Highest price in USD
+                    volume:
+                      type: string
+                      description: Volume in USD
+                  example:
+                    timestamp: "2018-04-14T00:00:00Z"
+                    low: "6737.42284"
+                    open: "7876.07784"
+                    close: "7992.22799"
+                    high: "8226.35323"
+                    volume: "1977895013"
             text/csv:
               schema:
                 type: string
@@ -507,7 +533,33 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Candle"
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: Start time of the candle in RFC3339
+                    low:
+                      type: string
+                      description: Lowest price in quote currency
+                    open:
+                      type: string
+                      description: First trade price in quote currency
+                    close:
+                      type: string
+                      description: Last trade price in quote currency
+                    high:
+                      type: string
+                      description: Highest price in quote currency
+                    volume:
+                      type: string
+                      description: Volume in base currency
+                  example:
+                    timestamp: "2018-04-14T00:00:00Z"
+                    low: "7810.00000000"
+                    open: "7877.48000000"
+                    close: "7999.01000000"
+                    high: "8186.00000000"
+                    volume: "31621.28635700"
             text/csv:
               schema:
                 type: string
@@ -1168,34 +1220,6 @@ components:
       example:
         currency: BTC
         price: "10000.00000"
-    Candle:
-      type: object
-      properties:
-        timestamp:
-          type: string
-          description: Start time of the candle in RFC3339
-        low:
-          type: string
-          description: Lowest price
-        open:
-          type: string
-          description: First trade price
-        close:
-          type: string
-          description: Last trade price
-        high:
-          type: string
-          description: Highest price
-        volume:
-          type: string
-          description: Volume in base currency
-      example:
-        timestamp: "2018-03-19T10:00:00Z"
-        low: "7024.32225"
-        open: "8276.19407"
-        close: "8281.17307"
-        high: "8566.43000"
-        volume: "59624801"
     Dashboard:
       type: object
       properties:
