@@ -277,16 +277,20 @@ paths:
       x-code-samples:
         $ref: './samples/getExchangeMarketInterval.json'
       description: |
-        The exchange market interval endpoint returns a summary of information about all markets for a given currency
-        over a configurable time interval in their native values.
+        The exchange market interval endpoint returns a summary of information about all markets over a configurable
+        time interval in their native values.
       parameters:
         - name: currency
           in: query
-          description: Nomics Currency ID to query information for
-          required: true
+          description: Nomics Currency ID to filter by. If present, only markets with this currency as the base or quote will be returned.
           schema:
             type: string
           example: BTC
+        - name: exchange
+          in: query
+          description: Nomics Exchange ID to filter by. If present, only markets on this exchange will be returned
+          schema:
+            type: string
         - name: start
           in: query
           description: Start time of the interval in RFC3339 (URI escaped).
@@ -351,16 +355,20 @@ paths:
       x-code-samples:
         $ref: './samples/getExchangeMarketPrices.json'
       description: |
-        The exchange market prices endpoint returns prices for the last trade in each market with the given currency
-        as either the base or quote currency in their native values.
+        The exchange market prices endpoint returns prices for the last trade in each market
       parameters:
         - name: currency
           in: query
-          description: Nomics Currency ID of the desired currency
-          required: true
+          description: Nomics Currency ID to filter by. If present, only markets with this currency as the base or quote will be returned.
           schema:
             type: string
           example: BTC
+        - name: exchange
+          in: query
+          description: Nomics Exchange ID to filter by. If present, only markets on this exchange will be returned
+          schema:
+            type: string
+          example: binance
       responses:
         '200':
           description: A list of markets with their prices
