@@ -886,7 +886,7 @@ paths:
       x-code-samples:
         $ref: './samples/getTrades.json'
       description: |
-        ### !! This API has not been released to all users.  If you'd like access to this endpoint, please contact cdc@nomics.com and request access.
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please <a href="https://p.nomics.com/pricing/">go here</a> to learn more.
 
         The trades endpoint returns individual trades in a normalized format for an individual
         exchange market.
@@ -1121,6 +1121,8 @@ paths:
       x-code-samples:
         $ref: './samples/getOrderBookSnapshot.json'
       description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please <a href="https://p.nomics.com/pricing/">go here</a> to learn more.
+                
         The most recent order book snapshot for the given exchange and market.
         
         CSV format is: `timestamp,bidPrice,bidAmount,askPrice,askAmount`
