@@ -333,19 +333,23 @@ paths:
                     close_timestamp:
                       type: string
                       description: Timestamp of the close price in RFC 3339
+                    num_trades:
+                      type: string
+                      description: Total number of trades
                   example:
                     exchange: "binance"
                     base: "ADA"
                     quote: "BTC"
-                    volume_base: "105451372.00000000"
-                    open_quote: "0.00002228"
-                    open_timestamp: "2018-06-24T00:00:00Z"
-                    close_quote: "0.00002187"
-                    close_timestamp: "2018-06-25T14:00:00Z"
+                    volume_base: "4974200617.00000000"
+                    open_quote: "0.00002547"
+                    open_timestamp: "2018-04-14T00:00:00Z"
+                    close_quote: "0.00003071"
+                    close_timestamp: "2018-05-14T00:00:00Z"
+                    num_trades: "2456653"
             text/csv:
               schema:
                 type: string
-              example: "binance,ADA,BTC,106633034.00000000,0.00002228,06/24/2018 00:00:00,0.00002177,06/25/2018 15:00:00"
+              example: "binance,ADA,BTC,4974200617.00000000,0.00002547,04/14/2018 00:00:00,0.00003071,05/14/2018 00:00:00,2456653"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
   /exchange-markets/prices:
@@ -561,6 +565,9 @@ paths:
                     volume:
                       type: string
                       description: Volume in base currency
+                    num_trades:
+                      type: string
+                      description: Number of trades
                   example:
                     timestamp: "2018-04-14T00:00:00Z"
                     low: "7810.00000000"
@@ -568,10 +575,11 @@ paths:
                     close: "7999.01000000"
                     high: "8186.00000000"
                     volume: "31621.28635700"
+                    num_trades: "168756"
             text/csv:
               schema:
                 type: string
-              example: "2018-03-19T10:00:00Z,7024.32225,8276.19407,8281.17307,8566.43000,59624801"
+              example: "04/14/2018 00:00:00,7810.00000000,7877.48000000,7999.01000000,8186.00000000,31621.28635700,168756"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /dashboard:
