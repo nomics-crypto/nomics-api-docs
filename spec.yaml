@@ -769,6 +769,55 @@ paths:
               example: "07/05/2018 15:00:00,269222501959"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /volume/history:
+    get:
+      summary: Global Volume History
+      operationId: getVolumeHistory
+      x-code-samples:
+        $ref: './samples/getVolumeHistory.json'
+      description: |
+        Volume History is the total volume for all cryptoassets in USD at intervals between the requested time period.
+      parameters:
+        - start:
+          name: start
+          in: query
+          description: Start time of the interval in RFC3339 (URI escaped)
+          schema:
+            type: string
+          example: "2018-04-14T00%3A00%3A00Z"
+        - end:
+          name: end
+          in: query
+          description: |
+            End time of the interval in RFC3339 (URI escaped). If not provided,
+            the current time is used.
+          schema:
+            type: string
+          example: "2018-05-14T00%3A00%3A00Z"
+      responses:
+        '200':
+          description: Volume over time for all currencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: RFC3339 timestamp
+                      example: "2018-04-14T00:00:00Z"
+                    volume:
+                      type: string
+                      description: Total volume in USD
+                      example: "5209035491"
+            test/csv:
+              schema:
+                type: string
+              example: "04/14/2018 00:00:00,5209035491"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /exchange-rates:
     get:
       summary: Exchange Rates
