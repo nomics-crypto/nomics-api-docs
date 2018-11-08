@@ -321,6 +321,9 @@ paths:
                     volume_base:
                       type: string
                       description: Total volume in the base currency
+                    volume_usd:
+                      type: string
+                      description: Total volume in USD
                     open_quote:
                       type: string
                       description: Open price in the quote currency
@@ -340,7 +343,8 @@ paths:
                     exchange: "binance"
                     base: "ADA"
                     quote: "BTC"
-                    volume_base: "4974200617.00000000"
+                    volume_base: "4974200617.00000"
+                    volume_usd: "1496075991.61416"
                     open_quote: "0.00002547"
                     open_timestamp: "2018-04-14T00:00:00Z"
                     close_quote: "0.00003071"
@@ -349,7 +353,7 @@ paths:
             text/csv:
               schema:
                 type: string
-              example: "binance,ADA,BTC,4974200617.00000000,0.00002547,04/14/2018 00:00:00,0.00003071,05/14/2018 00:00:00,2456653"
+              example: "binance,ADA,BTC,4974200617.00000,1496075991.61416,0.00002547,04/14/2018 00:00:00,0.00003071,05/14/2018 00:00:00,2456653"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
   /exchange-markets/prices:
