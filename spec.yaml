@@ -12,18 +12,20 @@ info:
     we've done on [nomics.com](https://nomics.com) you can do with our API. There are
     no internal API endpoints.
 
-    # API Server URL
+    # General
+
+    ## API Server URL
 
     The Nomics API runs at `https://api.nomics.com/v1`. All requests should be prefixed
     by the server URL.
 
-    # Errors
+    ## Errors
 
     The Nomics API uses standard HTTP status codes to indicate success or failure. 200
     represents success, 4xx represents a user error (such as a problem with your key),
     and 5xx represents a problem with our API.
 
-    # Versioning
+    ## Versioning
 
     We follow Semantic Versioning. That means our API is versioned as Major.Minor.Patch.
     For example, Version 1.2.3 has major version 1, minor version 2, and patch version 3.
@@ -45,7 +47,7 @@ info:
     Patch version changes indicate we fixed a bug or security vulnerability. Patch versions
     don't add new functionality.
 
-    # JSON and CSV Support
+    ## JSON and CSV Support
 
     By default, all endpoints serve data as JSON. However, by passing `format=csv` in the URL,
     an endpoint will return CSV data. This can be used in Google Sheets via the `IMPORTDATA`
@@ -55,7 +57,7 @@ info:
     from multiple requests. The fields will be rendered in the same order as the JSON fields. See
     the endpoint's documentation for an example.
 
-    # Cross Origin Resource Sharing (CORS)
+    ## Cross Origin Resource Sharing (CORS)
 
     This API supports Cross Origin Resource Sharing, which allows you to make API requests directly
     from your user's browser.
@@ -65,7 +67,7 @@ info:
 
     Requests from `localhost`, `127.0.0.1`, and `0.0.0.0` will always succeed to aid in development.
 
-    # Demo
+    ## Demo
 
     A demo application using the Nomics API, CORS, and React is available on Glitch.com. This can help
     you get started using the Nomics API. Keep in mind it uses the demo key, which is rotated frequently.
@@ -74,13 +76,31 @@ info:
     <div class="glitch-embed-wrap" style="height: 420px; width: 100%;">
       <iframe src="https://glitch.com/embed/#!/embed/nomics-api-demo?path=README.md" alt="nomics-api-demo on glitch" style="height: 100%; width: 100%; border: 0;"></iframe>
     </div>
+
 servers:
   - url: https://api.nomics.com/v1
     description: API Server
 
+tags:
+  - name: Currencies
+  - name: Markets
+  - name: Exchange Markets
+  - name: Prices
+  - name: Candles
+  - name: Dashboard
+  - name: Market Cap
+  - name: Volume
+  - name: Exchange Rates
+  - name: Trades
+  - name: Supplies
+  - name: Orders
+  - name: Deprecated
+
 paths:
   /currencies:
     get:
+      tags:
+        - Currencies
       summary: Currencies
       operationId: getCurrencies
       x-code-samples:
@@ -110,6 +130,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /markets:
     get:
+      tags:
+        - Markets
       summary: Markets
       operationId: getMarkets
       x-code-samples:
@@ -171,6 +193,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /markets/interval:
     get:
+      tags:
+        - Markets
       summary: Market Interval
       operationId: getMarketInterval
       x-code-samples:
@@ -222,6 +246,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
   /markets/prices:
     get:
+      tags:
+        - Markets
       summary: Market Prices
       operationId: getMarketPrices
       x-code-samples:
@@ -272,6 +298,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /exchange-markets/interval:
     get:
+      tags:
+        - Exchange Markets
       summary: Exchange Market Interval
       operationId: getExchangeMarketInterval
       x-code-samples:
@@ -358,6 +386,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
   /exchange-markets/prices:
     get:
+      tags:
+        - Exchange Markets
       summary: Exchange Market Prices
       operationId: getExchangeMarketPrices
       x-code-samples:
@@ -416,6 +446,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /prices:
     get:
+      tags:
+        - Prices
       summary: Prices
       operationId: getPrices
       x-code-samples:
@@ -439,6 +471,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /candles:
     get:
+      tags:
+        - Candles
       summary: Aggregated OHLCV Candles
       operationId: getCandles
       x-code-samples:
@@ -511,6 +545,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /exchange_candles:
     get:
+      tags:
+        - Candles
       summary: Exchange OHLCV Candles
       operationId: getExchangeCandles
       x-code-samples:
@@ -588,6 +624,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /dashboard:
     get:
+      tags:
+        - Dashboard
       summary: Dashboard
       operationId: getDashboard
       x-code-samples:
@@ -612,6 +650,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /sparkline:
     get:
+      tags:
+        - Deprecated
       summary: Sparkline
       operationId: getSparkline
       x-code-samples:
@@ -652,6 +692,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /currencies/sparkline:
     get:
+      tags:
+          - Currencies
       summary: Currencies Sparkline
       operationId: getCurrenciesSparkline
       x-code-samples:
@@ -700,6 +742,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /market-cap/sparkline:
     get:
+      tags:
+        - Market Cap
       summary: Market Cap Sparkline
       operationId: getMarketCapSparkline
       x-code-samples:
@@ -740,6 +784,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /market-cap/history:
     get:
+      tags:
+        - Market Cap
       summary: Market Cap History
       operationId: getMarketCapHistory
       x-code-samples:
@@ -775,6 +821,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /volume/history:
     get:
+      tags:
+        - Volume
       summary: Global Volume History
       operationId: getVolumeHistory
       x-code-samples:
@@ -824,6 +872,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /exchange-rates:
     get:
+      tags:
+        - Exchange Rates
       summary: Exchange Rates
       operationId: getExchangeRates
       x-code-samples:
@@ -852,6 +902,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /exchange-rates/interval:
     get:
+      tags:
+        - Exchange Rates
       summary: Exchange Rates Interval
       operationId: getExchangeRatesInterval
       x-code-samples:
@@ -901,6 +953,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
   /exchange-rates/history:
     get:
+      tags:
+        - Exchange Rates
       summary: Exchange Rates History
       operationId: getExchangeRatesHistory
       x-code-samples:
@@ -942,6 +996,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
   /trades:
     get:
+      tags:
+        - Trades
       summary: Trades
       operationId: getTrades
       x-code-samples:
@@ -1024,6 +1080,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /currencies/highs:
     get:
+      tags:
+        - Currencies
       summary: All Time Highs
       operationId: getCurrencyHighs
       x-code-samples:
@@ -1069,6 +1127,8 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /currencies/interval:
     get:
+      tags:
+        - Currencies
       summary: Currencies Interval
       operationId: getCurrenciesInterval
       x-code-samples:
@@ -1121,6 +1181,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
   /supplies/interval:
     get:
+      tags:
+        - Supplies
       summary: Supplies Interval
       operationId: getSuppliesInterval
       x-code-samples:
@@ -1177,6 +1239,8 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
   /orders/snapshot:
     get:
+      tags:
+        - Orders
       summary: Order Book Snapshot
       operationId: getOrderBookSnapshot
       x-code-samples:
