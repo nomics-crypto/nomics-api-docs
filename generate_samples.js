@@ -11,14 +11,12 @@ const key = "2018-09-demo-dont-deploy-b69315e440beb145"
 const curlTemplate = (url) => `curl "${url}"`;
 
 const javascriptTemplate = (url) => `fetch("${url}")
-  .then((response) => response.json())
-  .then((data) => console.log(data));`
+  .then(response => response.json())
+  .then(data => console.log(data))`
 
-const nodeTemplate = (url) => `require('axios').get(
-  "${url}"
-).then((response) => {
-  console.log(response)
-})`
+const nodeTemplate = (url) => `require('axios')
+  .get("${url}")
+  .then(response => console.log(response))`
 
 const pythonTemplate = (url) => `import urllib.request
 url = "${url}"
