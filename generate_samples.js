@@ -10,11 +10,13 @@ const key = "2018-09-demo-dont-deploy-b69315e440beb145"
 
 const curlTemplate = (url) => `curl "${url}"`;
 
-const nodeTemplate = (url) => `require('axios').get(
-  "${url}"
-).then((response) => {
-  console.log(response)
-})`
+const javascriptTemplate = (url) => `fetch("${url}")
+  .then(response => response.json())
+  .then(data => console.log(data))`
+
+const nodeTemplate = (url) => `require('axios')
+  .get("${url}")
+  .then(response => console.log(response))`
 
 const pythonTemplate = (url) => `import urllib.request
 url = "${url}"
@@ -38,7 +40,8 @@ Swagger({spec}).then((jx) => {
     const url = `${jx.spec.servers[0].url}${k}?${params.join("&")}`
     fs.writeFileSync(`./samples/${path.get.operationId}.json`, JSON.stringify([
       {lang: "Shell", source: curlTemplate(url)},
-      {lang: "JavaScript", source: nodeTemplate(url)},
+      {lang: "JavaScript", source: javascriptTemplate(url)},
+      {lang: "NodeJS", source: nodeTemplate(url)},
       {lang: "Ruby", source: rubyTemplate(url)},
       {lang: "Python", source: pythonTemplate(url)},
     ]))
