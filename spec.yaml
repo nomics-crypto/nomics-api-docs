@@ -92,14 +92,14 @@ tags:
   - name: Deprecated
 
 x-tagGroups:
-  - name: Free API
+  - name: Free
     tags:
       - Currencies
       - Markets
       - Candles
       - Volume
       - Exchange Rates
-  - name: Commercial API
+  - name: Commercial
     tags:
       - Trades
       - Orders
