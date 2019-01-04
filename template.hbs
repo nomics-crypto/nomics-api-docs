@@ -70,12 +70,16 @@
         #redoc label[role="menuitem"] {
             border-left: 5px solid transparent;
             color: #777a80;
-            padding: 8px 16px;
+            padding: 6px 16px;
             transition: 0.15s ease;
         }
         #redoc label[role="menuitem"].hXQhys,
         #redoc label[role="menuitem"].hXQhys:hover {
-            color: #93979e;
+            color: #aa00ff;
+            font-size: 0.88rem;
+            font-weight: 500;
+            margin-top: 10px;
+            opacity: 1;
         }
         #redoc label[role='menuitem'].-depth1 {
             font-size: 15px;
@@ -86,6 +90,7 @@
         #redoc label[role='menuitem'].-depth2 {
             background-color: #edeff2;
             font-size: 13px;
+            padding: 7px 16px;
         }
         #redoc label[role="menuitem"].active,
         #redoc label[role="menuitem"].active:hover {
@@ -331,6 +336,12 @@
             color: #fff;
         }
         /* Media Queries */
+        @media screen and (max-width: 64em) {
+            #redoc .api-content .hxaCuh {
+                margin: 0 40px;
+                width: calc(100% - 80px);
+            }
+        }
         @media screen and (min-width: 64em) {
             #redoc .api-content .fMRrIL {
                 margin-bottom: 20px;
@@ -353,6 +364,12 @@
             }
             #redoc .api-content p {
                 line-height: 1.67rem;
+            }
+        }
+        @media screen and (min-width: 64em) and (max-width: 85rem) {
+            #redoc .api-content .hxaCuh {
+                margin: 0 60px;
+                width: calc(100% - 120px);
             }
         }
     </style>
