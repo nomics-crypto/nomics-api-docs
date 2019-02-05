@@ -165,6 +165,32 @@ paths:
               example: "BTC,10000.00000"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /dashboard:
+    get:
+      tags:
+        - Currencies
+      summary: Dashboard
+      operationId: getDashboard
+      x-code-samples:
+        $ref: './samples/getDashboard.json'
+      description: |
+        The dashboard endpoint is a high level view of the current state of the market. It contains a wide
+        variety of information and is updated every 10 seconds.
+      responses:
+        '200':
+          description: A list of currency summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dashboard"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,7436.82313,1017039454.62165,1013499101.75834,7123.20591,7856259697.70049,7139283718.53940,10769.08245,41483988434.15605,50120582053.23234,1144.85801,385101925394.80138,16773015388.14144,6888.45685,24436.29525,2018-01-05T00:00:00Z,bithumb,KRW,16957550.0,21000000.0"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /currencies/interval:
     get:
       tags:
@@ -372,32 +398,6 @@ paths:
               schema:
                 type: string
               example: "BTC,24436.29525,01/05/2018 00:00:00,bithumb,KRW"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /dashboard:
-    get:
-      tags:
-        - Currencies
-      summary: Dashboard
-      operationId: getDashboard
-      x-code-samples:
-        $ref: './samples/getDashboard.json'
-      description: |
-        The dashboard endpoint is a high level view of the current state of the market. It contains a wide
-        variety of information and is updated every 10 seconds.
-      responses:
-        '200':
-          description: A list of currency summaries
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Dashboard"
-            text/csv:
-              schema:
-                type: string
-              example: "BTC,7436.82313,1017039454.62165,1013499101.75834,7123.20591,7856259697.70049,7139283718.53940,10769.08245,41483988434.15605,50120582053.23234,1144.85801,385101925394.80138,16773015388.14144,6888.45685,24436.29525,2018-01-05T00:00:00Z,bithumb,KRW,16957550.0,21000000.0"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /markets:
