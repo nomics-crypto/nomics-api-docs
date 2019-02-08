@@ -109,6 +109,92 @@ x-tagGroups:
 
 
 paths:
+  /currencies/ticker:
+    get:
+      tags:
+        - Currencies
+      summary: Currencies Ticker
+      operationId: getCurrenciesTicker
+      x-code-samples:
+        $ref: "./samples/getCurrenciesTicker.json"
+      description: |
+        Open and close prices and volume for all currencies between a customizable time range.
+      parameters:
+        - $ref: "#/components/parameters/currencies-ticker-interval"
+      responses:
+        "200":
+          description: Open, close, and volume for all currencies in a time range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    circulating_supply:
+                      type: string
+                      description: Current circulating supply
+                    high:
+                      type: string
+                      description: All time high price
+                    high_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the all time high
+                    market_cap:
+                      type: string
+                      description: Current market cap
+                    max_supply:
+                      type: string
+                      description: Current maximum supply
+                    price:
+                      type: string
+                      description: Current price
+                    symbol:
+                      type: string
+                      description: Nomics ID of the currency
+                    interval:
+                      type: object
+                      description: "Interval-specific ticker attributes. The key will be the name of the interval (IE: `1d` or `365d`) and will occur for every requested interval."
+                      properties:
+                        market_cap_change:
+                          type: string
+                          description: Amount of market cap change for the given interval in USD
+                        market_cap_change_pct:
+                          type: string
+                          description: Percent change of market cap for the given interval
+                        price_change:
+                          type: string
+                          description: Amount of price change for the given interval in USD
+                        price_change_pct:
+                          type: string
+                          description: Percent change of price for the given interval
+                        volume:
+                          type: string
+                          description: Total volume for the given interval in USD
+                        volume_change:
+                          type: string
+                          description: Amount of volume change for the given interval in USD
+                        volume_change_pct:
+                          type: string
+                          description: Percent change of volume for the given interval
+                  example:
+                    circulating_supply: "17527012"
+                    high: "24436.29525"
+                    high_timestamp: "2018-01-05T00:00:00.000Z"
+                    market_cap: "64486639237.16"
+                    max_supply: "21000000"
+                    price: "3679.2717"
+                    symbol: "BTC"
+                    1d:
+                      market_cap_change: "5274865072.90"
+                      market_cap_change_pct: "0.0891"
+                      price_change: "300.58"
+                      price_change_pct: "0.0890"
+                      volume: "274954149.16"
+                      volume_change: "154693371.61"
+                      volume_change_pct: "1.2863"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
   /currencies:
     get:
       tags:
@@ -1543,6 +1629,20 @@ components:
           - 1d
           - 1h
       example: 1d
+    currencies-ticker-interval:
+      name: interval
+      in: query
+      description: Comma separated time interval of the ticker(s). Default is all intervals.
+      required: false
+      schema:
+        type: string
+        enum:
+          - 1d
+          - 7d
+          - 30d
+          - 365d
+          - ytd
+      example: 1d,30d
     exchange-candle-interval:
       name: interval
       in: query
