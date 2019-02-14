@@ -77,8 +77,13 @@ info:
       <iframe src="https://glitch.com/embed/#!/embed/nomics-api-demo?path=README.md" alt="nomics-api-demo on glitch" style="height: 100%; width: 100%; border: 0;"></iframe>
     </div>
 
-    ## Community Projects
-    We love watching developers explore new use-cases with our API. Whether you're tinkering on a small side project or building an open-source resource, please share what you're up to in our [forums](https://forums.nomics.com/). We'd love to take a look and include it in the list below:
+    # Community
+    
+    ## Forums
+    We love watching developers explore new use-cases with our API. Whether you're tinkering on a small side project or building an open-source resource, please share what you're up to in our [forums](https://forums.nomics.com/).
+
+    ## SDKs and Libraries
+    Here are the latest projects our community members have shared in the forums:
     - [Nomics.com Swift SDK](https://forums.nomics.com/t/swift-sdk-supporting-ios-macos-tvos-and-watchos/) by Nick DiZazzo
     - [Nomics Node.js Library](https://forums.nomics.com/t/i-made-a-library-for-node-js/) by mikunimaru
 
