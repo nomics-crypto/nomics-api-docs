@@ -1189,6 +1189,16 @@ paths:
         * `poloniex`
         * `ethfinex`
         * `kraken`
+        * `okex`
+        * `huobipro`
+        * `zb`
+        * `upbit`
+        * `uex`
+        * `cobinhood`
+        * `acx`
+        * `bitibu`
+        * `coinex`
+        * `okcoinusd`
       parameters:
         - $ref: '#/components/parameters/exchange'
         - $ref: '#/components/parameters/market'
