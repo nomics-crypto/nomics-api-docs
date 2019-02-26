@@ -118,9 +118,10 @@ paths:
       x-code-samples:
         $ref: "./samples/getCurrenciesTicker.json"
       description: |
-        Open and close prices and volume for all currencies between a customizable time range.
+        Price, volume, and market cap for all currencies across 1 day, 7 day, 30 day, 365 day, and year to date intervals. Current prices are updated every 10 seconds.
       parameters:
         - $ref: "#/components/parameters/currencies-ticker-interval"
+        - $ref: "#/components/parameters/currencies-ticker-quote-currency"
       responses:
         "200":
           description: Open, close, and volume for all currencies in a time range
@@ -149,7 +150,7 @@ paths:
                     price:
                       type: string
                       description: Current price
-                    symbol:
+                    currency:
                       type: string
                       description: Nomics ID of the currency
                     interval:
@@ -184,7 +185,7 @@ paths:
                     market_cap: "64486639237.16"
                     max_supply: "21000000"
                     price: "3679.2717"
-                    symbol: "BTC"
+                    currency: "BTC"
                     1d:
                       market_cap_change: "5274865072.90"
                       market_cap_change_pct: "0.0891"
@@ -1653,6 +1654,14 @@ components:
           - 365d
           - ytd
       example: 1d,30d
+    currencies-ticker-quote-currency:
+      name: quote-currency
+      in: query
+      description: Currency to quote ticker price, market cap, and volume values. Default is `USD`.
+      required: false
+      schema:
+        type: string
+      example: EUR
     exchange-candle-interval:
       name: interval
       in: query
