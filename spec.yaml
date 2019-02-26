@@ -1657,7 +1657,7 @@ components:
     currencies-ticker-quote-currency:
       name: quote-currency
       in: query
-      description: Currency to quote ticker price, market cap, and volume values. Default is `USD`.
+      description: Currency to quote ticker price, market cap, and volume values. Must be a valid currency from [Exchange Rates](#operation/getExchangeRates). Default is `USD`.
       required: false
       schema:
         type: string
