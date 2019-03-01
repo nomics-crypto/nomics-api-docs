@@ -1301,7 +1301,10 @@ paths:
         * `bitibu`
         * `coinex`
         * `okcoinusd`
-        * `bitmex`
+        * `bitmex`*
+        
+        * Bitmex order books are available, but only by request. Because Bitmex is a futures exchange we do not include its data with the 
+          rest of our data set.
       parameters:
         - $ref: '#/components/parameters/exchange'
         - $ref: '#/components/parameters/market'
