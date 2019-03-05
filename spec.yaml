@@ -1713,7 +1713,7 @@ components:
     market:
       name: market
       in: query
-      description: Market ID
+      description: The Exchange's Market ID from [Markets](#tag/Markets)
       required: true
       schema:
         type: string
