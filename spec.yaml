@@ -874,7 +874,7 @@ paths:
 
         Candles have the following history based on size:
 
-        * `1d`: From inception updated every 2 hours
+        * `1d`: From inception updated every 15 minutes
         * `1h`: Rolling 30 days updated every 5 minutes
       parameters:
         - $ref: '#/components/parameters/candle-interval'
