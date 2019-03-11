@@ -874,8 +874,8 @@ paths:
 
         Candles have the following history based on size:
 
-        * `1d`: From inception updated every 4 hours
-        * `1h`: Rolling 30 days updated every 10 minutes
+        * `1d`: From inception updated every 2 hours
+        * `1h`: Rolling 30 days updated every 5 minutes
       parameters:
         - $ref: '#/components/parameters/candle-interval'
         - $ref: '#/components/parameters/currency'
@@ -944,11 +944,11 @@ paths:
         
         Candles have the following history based on size:
 
-        * `1d`: From inception updated every 4 hours
-        * `4h`: Rolling 120 days updated every 40 minutes
-        * `1h`: Rolling 30 days updated every 10 minutes
-        * `30m`: Rolling 14 days updated every 5 minutes
-        * `5m`: Rolling 3 days updated every minute
+        * `1d`: From inception updated every minute
+        * `4h`: Rolling 120 days updated every minute
+        * `1h`: Rolling 30 days updated every minute
+        * `30m`: Rolling 14 days updated every minute
+        * `5m`: Rolling 3 days updated every 10 seconds
         * `1m`: Rolling 24 hours updated every 10 seconds
       parameters:
         - $ref: '#/components/parameters/exchange-candle-interval'
