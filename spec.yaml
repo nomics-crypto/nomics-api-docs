@@ -100,6 +100,65 @@ tags:
   - name: Currencies
   - name: Markets
   - name: Candles
+    description: |
+      ### What are OHLCV Candles?
+
+      OHLCV Candles is an abbreviation of "Open, High, Low, Close, and Volume Candlestick Data". Each "Candle"
+      represents a point in time of an asset's price history.
+
+      For example, take the following pricing data:
+
+      | Month    | High | Open | Close | Low |
+      |----------|------|------|-------|-----|
+      | January  | $70  | $20  | $50   | $15 |
+      | February | $66  | $50  | $45   | $25 |
+      | March    | $80  | $45  | $62   | $30 |
+      | April    | $95  | $62  | $85   | $50 |
+      | May      | $90  | $85  | $70   | $60 |
+
+      A candlestick chart of this data in Google Sheets looks like this:
+
+      ![Candlestick Chart](https://s3.us-east-2.amazonaws.com/nomics-api-documentation/candlestick-chart.png)
+
+      The lines extending from the boxes are called "wicks" and they represent the high and low for that time
+      period. The top and bottom of the boxes represent the open and close. Different visualizations of candles
+      have different ways of conveying which of the top and bottom of the boxes are the open and close. In this
+      case, with Google Sheets, candles that close higher than they open are solid colors, while candles that
+      close lower than they open are transparent.
+
+      ### How are Candles Built?
+
+      At Nomics, we have three methods of building candles:
+
+      1. Building candles from raw, gapless trade execution data (sometimes called "tick data")
+      2. Ingesting candles directly from exchanges, and building intermediate sizes
+      3. Ingesting 24 hour tickers from exchanges, and extrapolating estimated candles
+
+      The first method, trades, is greatly preferred as it yields the most accurate and trustworthy data. The second
+      method, candles, is also very accurate, but without the underlying trade data, it is not as transparent. The
+      third method, tickers, is the lowest quality source and should only be used as an estimate of pricing activity.
+
+      ### Why don't candles show up right away?
+
+      You may notice that candles don't show up immediately after they start. For example, at 12:01am, you may not see
+      a daily, hourly, or even a minute candle for 12:00am yet. This is because several steps need to occur in order to
+      build a candle:
+
+      1. Trades must be executed on an exchange. If there are no trades after 12:00am for a market or currency, there
+      is simply no data to represent.
+      2. Trades must be ingested into Nomics. We ingest data as fast as possible, but due to exchange rate limits and
+      limitations on the speed of data across the internet, there is always a delay between a trade being executed and
+      when it arrives in the Nomics database.
+      3. An Exchange Candle must be built. Once we have the trade in our database, we then aggregate all trades within
+      the candle's time range in order to build and store the candle.
+      4. An Aggregate Candle must be built. After an Exchange Candle is built (which represents a single market on a
+      single exchange) we must build an Aggregated Candle (which represents an asset across all markets and exchanges)
+
+      Every step in this pipeline takes time to compute, which means that it may be seconds, or even minutes before
+      a trade is fully represented by all candle types in our data set.
+
+      For more information about update frequencies, see the descriptions of our candle types below.
+
   - name: Volume
   - name: Exchange Rates
   - name: Trades
