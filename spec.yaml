@@ -178,6 +178,7 @@ x-tagGroups:
     tags:
       - Trades
       - Orders
+      - Market Pair
   - name: Other
     tags:
       - Deprecated
@@ -1068,104 +1069,6 @@ paths:
               example: "04/14/2018 00:00:00,7810.00000000,7877.48000000,7999.01000000,8186.00000000,31621.28635700,168756"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
-  /markets/candles:
-    get:
-      tags:
-        - Candles
-      summary: Market Pair OHLCV Candles
-      operationId: getMarketCandles
-      x-code-samples:
-        $ref: './samples/getMarketCandles.json'
-      description: |
-        The Market Pair Candles endpoint returns aggregated open, close, high, low, and volume information for a
-        Market Pair of base and quote currencies. Open and Close are volume weighted averages across markets, while
-        High and Low are the max and min prices across markets. Volume is the total volume.
-
-        This is equivalent to getting Exchange Market OHLCV Candles across all exchanges with the given base and quote
-        and merging them together. This is different from Aggregated OHLCV Candles because those convert to USD and
-        merge candles across the base currency only.
-
-        The data is aggregated but not converted to USD, so OHLC values are in the quote currency unit and Volume
-        is in the base currency unit.
-        
-        Candles have the following history based on size:
-
-        * `1d`: Inception
-        * `4h`: 120 days
-        * `1h`: 30 days
-        * `30m`: 14 days
-        * `5m`: 3 days
-        * `1m`: 24 hours
-      parameters:
-        - $ref: '#/components/parameters/exchange-candle-interval'
-        - name: base
-          in: query
-          required: true
-          description: Base currency of the pair
-          schema:
-            type: string
-          example: ETH
-        - name: quote
-          in: query
-          required: true
-          description: Quote currency of the pair
-          schema:
-            type: string
-          example: BTC
-        - interval-start:
-          name: start
-          in: query
-          description: Start time of the interval in RFC3339 (URI escaped). If not provided, starts from first candle.
-          required: false
-          schema:
-            type: string
-          example: "2018-04-14T00%3A00%3A00Z"
-        - $ref: '#/components/parameters/interval-end'
-      responses:
-        '200':
-          description: A list of candles
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    timestamp:
-                      type: string
-                      description: Start time of the candle in RFC3339
-                    low:
-                      type: string
-                      description: Lowest price in quote currency
-                    open:
-                      type: string
-                      description: Volume weighted average of first trade prices in quote currency
-                    close:
-                      type: string
-                      description: Volume weighted average of last trade prices in quote currency
-                    high:
-                      type: string
-                      description: Highest price in quote currency
-                    volume:
-                      type: string
-                      description: Volume in base currency
-                    num_trades:
-                      type: string
-                      description: Total number of trades across all markets
-                  example:
-                    timestamp: "2018-04-14T00:00:00Z"
-                    low: "0.06101"
-                    open: "0.06267940"
-                    close: "0.06282333"
-                    high: "0.066667"
-                    volume: "193325.66033455"
-                    num_trades: "185948"
-            text/csv:
-              schema:
-                type: string
-              example: "04/14/2018 00:00:00,0.06101,0.06267940,0.06282333,0.066667,193325.66033455,185948"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
   /volume/history:
     get:
       tags:
@@ -1350,7 +1253,7 @@ paths:
       x-code-samples:
         $ref: './samples/getTrades.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please <a href="https://p.nomics.com/pricing/">go here</a> to learn more.
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
 
         The trades endpoint returns individual trades in a normalized format for an individual
         exchange market.
@@ -1436,7 +1339,7 @@ paths:
       x-code-samples:
         $ref: './samples/getOrderBookSnapshot.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please <a href="https://p.nomics.com/pricing/">go here</a> to learn more.
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
                 
         The most recent order book snapshot for the given exchange and market.
         
@@ -1485,6 +1388,106 @@ paths:
               example: "08/29/2018 20:14:04,7014.31,0.178164,7015.99,0.000044"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /markets/candles:
+    get:
+      tags:
+        - Market Pair
+      summary: Market Pair OHLCV Candles
+      operationId: getMarketCandles
+      x-code-samples:
+        $ref: './samples/getMarketCandles.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        The Market Pair Candles endpoint returns aggregated open, close, high, low, and volume information for a
+        Market Pair of base and quote currencies. Open and Close are volume weighted averages across markets, while
+        High and Low are the max and min prices across markets. Volume is the total volume.
+
+        This is equivalent to getting Exchange Market OHLCV Candles across all exchanges with the given base and quote
+        and merging them together. This is different from Aggregated OHLCV Candles because those convert to USD and
+        merge candles across the base currency only.
+
+        The data is aggregated but not converted to USD, so OHLC values are in the quote currency unit and Volume
+        is in the base currency unit.
+        
+        Candles have the following history based on size:
+
+        * `1d`: Inception
+        * `4h`: 120 days
+        * `1h`: 30 days
+        * `30m`: 14 days
+        * `5m`: 3 days
+        * `1m`: 24 hours
+      parameters:
+        - $ref: '#/components/parameters/exchange-candle-interval'
+        - name: base
+          in: query
+          required: true
+          description: Base currency of the pair
+          schema:
+            type: string
+          example: ETH
+        - name: quote
+          in: query
+          required: true
+          description: Quote currency of the pair
+          schema:
+            type: string
+          example: BTC
+        - interval-start:
+          name: start
+          in: query
+          description: Start time of the interval in RFC3339 (URI escaped). If not provided, starts from first candle.
+          required: false
+          schema:
+            type: string
+          example: "2018-04-14T00%3A00%3A00Z"
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          description: A list of candles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: Start time of the candle in RFC3339
+                    low:
+                      type: string
+                      description: Lowest price in quote currency
+                    open:
+                      type: string
+                      description: Volume weighted average of first trade prices in quote currency
+                    close:
+                      type: string
+                      description: Volume weighted average of last trade prices in quote currency
+                    high:
+                      type: string
+                      description: Highest price in quote currency
+                    volume:
+                      type: string
+                      description: Volume in base currency
+                    num_trades:
+                      type: string
+                      description: Total number of trades across all markets
+                  example:
+                    timestamp: "2018-04-14T00:00:00Z"
+                    low: "0.06101"
+                    open: "0.06267940"
+                    close: "0.06282333"
+                    high: "0.066667"
+                    volume: "193325.66033455"
+                    num_trades: "185948"
+            text/csv:
+              schema:
+                type: string
+              example: "04/14/2018 00:00:00,0.06101,0.06267940,0.06282333,0.066667,193325.66033455,185948"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /sparkline:
     get:
       tags:
