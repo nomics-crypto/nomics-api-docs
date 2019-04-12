@@ -12,6 +12,8 @@ info:
     we've done on [nomics.com](https://nomics.com) you can do with our API. There are
     no internal API endpoints.
 
+    If you need support, reach out to use at our [forums](https://forums.nomics.com/).
+
     # General
 
     ## API Server URL
@@ -77,6 +79,20 @@ info:
       <iframe src="https://glitch.com/embed/#!/embed/nomics-api-demo?path=README.md" alt="nomics-api-demo on glitch" style="height: 100%; width: 100%; border: 0;"></iframe>
     </div>
 
+    # SDKs and Libraries
+
+    ## By Nomics
+    - [Nomics JavaScript Client](https://github.com/nomics-crypto/nomics-javascript)
+
+    ## Community Submissions
+    - [Nomics.com Swift SDK](https://forums.nomics.com/t/swift-sdk-supporting-ios-macos-tvos-and-watchos/) by Nick DiZazzo
+    - [Nomics Node.js Library](https://forums.nomics.com/t/i-made-a-library-for-node-js/) by mikunimaru
+    - [Nomics Python Wrapper](https://forums.nomics.com/t/python-package-for-nomics-api/119) by Taylor Facen
+    - [Python Wrapper for Nomics](https://github.com/AviFelman/py-nomics) by Avi Felman
+
+    We love watching developers explore new use-cases with our API. Whether you're tinkering on a small side project or building an open-source resource, please share what you're up to in our [forums](https://forums.nomics.com/).
+
+
 servers:
   - url: https://api.nomics.com/v1
     description: API Server
@@ -85,6 +101,65 @@ tags:
   - name: Currencies
   - name: Markets
   - name: Candles
+    description: |
+      ### What are OHLCV Candles?
+
+      OHLCV Candles is an abbreviation of "Open, High, Low, Close, and Volume Candlestick Data". Each "Candle"
+      represents a point in time of an asset's price history.
+
+      For example, take the following pricing data:
+
+      | Month    | High | Open | Close | Low |
+      |----------|------|------|-------|-----|
+      | January  | $70  | $20  | $50   | $15 |
+      | February | $66  | $50  | $45   | $25 |
+      | March    | $80  | $45  | $62   | $30 |
+      | April    | $95  | $62  | $85   | $50 |
+      | May      | $90  | $85  | $70   | $60 |
+
+      A candlestick chart of this data in Google Sheets looks like this:
+
+      ![Candlestick Chart](https://s3.us-east-2.amazonaws.com/nomics-api-documentation/candlestick-chart.png)
+
+      The lines extending from the boxes are called "wicks" and they represent the high and low for that time
+      period. The top and bottom of the boxes represent the open and close. Different visualizations of candles
+      have different ways of conveying which of the top and bottom of the boxes are the open and close. In this
+      case, with Google Sheets, candles that close higher than they open are solid colors, while candles that
+      close lower than they open are transparent.
+
+      ### How are Candles Built?
+
+      At Nomics, we have three methods of building candles:
+
+      1. Building candles from raw, gapless trade execution data (sometimes called "tick data")
+      2. Ingesting candles directly from exchanges, and building intermediate sizes
+      3. Ingesting 24 hour tickers from exchanges, and extrapolating estimated candles
+
+      The first method, trades, is greatly preferred as it yields the most accurate and trustworthy data. The second
+      method, candles, is also very accurate, but without the underlying trade data, it is not as transparent. The
+      third method, tickers, is the lowest quality source and should only be used as an estimate of pricing activity.
+
+      ### Why don't candles show up right away?
+
+      You may notice that candles don't show up immediately after they start. For example, at 12:01am, you may not see
+      a daily, hourly, or even a minute candle for 12:00am yet. This is because several steps need to occur in order to
+      build a candle:
+
+      1. Trades must be executed on an exchange. If there are no trades after 12:00am for a market or currency, there
+      is simply no data to represent.
+      2. Trades must be ingested into Nomics. We ingest data as fast as possible, but due to exchange rate limits and
+      limitations on the speed of data across the internet, there is always a delay between a trade being executed and
+      when it arrives in the Nomics database.
+      3. An Exchange Candle must be built. Once we have the trade in our database, we then aggregate all trades within
+      the candle's time range in order to build and store the candle.
+      4. An Aggregate Candle must be built. After an Exchange Candle is built (which represents a single market on a
+      single exchange) we must build an Aggregated Candle (which represents an asset across all markets and exchanges)
+
+      Every step in this pipeline takes time to compute, which means that it may be seconds, or even minutes before
+      a trade is fully represented by all candle types in our data set.
+
+      For more information about update frequencies, see the descriptions of our candle types below.
+
   - name: Volume
   - name: Exchange Rates
   - name: Trades
@@ -109,6 +184,93 @@ x-tagGroups:
 
 
 paths:
+  /currencies/ticker:
+    get:
+      tags:
+        - Currencies
+      summary: Currencies Ticker
+      operationId: getCurrenciesTicker
+      x-code-samples:
+        $ref: "./samples/getCurrenciesTicker.json"
+      description: |
+        Price, volume, market cap, and rank for all currencies across 1 day, 7 day, 30 day, 365 day, and year to date intervals. Current prices are updated every 10 seconds.
+      parameters:
+        - $ref: "#/components/parameters/currencies-ticker-interval"
+        - $ref: "#/components/parameters/currencies-ticker-quote-currency"
+      responses:
+        "200":
+          description: Price, volume, market cap, and rank for all currencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    circulating_supply:
+                      type: string
+                      description: Current circulating supply
+                    high:
+                      type: string
+                      description: All time high price
+                    high_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the all time high
+                    market_cap:
+                      type: string
+                      description: Current market cap
+                    max_supply:
+                      type: string
+                      description: Current maximum supply
+                    price:
+                      type: string
+                      description: Current price
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    interval:
+                      type: object
+                      description: "Interval-specific ticker attributes. The key will be the name of the interval (IE: `1d` or `365d`) and will occur for every requested interval."
+                      properties:
+                        market_cap_change:
+                          type: string
+                          description: Amount of market cap change for the given interval in USD
+                        market_cap_change_pct:
+                          type: string
+                          description: Percent change of market cap for the given interval
+                        price_change:
+                          type: string
+                          description: Amount of price change for the given interval in USD
+                        price_change_pct:
+                          type: string
+                          description: Percent change of price for the given interval
+                        volume:
+                          type: string
+                          description: Total volume for the given interval in USD
+                        volume_change:
+                          type: string
+                          description: Amount of volume change for the given interval in USD
+                        volume_change_pct:
+                          type: string
+                          description: Percent change of volume for the given interval
+                  example:
+                    circulating_supply: "17527012"
+                    high: "24436.29525"
+                    high_timestamp: "2018-01-05T00:00:00.000Z"
+                    market_cap: "64486639237.16"
+                    max_supply: "21000000"
+                    price: "3679.2717"
+                    currency: "BTC"
+                    1d:
+                      market_cap_change: "5274865072.90"
+                      market_cap_change_pct: "0.0891"
+                      price_change: "300.58"
+                      price_change_pct: "0.0890"
+                      volume: "274954149.16"
+                      volume_change: "154693371.61"
+                      volume_change_pct: "1.2863"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
   /currencies:
     get:
       tags:
@@ -163,6 +325,32 @@ paths:
               schema:
                 type: string
               example: "BTC,10000.00000"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /dashboard:
+    get:
+      tags:
+        - Currencies
+      summary: Dashboard
+      operationId: getDashboard
+      x-code-samples:
+        $ref: './samples/getDashboard.json'
+      description: |
+        The dashboard endpoint is a high level view of the current state of the market. It contains a wide
+        variety of information and is updated every 10 seconds.
+      responses:
+        '200':
+          description: A list of currency summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dashboard"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,7436.82313,1017039454.62165,1013499101.75834,7123.20591,7856259697.70049,7139283718.53940,10769.08245,41483988434.15605,50120582053.23234,1144.85801,385101925394.80138,16773015388.14144,6888.45685,24436.29525,2018-01-05T00:00:00Z,bithumb,KRW,16957550.0,21000000.0"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /currencies/interval:
@@ -727,32 +915,6 @@ paths:
               example: "07/05/2018 15:00:00,269222501959"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
-  /dashboard:
-    get:
-      tags:
-        - Markets
-      summary: Dashboard
-      operationId: getDashboard
-      x-code-samples:
-        $ref: './samples/getDashboard.json'
-      description: |
-        The dashboard endpoint is a high level view of the current state of the market. It contains a wide
-        variety of information and is updated every 10 seconds.
-      responses:
-        '200':
-          description: A list of currency summaries
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Dashboard"
-            text/csv:
-              schema:
-                type: string
-              example: "BTC,7436.82313,1017039454.62165,1013499101.75834,7123.20591,7856259697.70049,7139283718.53940,10769.08245,41483988434.15605,50120582053.23234,1144.85801,385101925394.80138,16773015388.14144,6888.45685,24436.29525,2018-01-05T00:00:00Z,bithumb,KRW,16957550.0,21000000.0"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
   /candles:
     get:
       tags:
@@ -772,8 +934,8 @@ paths:
 
         Candles have the following history based on size:
 
-        * `1d`: Inception
-        * `1h`: 30 days
+        * `1d`: From inception updated every 15 minutes
+        * `1h`: Rolling 30 days updated every 5 minutes
       parameters:
         - $ref: '#/components/parameters/candle-interval'
         - $ref: '#/components/parameters/currency'
@@ -842,12 +1004,12 @@ paths:
         
         Candles have the following history based on size:
 
-        * `1d`: Inception
-        * `4h`: 120 days
-        * `1h`: 30 days
-        * `30m`: 14 days
-        * `5m`: 3 days
-        * `1m`: 24 hours
+        * `1d`: From inception updated every minute
+        * `4h`: Rolling 120 days updated every minute
+        * `1h`: Rolling 30 days updated every minute
+        * `30m`: Rolling 14 days updated every minute
+        * `5m`: Rolling 3 days updated every 10 seconds
+        * `1m`: Rolling 24 hours updated every 10 seconds
       parameters:
         - $ref: '#/components/parameters/exchange-candle-interval'
         - $ref: '#/components/parameters/exchange'
@@ -1193,6 +1355,8 @@ paths:
         The trades endpoint returns individual trades in a normalized format for an individual
         exchange market.
 
+        **Trades are available for Bitmex**, but only by request. Bitmex is a futures exchange and we do not include its trade data with the rest of our data set.
+
         ### Getting the most recent trades
 
         By default, the trades endpoint returns the 100 most recent trades in descending order.
@@ -1278,14 +1442,12 @@ paths:
         
         CSV format is: `timestamp,bidPrice,bidAmount,askPrice,askAmount`
 
-        **Order books are currently only available for the following exchange IDs:**
+        **Order books are currently not available for the following exchange IDs:**
 
-        * `binance`
-        * `bitfinex`
-        * `gdax`
-        * `bittrex`
-        * `poloniex`
-        * `ethfinex`
+        * `bitflyer`
+        * `hitbtc`
+
+        **Order books are available for Bitmex**, but only by request. Bitmex is a futures exchange and we do not include its trade data with the rest of our data set.
       parameters:
         - $ref: '#/components/parameters/exchange'
         - $ref: '#/components/parameters/market'
@@ -1640,6 +1802,28 @@ components:
           - 1d
           - 1h
       example: 1d
+    currencies-ticker-interval:
+      name: interval
+      in: query
+      description: Comma separated time interval of the ticker(s). Default is all intervals.
+      required: false
+      schema:
+        type: string
+        enum:
+          - 1d
+          - 7d
+          - 30d
+          - 365d
+          - ytd
+      example: 1d,30d
+    currencies-ticker-quote-currency:
+      name: quote-currency
+      in: query
+      description: Currency to quote ticker price, market cap, and volume values. Must be a valid currency from [Exchange Rates](#operation/getExchangeRates). Default is `USD`.
+      required: false
+      schema:
+        type: string
+      example: EUR
     exchange-candle-interval:
       name: interval
       in: query
@@ -1674,7 +1858,7 @@ components:
     market:
       name: market
       in: query
-      description: Market ID
+      description: The Exchange's Market ID from [Markets](#tag/Markets)
       required: true
       schema:
         type: string
