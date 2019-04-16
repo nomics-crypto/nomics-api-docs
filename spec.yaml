@@ -98,8 +98,6 @@ servers:
     description: API Server
 
 tags:
-  - name: Currencies
-  - name: Markets
   - name: Candles
     description: |
       ### What are OHLCV Candles?
@@ -160,12 +158,6 @@ tags:
 
       For more information about update frequencies, see the descriptions of our candle types below.
 
-  - name: Volume
-  - name: Exchange Rates
-  - name: Trades
-  - name: Orders
-  - name: Deprecated
-
 x-tagGroups:
   - name: Free
     tags:
@@ -174,11 +166,11 @@ x-tagGroups:
       - Candles
       - Volume
       - Exchange Rates
-  - name: Commercial
+  - name: Commercial*
     tags:
-      - Trades
-      - Orders
-      - Market Pair
+      - Trades*
+      - Orders*
+      - Candles*
   - name: Other
     tags:
       - Deprecated
@@ -1247,7 +1239,7 @@ paths:
   /trades:
     get:
       tags:
-        - Trades
+        - Trades*
       summary: Trades
       operationId: getTrades
       x-code-samples:
@@ -1333,7 +1325,7 @@ paths:
   /orders/snapshot:
     get:
       tags:
-        - Orders
+        - Orders*
       summary: Order Book Snapshot
       operationId: getOrderBookSnapshot
       x-code-samples:
@@ -1391,7 +1383,7 @@ paths:
   /markets/candles:
     get:
       tags:
-        - Market Pair
+        - Candles*
       summary: Market Pair OHLCV Candles
       operationId: getMarketCandles
       x-code-samples:
