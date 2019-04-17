@@ -982,85 +982,6 @@ paths:
               example: "2018-03-19T10:00:00Z,7024.32225,8276.19407,8281.17307,8566.43000,59624801"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
-  /exchange_candles:
-    get:
-      tags:
-        - Candles
-      summary: Exchange OHLCV Candles
-      operationId: getExchangeCandles
-      x-code-samples:
-        $ref: './samples/getExchangeCandles.json'
-      description: |
-        The exchange candles endpoint returns raw open, close, high, low, and volume information for Nomics Markets.
-        The data is not aggregated, therefore prices are in the quote currency of the market and volume is in the base
-        currency of the market.
-        
-        Candles have the following history based on size:
-
-        * `1d`: From inception updated every minute
-        * `4h`: Rolling 120 days updated every minute
-        * `1h`: Rolling 30 days updated every minute
-        * `30m`: Rolling 14 days updated every minute
-        * `5m`: Rolling 3 days updated every 10 seconds
-        * `1m`: Rolling 24 hours updated every 10 seconds
-      parameters:
-        - $ref: '#/components/parameters/exchange-candle-interval'
-        - $ref: '#/components/parameters/exchange'
-        - $ref: '#/components/parameters/market'
-        - interval-start:
-          name: start
-          in: query
-          description: Start time of the interval in RFC3339 (URI escaped). If not provided, starts from first candle.
-          required: false
-          schema:
-            type: string
-          example: "2018-04-14T00%3A00%3A00Z"
-        - $ref: '#/components/parameters/interval-end'
-      responses:
-        '200':
-          description: A list of candles
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    timestamp:
-                      type: string
-                      description: Start time of the candle in RFC3339
-                    low:
-                      type: string
-                      description: Lowest price in quote currency
-                    open:
-                      type: string
-                      description: First trade price in quote currency
-                    close:
-                      type: string
-                      description: Last trade price in quote currency
-                    high:
-                      type: string
-                      description: Highest price in quote currency
-                    volume:
-                      type: string
-                      description: Volume in base currency
-                    num_trades:
-                      type: string
-                      description: Number of trades
-                  example:
-                    timestamp: "2018-04-14T00:00:00Z"
-                    low: "7810.00000000"
-                    open: "7877.48000000"
-                    close: "7999.01000000"
-                    high: "8186.00000000"
-                    volume: "31621.28635700"
-                    num_trades: "168756"
-            text/csv:
-              schema:
-                type: string
-              example: "04/14/2018 00:00:00,7810.00000000,7877.48000000,7999.01000000,8186.00000000,31621.28635700,168756"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
   /volume/history:
     get:
       tags:
@@ -1380,6 +1301,87 @@ paths:
               example: "08/29/2018 20:14:04,7014.31,0.178164,7015.99,0.000044"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /exchange_candles:
+    get:
+      tags:
+        - Candles*
+      summary: Exchange OHLCV Candles
+      operationId: getExchangeCandles
+      x-code-samples:
+        $ref: './samples/getExchangeCandles.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        The exchange candles endpoint returns raw open, close, high, low, and volume information for Nomics Markets.
+        The data is not aggregated, therefore prices are in the quote currency of the market and volume is in the base
+        currency of the market.
+        
+        Candles have the following history based on size:
+
+        * `1d`: From inception updated every minute
+        * `4h`: Rolling 120 days updated every minute
+        * `1h`: Rolling 30 days updated every minute
+        * `30m`: Rolling 14 days updated every minute
+        * `5m`: Rolling 3 days updated every 10 seconds
+        * `1m`: Rolling 24 hours updated every 10 seconds
+      parameters:
+        - $ref: '#/components/parameters/exchange-candle-interval'
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/market'
+        - interval-start:
+          name: start
+          in: query
+          description: Start time of the interval in RFC3339 (URI escaped). If not provided, starts from first candle.
+          required: false
+          schema:
+            type: string
+          example: "2018-04-14T00%3A00%3A00Z"
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          description: A list of candles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: Start time of the candle in RFC3339
+                    low:
+                      type: string
+                      description: Lowest price in quote currency
+                    open:
+                      type: string
+                      description: First trade price in quote currency
+                    close:
+                      type: string
+                      description: Last trade price in quote currency
+                    high:
+                      type: string
+                      description: Highest price in quote currency
+                    volume:
+                      type: string
+                      description: Volume in base currency
+                    num_trades:
+                      type: string
+                      description: Number of trades
+                  example:
+                    timestamp: "2018-04-14T00:00:00Z"
+                    low: "7810.00000000"
+                    open: "7877.48000000"
+                    close: "7999.01000000"
+                    high: "8186.00000000"
+                    volume: "31621.28635700"
+                    num_trades: "168756"
+            text/csv:
+              schema:
+                type: string
+              example: "04/14/2018 00:00:00,7810.00000000,7877.48000000,7999.01000000,8186.00000000,31621.28635700,168756"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /markets/candles:
     get:
       tags:
