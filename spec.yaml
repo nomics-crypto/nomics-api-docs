@@ -69,7 +69,7 @@ info:
 
     Requests from `localhost`, `127.0.0.1`, and `0.0.0.0` will always succeed to aid in development.
 
-    ## Demo
+    ## Demo Application
 
     A demo application using the Nomics API, CORS, and React is available on Glitch.com. This can help
     you get started using the Nomics API. Keep in mind it uses the demo key, which is rotated frequently.
@@ -78,6 +78,16 @@ info:
     <div class="glitch-embed-wrap" style="height: 420px; width: 100%;">
       <iframe src="https://glitch.com/embed/#!/embed/nomics-api-demo?path=README.md" alt="nomics-api-demo on glitch" style="height: 100%; width: 100%; border: 0;"></iframe>
     </div>
+
+    ## Demo Spreadsheet
+
+    Here is a demo of using the Nomics API with Google Sheets.
+    
+    **[Open in Google Sheets to Copy and Edit](https://docs.google.com/spreadsheets/d/1pCBAe-RK4HhD_qs5RYL0dJpJCK_WeT1507RgadapHy4/edit?usp=sharing)**
+
+    <iframe width="100%" height="400px" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vShn2iWjvqQ0ueBa9l9g1UBYVM92OZSgZ4nmp0rWuykvHPrvyMyMeSN4r0Orj0ACEIIKdCz6cc5abCw/pubhtml?widget=true&amp;headers=false"></iframe>
+
+    
 
     # SDKs and Libraries
 
