@@ -1396,15 +1396,15 @@ paths:
     get:
       tags:
         - Candles*
-      summary: Market Pair OHLCV Candles
+      summary: Aggregated Pair OHLCV Candles
       operationId: getMarketCandles
       x-code-samples:
         $ref: './samples/getMarketCandles.json'
       description: |
         ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
 
-        The Market Pair Candles endpoint returns aggregated open, close, high, low, and volume information for a
-        Market Pair of base and quote currencies. Open and Close are volume weighted averages across markets, while
+        The Aggregated Pair Candles endpoint returns aggregated open, close, high, low, and volume information for an
+        Aggregated Pair of base and quote currencies. Open and Close are volume weighted averages across markets, while
         High and Low are the max and min prices across markets. Volume is the total volume.
 
         This is equivalent to getting Exchange Market OHLCV Candles across all exchanges with the given base and quote
