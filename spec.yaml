@@ -639,8 +639,8 @@ paths:
       description: |
         The market prices endpoint returns prices in USD for the last trade in each market with the given base
         currency. These prices only include markets with quote currencies that are used as part of our
-        [Pricing Methodology](https://blog.nomics.com/nomics-newsletter/nomics-pricing-methodology-explained/) in order
-        to convert to USD--markets quoted in fiat, BTC, and ETH.
+        [Pricing Methodology](https://blog.nomics.com/nomics-newsletter/nomics-pricing-methodology-explained/)
+        (fiat, BTC, and ETH) to convert to USD.
       parameters:
         - name: currency
           in: query
