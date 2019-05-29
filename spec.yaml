@@ -283,10 +283,13 @@ paths:
       x-code-samples:
         $ref: './samples/getCurrencies.json'
       description: |
-        The currencies endpoint returns all the currencies that Nomics supports.
+        The currencies endpoint returns all the currencies and their metadata that Nomics supports.
+      parameters:
+        - $ref: "#/components/parameters/currency-ids"
+        - $ref: "#/components/parameters/currency-attributes"
       responses:
         '200':
-          description: A list of Nomics Currency IDs
+          description: A list of Nomics Currencies
           content:
             application/json:
               schema:
@@ -297,8 +300,72 @@ paths:
                     id:
                       type: string
                       description: Nomics Currency ID
+                    original_symbol:
+                      type: string
+                      description: Original symbol from exchange
+                    name:
+                      type: string
+                      description: Currency Name
+                    description:
+                      type: string
+                      description: Currency description
+                    website_url:
+                      type: string
+                      description: Currency website URL
+                    logo_url:
+                      type: string
+                      description: Currency logo URL
+                    blog_url:
+                      type: string
+                      description: Currency blog URL
+                    discord_url:
+                      type: string
+                      description: Currency Discord URL
+                    facebook_url:
+                      type: string
+                      description: Currency Facebook URL
+                    github_url:
+                      type: string
+                      description: Currency GitHub URL
+                    medium_url:
+                      type: string
+                      description: Currency Medium URL
+                    reddit_url:
+                      type: string
+                      description: Currency Reddit URL
+                    telegram_url:
+                      type: string
+                      description: Currency Telegram URL
+                    twitter_url:
+                      type: string
+                      description: Currency Twitter URL
+                    whitepaper_url:
+                      type: string
+                      description: Currency white paper URL
+                    youtube_url:
+                      type: string
+                      description: Currency YouTube URL
+                    replaced_by:
+                      type: string
+                      description: Nomics Currency ID of the currency that replaced the given currency. This can happen on hard forks or blockchain swaps as an example.
                   example:
                     id: BTC
+                    original_symbol: BTC
+                    name: Bitcoin
+                    description: Bitcoin cryptocurrency
+                    website_url: https://bitcoin.org/en
+                    logo_url: https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/btc.svg
+                    blog_url: https://bitcoin.org/en/blog
+                    discord_url: https://discord.gg/bitcoin
+                    facebook_url: https://www.facebook.com/bitcoin
+                    github_url: https://github.com/bitcoin
+                    medium_url: https://medium.com/bitcoin
+                    reddit_url: https://www.reddit.com/r/bitcoin
+                    telegram_url: https://t.me/bitcoin
+                    twitter_url: https://twitter.com/bitcoin
+                    whitepaper_url: https://bitcoin.org/en/bitcoin-paper
+                    youtube_url: https://www.youtube.com/channel/bitcoin
+                    replaced_by: null
             text/csv:
               schema:
                 type: string
@@ -1890,6 +1957,42 @@ components:
       schema:
         type: string
       example: "2018-05-14T00%3A00%3A00Z"
+    currency-ids:
+      name: ids
+      in: query
+      description: |
+        Comma separated list of Nomics Currency IDs to filter result rows
+      required: false
+      schema:
+        type: string
+      example: "BTC,ETH,XRP"
+    currency-attributes:
+      name: attributes
+      in: query
+      description: |
+        Comma separated list of currency attributes to filter result columns
+      required: false
+      schema:
+        type: string
+      example: "id,name,logo_url"
+    exchange-ids:
+      name: ids
+      in: query
+      description: |
+        Comma separated list of Nomics Exchange IDs to filter result rows
+      required: false
+      schema:
+        type: string
+      example: "binance,idex,bittrex"
+    exchange-attributes:
+      name: attributes
+      in: query
+      description: |
+        Comma separated list of exchange attributes to filter result columns
+      required: false
+      schema:
+        type: string
+      example: "id,name,transparency_grade"
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
