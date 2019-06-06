@@ -9,7 +9,7 @@
     "samples": "node ./generate_samples.js"
   },
   "dependencies": {
-    "redoc-cli": "^0.6.1"
+    "redoc-cli": "^0.8.4"
   },
   "devDependencies": {
     "swagger-client": "^3.8.12"
