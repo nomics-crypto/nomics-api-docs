@@ -169,14 +169,14 @@ tags:
       For more information about update frequencies, see the descriptions of our candle types below.
 
 x-tagGroups:
-  - name: Free
+  - name: Standard
     tags:
       - Currencies
       - Markets
       - Candles
       - Volume
       - Exchange Rates
-  - name: Commercial*
+  - name: Enterprise*
     tags:
       - Trades*
       - Orders*
