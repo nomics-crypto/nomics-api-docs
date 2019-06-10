@@ -1041,10 +1041,10 @@ supports-color@^3.2.3:
   dependencies:
     has-flag "^1.0.0"
 
-swagger-client@^3.8.12:
-  version "3.8.15"
-  resolved "https://registry.yarnpkg.com/swagger-client/-/swagger-client-3.8.15.tgz#eb72b4cceea7d2c733a36e5cd1f44fcb981a3deb"
-  integrity sha512-4lJBTVQzB5jVPdi69drtyppjs0ZrwmpG8btQw5/dTRQVsJiY7lL/liMdGcgVLgfmqG1nK/Es+qrk8Sgqz/kokA==
+swagger-client@^3.9.0:
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/swagger-client/-/swagger-client-3.9.0.tgz#b94ea65baa0194f4cb3fad2f8bd552c531d57e03"
+  integrity sha512-uyCq2xoaAtmE0oIQ0fCfnsDoy/v97ANnAZywtyk4yumBP74xXp4NFlpZaqZJHN9K9dbPzgs3MH98VocZeM0ExQ==
   dependencies:
     "@kyleshockey/js-yaml" "^1.0.1"
     "@kyleshockey/object-assign-deep" "^0.4.0"
@@ -1060,6 +1060,7 @@ swagger-client@^3.8.12:
     lodash "^4.16.2"
     qs "^6.3.0"
     querystring-browser "^1.0.4"
+    traverse "^0.6.6"
     url "^0.11.0"
     utf8-bytes "0.0.1"
     utfstring "^2.0.0"
@@ -1068,6 +1069,11 @@ tiny-emitter@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.0.2.tgz#82d27468aca5ade8e5fd1e6d22b57dd43ebdfb7c"
   integrity sha512-2NM0auVBGft5tee/OxP4PI3d8WItkDM+fPnaRAVo6xTDI2knbz9eC5ArWGqtGlYqiH3RU5yMpdyTTO7MguC4ow==
+
+traverse@^0.6.6:
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/traverse/-/traverse-0.6.6.tgz#cbdf560fd7b9af632502fed40f918c157ea97137"
+  integrity sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc=
 
 tslib@^1.9.3:
   version "1.9.3"
