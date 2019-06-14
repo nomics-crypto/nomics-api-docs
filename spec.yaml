@@ -198,8 +198,38 @@ paths:
       description: |
         Price, volume, market cap, and rank for all currencies across 1 day, 7 day, 30 day, 365 day, and year to date intervals. Current prices are updated every 10 seconds.
       parameters:
-        - $ref: "#/components/parameters/currencies-ticker-interval"
-        - $ref: "#/components/parameters/currencies-ticker-quote-currency"
+        - $ref: "#/components/parameters/currency-ids"
+        - interval:
+          name: interval
+          in: query
+          description: Comma separated time interval of the ticker(s). Default is all intervals.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 1d
+              - 7d
+              - 30d
+              - 365d
+              - ytd
+          example: 1d,30d
+        - quote-currency:
+          deprecated: true
+          name: quote-currency
+          in: query
+          description: Currency to quote ticker price, market cap, and volume values. Must be a valid currency from [Exchange Rates](#operation/getExchangeRates). Default is `USD`.
+          required: false
+          schema:
+            type: string
+          example: EUR
+        - convert:
+          name: convert
+          in: query
+          description: Currency to quote ticker price, market cap, and volume values. May be a Fiat Currency or Cryptocurrency. Default is `USD`.
+          required: false
+          schema:
+            type: string
+          example: EUR
       responses:
         "200":
           description: Price, volume, market cap, and rank for all currencies
@@ -210,37 +240,50 @@ paths:
                 items:
                   type: object
                   properties:
+                    currency:
+                      type: string
+                      deprecated: true
+                      description: Nomics ID of the currency
+                    id:
+                      type: string
+                      description: Unique Nomics ID of the currency
+                    price:
+                      type: string
+                      description: Current price
+                    price_date:
+                      type: string
+                      description: Date of the price
+                    symbol:
+                      type: string
+                      description: Display symbol of the currency (may be duplicated)
                     circulating_supply:
                       type: string
                       description: Current circulating supply
+                    max_supply:
+                      type: string
+                      description: Current maximum supply
+                    name:
+                      type: string
+                      description: Name of the currency
+                    logo_url:
+                      type: string
+                      description: URL to logo of the currency
+                    market_cap:
+                      type: string
+                      description: Current market cap
+                    rank:
+                      type: string
+                      description: Rank of the currency by market cap
                     high:
                       type: string
                       description: All time high price
                     high_timestamp:
                       type: string
                       description: RFC3999 timestamp of the all time high
-                    market_cap:
-                      type: string
-                      description: Current market cap
-                    max_supply:
-                      type: string
-                      description: Current maximum supply
-                    price:
-                      type: string
-                      description: Current price
-                    currency:
-                      type: string
-                      description: Nomics ID of the currency
                     interval:
                       type: object
                       description: "Interval-specific ticker attributes. The key will be the name of the interval (IE: `1d` or `365d`) and will occur for every requested interval."
                       properties:
-                        market_cap_change:
-                          type: string
-                          description: Amount of market cap change for the given interval in USD
-                        market_cap_change_pct:
-                          type: string
-                          description: Percent change of market cap for the given interval
                         price_change:
                           type: string
                           description: Amount of price change for the given interval in USD
@@ -256,29 +299,41 @@ paths:
                         volume_change_pct:
                           type: string
                           description: Percent change of volume for the given interval
+                        market_cap_change:
+                          type: string
+                          description: Amount of market cap change for the given interval in USD
+                        market_cap_change_pct:
+                          type: string
+                          description: Percent change of market cap for the given interval
                   example:
-                    circulating_supply: "17527012"
-                    high: "24436.29525"
-                    high_timestamp: "2018-01-05T00:00:00.000Z"
-                    market_cap: "64486639237.16"
-                    max_supply: "21000000"
-                    price: "3679.2717"
                     currency: "BTC"
-                    1d:
-                      market_cap_change: "5274865072.90"
-                      market_cap_change_pct: "0.0891"
-                      price_change: "300.58"
-                      price_change_pct: "0.0890"
-                      volume: "274954149.16"
-                      volume_change: "154693371.61"
-                      volume_change_pct: "1.2863"
+                    id: "BTC"
+                    price: "8451.36516421"
+                    price_date: "2019-06-14"
+                    symbol: "BTC"
+                    circulating_supply: "17758462"
+                    max_supply: "21000000"
+                    name: "Bitcoin"
+                    logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/btc.svg"
+                    market_cap: "150083247116.70"
+                    rank: "1"
+                    high: "19404.81116899"
+                    high_timestamp: "2017-12-16"
+                    1d: 
+                      price_change: "269.75208019"
+                      price_change_pct: "0.03297053"
+                      volume: "1110989572.04"
+                      volume_change: "-24130098.49"
+                      volume_change_pct: "-0.02"
+                      market_cap_change: "4805518049.63"
+                      market_cap_change_pct: "0.03
         "401":
           $ref: "#/components/responses/UnauthorizedError"
   /currencies:
     get:
       tags:
         - Currencies
-      summary: Currencies
+      summary: Currencies Metadata
       operationId: getCurrencies
       x-code-samples:
         $ref: './samples/getCurrencies.json'
@@ -372,111 +427,6 @@ paths:
               example: "BTC"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
-  /prices:
-    get:
-      tags:
-        - Currencies
-      summary: Prices
-      operationId: getPrices
-      x-code-samples:
-        $ref: './samples/getPrices.json'
-      description: |
-        The prices endpoint returns current prices for all currencies. Prices are updated every 10 seconds.
-      responses:
-        '200':
-          description: A list of currencies with their price
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Price'
-            text/csv:
-              schema:
-                type: string
-              example: "BTC,10000.00000"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /dashboard:
-    get:
-      tags:
-        - Currencies
-      summary: Dashboard
-      operationId: getDashboard
-      x-code-samples:
-        $ref: './samples/getDashboard.json'
-      description: |
-        The dashboard endpoint is a high level view of the current state of the market. It contains a wide
-        variety of information and is updated every 10 seconds.
-      responses:
-        '200':
-          description: A list of currency summaries
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Dashboard"
-            text/csv:
-              schema:
-                type: string
-              example: "BTC,7436.82313,1017039454.62165,1013499101.75834,7123.20591,7856259697.70049,7139283718.53940,10769.08245,41483988434.15605,50120582053.23234,1144.85801,385101925394.80138,16773015388.14144,6888.45685,24436.29525,2018-01-05T00:00:00Z,bithumb,KRW,16957550.0,21000000.0"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /currencies/interval:
-    get:
-      tags:
-        - Currencies
-      summary: Currencies Interval
-      operationId: getCurrenciesInterval
-      x-code-samples:
-        $ref: './samples/getCurrenciesInterval.json'
-      description: |
-        Open and close prices and volume for all currencies between a customizable time range.
-      parameters:
-        - $ref: '#/components/parameters/interval-start'
-        - $ref: '#/components/parameters/interval-end'
-      responses:
-        '200':
-          description: Open, close, and volume for all currencies in a time range
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    currency:
-                      type: string
-                      description: Nomics ID of the currency
-                    volume:
-                      type: string
-                      description: Total volume in USD over the time range
-                    open:
-                      type: string
-                      description: Open price in USD
-                    open_timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the open price
-                    close:
-                      type: string
-                      description: Close price in USD
-                    close_timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the open price
-                  example:
-                    currency: "BTC"
-                    volume: "7039575495.41955"
-                    open: "8746.03472"
-                    open_timestamp: "2018-05-14T00:00:00Z"
-                    close: "7509.12469"
-                    close_timestamp: "2018-05-24T00:00:00Z"
-            text/csv:
-              schema:
-                type: string
-              example: "BTC,7042240511.06433,8746.03472,05/14/2018 00:00:00,7498.07225,05/24/2018 00:00:00"
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
   /currencies/sparkline:
     get:
       tags:
@@ -585,53 +535,6 @@ paths:
               example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-  /currencies/highs:
-    get:
-      tags:
-        - Currencies
-      summary: All Time Highs
-      operationId: getCurrencyHighs
-      x-code-samples:
-        $ref: './samples/getCurrencyHighs.json'
-      description: |
-        Returns all time high information for all currencies.
-      responses:
-        '200':
-          description: All time highs for all currencies
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    currency:
-                      type: string
-                      description: Nomics ID of the currency
-                    price:
-                      type: string
-                      description: Highest price of the currency in USD
-                    timestamp:
-                      type: string
-                      description: Timestamp of the high price in RFC3339
-                    exchange:
-                      type: string
-                      description: Exchange ID on which the high occurred
-                    quote:
-                      type: string
-                      description: Quote currency against which the high occurred
-                  example:
-                    currency: "BTC"
-                    price: "24436.29525"
-                    timestamp: "2018-01-05T00:00:00Z"
-                    exchange: "bithumb"
-                    quote: "KRW"
-            test/csv:
-              schema:
-                type: string
-              example: "BTC,24436.29525,01/05/2018 00:00:00,bithumb,KRW"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
   /markets:
     get:
       tags:
@@ -1568,11 +1471,168 @@ paths:
               example: "04/14/2018 00:00:00,0.06101,0.06267940,0.06282333,0.066667,193325.66033455,185948"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /prices:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: Prices
+      operationId: getPrices
+      x-code-samples:
+        $ref: './samples/getPrices.json'
+      description: |
+        The prices endpoint returns current prices for all currencies. Prices are updated every 10 seconds.
+      responses:
+        '200':
+          description: A list of currencies with their price
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Price'
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,10000.00000"
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
+  /dashboard:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: Dashboard
+      operationId: getDashboard
+      x-code-samples:
+        $ref: './samples/getDashboard.json'
+      description: |
+        The dashboard endpoint is a high level view of the current state of the market. It contains a wide
+        variety of information and is updated every 10 seconds.
+      responses:
+        '200':
+          description: A list of currency summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dashboard"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,7436.82313,1017039454.62165,1013499101.75834,7123.20591,7856259697.70049,7139283718.53940,10769.08245,41483988434.15605,50120582053.23234,1144.85801,385101925394.80138,16773015388.14144,6888.45685,24436.29525,2018-01-05T00:00:00Z,bithumb,KRW,16957550.0,21000000.0"
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
+  /currencies/interval:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: Currencies Interval
+      operationId: getCurrenciesInterval
+      x-code-samples:
+        $ref: './samples/getCurrenciesInterval.json'
+      description: |
+        Open and close prices and volume for all currencies between a customizable time range.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          description: Open, close, and volume for all currencies in a time range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    volume:
+                      type: string
+                      description: Total volume in USD over the time range
+                    open:
+                      type: string
+                      description: Open price in USD
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open price
+                    close:
+                      type: string
+                      description: Close price in USD
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open price
+                  example:
+                    currency: "BTC"
+                    volume: "7039575495.41955"
+                    open: "8746.03472"
+                    open_timestamp: "2018-05-14T00:00:00Z"
+                    close: "7509.12469"
+                    close_timestamp: "2018-05-24T00:00:00Z"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,7042240511.06433,8746.03472,05/14/2018 00:00:00,7498.07225,05/24/2018 00:00:00"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /currencies/highs:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: All Time Highs
+      operationId: getCurrencyHighs
+      x-code-samples:
+        $ref: './samples/getCurrencyHighs.json'
+      description: |
+        Returns all time high information for all currencies.
+      responses:
+        '200':
+          description: All time highs for all currencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    price:
+                      type: string
+                      description: Highest price of the currency in USD
+                    timestamp:
+                      type: string
+                      description: Timestamp of the high price in RFC3339
+                    exchange:
+                      type: string
+                      description: Exchange ID on which the high occurred
+                    quote:
+                      type: string
+                      description: Quote currency against which the high occurred
+                  example:
+                    currency: "BTC"
+                    price: "24436.29525"
+                    timestamp: "2018-01-05T00:00:00Z"
+                    exchange: "bithumb"
+                    quote: "KRW"
+            test/csv:
+              schema:
+                type: string
+              example: "BTC,24436.29525,01/05/2018 00:00:00,bithumb,KRW"
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
   /sparkline:
     get:
       tags:
         - Deprecated
       summary: Sparkline
+      deprecated: true
       operationId: getSparkline
       x-code-samples:
         $ref: './samples/getSparkline.json'
@@ -1612,6 +1672,7 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /market-cap/sparkline:
     get:
+      deprecated: true
       tags:
         - Deprecated
       summary: Market Cap Sparkline
@@ -1885,28 +1946,6 @@ components:
           - 1d
           - 1h
       example: 1d
-    currencies-ticker-interval:
-      name: interval
-      in: query
-      description: Comma separated time interval of the ticker(s). Default is all intervals.
-      required: false
-      schema:
-        type: string
-        enum:
-          - 1d
-          - 7d
-          - 30d
-          - 365d
-          - ytd
-      example: 1d,30d
-    currencies-ticker-quote-currency:
-      name: quote-currency
-      in: query
-      description: Currency to quote ticker price, market cap, and volume values. Must be a valid currency from [Exchange Rates](#operation/getExchangeRates). Default is `USD`.
-      required: false
-      schema:
-        type: string
-      example: EUR
     exchange-candle-interval:
       name: interval
       in: query
