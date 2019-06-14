@@ -240,44 +240,50 @@ paths:
                 items:
                   type: object
                   properties:
+                    currency:
+                      type: string
+                      deprecated: true
+                      description: Nomics ID of the currency
+                    id:
+                      type: string
+                      description: Unique Nomics ID of the currency
+                    price:
+                      type: string
+                      description: Current price
+                    price_date:
+                      type: string
+                      description: Date of the price
+                    symbol:
+                      type: string
+                      description: Display symbol of the currency (may be duplicated)
                     circulating_supply:
                       type: string
                       description: Current circulating supply
+                    max_supply:
+                      type: string
+                      description: Current maximum supply
+                    name:
+                      type: string
+                      description: Name of the currency
+                    logo_url:
+                      type: string
+                      description: URL to logo of the currency
+                    market_cap:
+                      type: string
+                      description: Current market cap
+                    rank:
+                      type: string
+                      description: Rank of the currency by market cap
                     high:
                       type: string
                       description: All time high price
                     high_timestamp:
                       type: string
                       description: RFC3999 timestamp of the all time high
-                    market_cap:
-                      type: string
-                      description: Current market cap
-                    max_supply:
-                      type: string
-                      description: Current maximum supply
-                    price:
-                      type: string
-                      description: Current price
-                    id:
-                      type: string
-                      description: Unique Nomics ID of the currency
-                    symbol:
-                      type: string
-                      description: Display symbol of the currency (may be duplicated)
-                    currency:
-                      type: string
-                      deprecated: true
-                      description: Nomics ID of the currency
                     interval:
                       type: object
                       description: "Interval-specific ticker attributes. The key will be the name of the interval (IE: `1d` or `365d`) and will occur for every requested interval."
                       properties:
-                        market_cap_change:
-                          type: string
-                          description: Amount of market cap change for the given interval in USD
-                        market_cap_change_pct:
-                          type: string
-                          description: Percent change of market cap for the given interval
                         price_change:
                           type: string
                           description: Amount of price change for the given interval in USD
@@ -293,22 +299,34 @@ paths:
                         volume_change_pct:
                           type: string
                           description: Percent change of volume for the given interval
+                        market_cap_change:
+                          type: string
+                          description: Amount of market cap change for the given interval in USD
+                        market_cap_change_pct:
+                          type: string
+                          description: Percent change of market cap for the given interval
                   example:
-                    circulating_supply: "17527012"
-                    high: "24436.29525"
-                    high_timestamp: "2018-01-05T00:00:00.000Z"
-                    market_cap: "64486639237.16"
-                    max_supply: "21000000"
-                    price: "3679.2717"
                     currency: "BTC"
-                    1d:
-                      market_cap_change: "5274865072.90"
-                      market_cap_change_pct: "0.0891"
-                      price_change: "300.58"
-                      price_change_pct: "0.0890"
-                      volume: "274954149.16"
-                      volume_change: "154693371.61"
-                      volume_change_pct: "1.2863"
+                    id: "BTC"
+                    price: "8451.36516421"
+                    price_date: "2019-06-14"
+                    symbol: "BTC"
+                    circulating_supply: "17758462"
+                    max_supply: "21000000"
+                    name: "Bitcoin"
+                    logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/btc.svg"
+                    market_cap: "150083247116.70"
+                    rank: "1"
+                    high: "19404.81116899"
+                    high_timestamp: "2017-12-16"
+                    1d: 
+                      price_change: "269.75208019"
+                      price_change_pct: "0.03297053"
+                      volume: "1110989572.04"
+                      volume_change: "-24130098.49"
+                      volume_change_pct: "-0.02"
+                      market_cap_change: "4805518049.63"
+                      market_cap_change_pct: "0.03
         "401":
           $ref: "#/components/responses/UnauthorizedError"
   /currencies:
