@@ -333,7 +333,7 @@ paths:
     get:
       tags:
         - Currencies
-      summary: Currencies
+      summary: Currencies Metadata
       operationId: getCurrencies
       x-code-samples:
         $ref: './samples/getCurrencies.json'
@@ -427,111 +427,6 @@ paths:
               example: "BTC"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
-  /prices:
-    get:
-      tags:
-        - Currencies
-      summary: Prices
-      operationId: getPrices
-      x-code-samples:
-        $ref: './samples/getPrices.json'
-      description: |
-        The prices endpoint returns current prices for all currencies. Prices are updated every 10 seconds.
-      responses:
-        '200':
-          description: A list of currencies with their price
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Price'
-            text/csv:
-              schema:
-                type: string
-              example: "BTC,10000.00000"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /dashboard:
-    get:
-      tags:
-        - Currencies
-      summary: Dashboard
-      operationId: getDashboard
-      x-code-samples:
-        $ref: './samples/getDashboard.json'
-      description: |
-        The dashboard endpoint is a high level view of the current state of the market. It contains a wide
-        variety of information and is updated every 10 seconds.
-      responses:
-        '200':
-          description: A list of currency summaries
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Dashboard"
-            text/csv:
-              schema:
-                type: string
-              example: "BTC,7436.82313,1017039454.62165,1013499101.75834,7123.20591,7856259697.70049,7139283718.53940,10769.08245,41483988434.15605,50120582053.23234,1144.85801,385101925394.80138,16773015388.14144,6888.45685,24436.29525,2018-01-05T00:00:00Z,bithumb,KRW,16957550.0,21000000.0"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /currencies/interval:
-    get:
-      tags:
-        - Currencies
-      summary: Currencies Interval
-      operationId: getCurrenciesInterval
-      x-code-samples:
-        $ref: './samples/getCurrenciesInterval.json'
-      description: |
-        Open and close prices and volume for all currencies between a customizable time range.
-      parameters:
-        - $ref: '#/components/parameters/interval-start'
-        - $ref: '#/components/parameters/interval-end'
-      responses:
-        '200':
-          description: Open, close, and volume for all currencies in a time range
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    currency:
-                      type: string
-                      description: Nomics ID of the currency
-                    volume:
-                      type: string
-                      description: Total volume in USD over the time range
-                    open:
-                      type: string
-                      description: Open price in USD
-                    open_timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the open price
-                    close:
-                      type: string
-                      description: Close price in USD
-                    close_timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the open price
-                  example:
-                    currency: "BTC"
-                    volume: "7039575495.41955"
-                    open: "8746.03472"
-                    open_timestamp: "2018-05-14T00:00:00Z"
-                    close: "7509.12469"
-                    close_timestamp: "2018-05-24T00:00:00Z"
-            text/csv:
-              schema:
-                type: string
-              example: "BTC,7042240511.06433,8746.03472,05/14/2018 00:00:00,7498.07225,05/24/2018 00:00:00"
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
   /currencies/sparkline:
     get:
       tags:
@@ -640,53 +535,6 @@ paths:
               example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-  /currencies/highs:
-    get:
-      tags:
-        - Currencies
-      summary: All Time Highs
-      operationId: getCurrencyHighs
-      x-code-samples:
-        $ref: './samples/getCurrencyHighs.json'
-      description: |
-        Returns all time high information for all currencies.
-      responses:
-        '200':
-          description: All time highs for all currencies
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    currency:
-                      type: string
-                      description: Nomics ID of the currency
-                    price:
-                      type: string
-                      description: Highest price of the currency in USD
-                    timestamp:
-                      type: string
-                      description: Timestamp of the high price in RFC3339
-                    exchange:
-                      type: string
-                      description: Exchange ID on which the high occurred
-                    quote:
-                      type: string
-                      description: Quote currency against which the high occurred
-                  example:
-                    currency: "BTC"
-                    price: "24436.29525"
-                    timestamp: "2018-01-05T00:00:00Z"
-                    exchange: "bithumb"
-                    quote: "KRW"
-            test/csv:
-              schema:
-                type: string
-              example: "BTC,24436.29525,01/05/2018 00:00:00,bithumb,KRW"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
   /markets:
     get:
       tags:
@@ -1623,6 +1471,162 @@ paths:
               example: "04/14/2018 00:00:00,0.06101,0.06267940,0.06282333,0.066667,193325.66033455,185948"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /prices:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: Prices
+      operationId: getPrices
+      x-code-samples:
+        $ref: './samples/getPrices.json'
+      description: |
+        The prices endpoint returns current prices for all currencies. Prices are updated every 10 seconds.
+      responses:
+        '200':
+          description: A list of currencies with their price
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Price'
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,10000.00000"
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
+  /dashboard:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: Dashboard
+      operationId: getDashboard
+      x-code-samples:
+        $ref: './samples/getDashboard.json'
+      description: |
+        The dashboard endpoint is a high level view of the current state of the market. It contains a wide
+        variety of information and is updated every 10 seconds.
+      responses:
+        '200':
+          description: A list of currency summaries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Dashboard"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,7436.82313,1017039454.62165,1013499101.75834,7123.20591,7856259697.70049,7139283718.53940,10769.08245,41483988434.15605,50120582053.23234,1144.85801,385101925394.80138,16773015388.14144,6888.45685,24436.29525,2018-01-05T00:00:00Z,bithumb,KRW,16957550.0,21000000.0"
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
+  /currencies/interval:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: Currencies Interval
+      operationId: getCurrenciesInterval
+      x-code-samples:
+        $ref: './samples/getCurrenciesInterval.json'
+      description: |
+        Open and close prices and volume for all currencies between a customizable time range.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+      responses:
+        '200':
+          description: Open, close, and volume for all currencies in a time range
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    volume:
+                      type: string
+                      description: Total volume in USD over the time range
+                    open:
+                      type: string
+                      description: Open price in USD
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open price
+                    close:
+                      type: string
+                      description: Close price in USD
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open price
+                  example:
+                    currency: "BTC"
+                    volume: "7039575495.41955"
+                    open: "8746.03472"
+                    open_timestamp: "2018-05-14T00:00:00Z"
+                    close: "7509.12469"
+                    close_timestamp: "2018-05-24T00:00:00Z"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,7042240511.06433,8746.03472,05/14/2018 00:00:00,7498.07225,05/24/2018 00:00:00"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /currencies/highs:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: All Time Highs
+      operationId: getCurrencyHighs
+      x-code-samples:
+        $ref: './samples/getCurrencyHighs.json'
+      description: |
+        Returns all time high information for all currencies.
+      responses:
+        '200':
+          description: All time highs for all currencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    price:
+                      type: string
+                      description: Highest price of the currency in USD
+                    timestamp:
+                      type: string
+                      description: Timestamp of the high price in RFC3339
+                    exchange:
+                      type: string
+                      description: Exchange ID on which the high occurred
+                    quote:
+                      type: string
+                      description: Quote currency against which the high occurred
+                  example:
+                    currency: "BTC"
+                    price: "24436.29525"
+                    timestamp: "2018-01-05T00:00:00Z"
+                    exchange: "bithumb"
+                    quote: "KRW"
+            test/csv:
+              schema:
+                type: string
+              example: "BTC,24436.29525,01/05/2018 00:00:00,bithumb,KRW"
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
   /sparkline:
     get:
       tags:
