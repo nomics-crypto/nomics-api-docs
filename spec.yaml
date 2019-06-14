@@ -198,8 +198,38 @@ paths:
       description: |
         Price, volume, market cap, and rank for all currencies across 1 day, 7 day, 30 day, 365 day, and year to date intervals. Current prices are updated every 10 seconds.
       parameters:
-        - $ref: "#/components/parameters/currencies-ticker-interval"
-        - $ref: "#/components/parameters/currencies-ticker-quote-currency"
+        - $ref: "#/components/parameters/currency-ids"
+        - interval:
+          name: interval
+          in: query
+          description: Comma separated time interval of the ticker(s). Default is all intervals.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 1d
+              - 7d
+              - 30d
+              - 365d
+              - ytd
+          example: 1d,30d
+        - quote-currency:
+          deprecated: true
+          name: quote-currency
+          in: query
+          description: Currency to quote ticker price, market cap, and volume values. Must be a valid currency from [Exchange Rates](#operation/getExchangeRates). Default is `USD`.
+          required: false
+          schema:
+            type: string
+          example: EUR
+        - convert:
+          name: convert
+          in: query
+          description: Currency to quote ticker price, market cap, and volume values. May be a Fiat Currency or Cryptocurrency. Default is `USD`.
+          required: false
+          schema:
+            type: string
+          example: EUR
       responses:
         "200":
           description: Price, volume, market cap, and rank for all currencies
@@ -228,8 +258,15 @@ paths:
                     price:
                       type: string
                       description: Current price
+                    id:
+                      type: string
+                      description: Unique Nomics ID of the currency
+                    symbol:
+                      type: string
+                      description: Display symbol of the currency (may be duplicated)
                     currency:
                       type: string
+                      deprecated: true
                       description: Nomics ID of the currency
                     interval:
                       type: object
@@ -1573,6 +1610,7 @@ paths:
       tags:
         - Deprecated
       summary: Sparkline
+      deprecated: true
       operationId: getSparkline
       x-code-samples:
         $ref: './samples/getSparkline.json'
@@ -1612,6 +1650,7 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /market-cap/sparkline:
     get:
+      deprecated: true
       tags:
         - Deprecated
       summary: Market Cap Sparkline
@@ -1885,28 +1924,6 @@ components:
           - 1d
           - 1h
       example: 1d
-    currencies-ticker-interval:
-      name: interval
-      in: query
-      description: Comma separated time interval of the ticker(s). Default is all intervals.
-      required: false
-      schema:
-        type: string
-        enum:
-          - 1d
-          - 7d
-          - 30d
-          - 365d
-          - ytd
-      example: 1d,30d
-    currencies-ticker-quote-currency:
-      name: quote-currency
-      in: query
-      description: Currency to quote ticker price, market cap, and volume values. Must be a valid currency from [Exchange Rates](#operation/getExchangeRates). Default is `USD`.
-      required: false
-      schema:
-        type: string
-      example: EUR
     exchange-candle-interval:
       name: interval
       in: query
