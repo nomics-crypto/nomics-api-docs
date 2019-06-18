@@ -176,7 +176,7 @@ x-tagGroups:
       - Candles
       - Volume
       - Exchange Rates
-  - name: Enterprise*
+  - name: Business*
     tags:
       - Trades*
       - Orders*
