@@ -172,13 +172,13 @@ x-tagGroups:
   - name: Standard
     tags:
       - Currencies
-      - Exchanges
       - Markets
       - Volume
       - Exchange Rates
   - name: Business*
     tags:
       - Currencies*
+      - Exchanges*
       - Markets*
       - Candles*
       - Trades*
@@ -542,7 +542,7 @@ paths:
   /exchanges:
     get:
       tags:
-        - Exchanges
+        - Exchanges*
       summary: Exchanges Metadata
       operationId: getExchanges
       x-code-samples:
