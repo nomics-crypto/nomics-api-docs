@@ -543,7 +543,7 @@ paths:
     get:
       tags:
         - Exchanges
-      summary: Exchanges
+      summary: Exchanges Metadata
       operationId: getExchanges
       x-code-samples:
         $ref: './samples/getExchanges.json'
