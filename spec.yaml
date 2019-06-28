@@ -172,6 +172,7 @@ x-tagGroups:
   - name: Standard
     tags:
       - Currencies
+      - Exchanges
       - Markets
       - Volume
       - Exchange Rates
@@ -538,6 +539,124 @@ paths:
               example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /exchanges:
+    get:
+      tags:
+        - Exchanges
+      summary: Exchanges Metadata
+      operationId: getExchanges
+      x-code-samples:
+        $ref: './samples/getExchanges.json'
+      description: |
+        The exchanges endpoint returns all the exchanges and their metadata that Nomics supports.
+      parameters:
+        - $ref: "#/components/parameters/exchange-ids"
+        - $ref: "#/components/parameters/exchange-attributes"
+      responses:
+        '200':
+          description: A list of Nomics Exchanges
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Nomics Exchange ID
+                    capability_markets:
+                      type: boolean
+                      description: Flag that determines if the exchange provides markets data
+                    capability_trades:
+                      type: boolean
+                      description: Flag that determines if the exchange provides trades data
+                    capability_trades_by_timestamp:
+                      type: boolean
+                      description: Flag that determines if the exchange provides trades by timestamp data
+                    capability_trades_snapshot:
+                      type: boolean
+                      description: Flag that determines if the exchange provides recent-only trades data
+                    capability_orders_snapshot:
+                      type: boolean
+                      description: Flag that determines if the exchange provides orderbook snapshot data
+                    capability_candles:
+                      type: boolean
+                      description: Flag that determines if the exchange provides OHLCV candle data
+                    capability_ticker:
+                      type: boolean
+                      description: Flag that determines if the exchange provides 24h ticker data
+                    integrated:
+                      type: boolean
+                      description: Flag that determines if the exchange has completed a [Nomics Deep Data Integration](https://nomicsintegration.com)
+                    name:
+                      type: string
+                      description: Exchange Name
+                    description:
+                      type: string
+                      description: Exchange description
+                    location:
+                      type: string
+                      description: Primary exchange location country
+                    logo_url:
+                      type: string
+                      description: Exchange logo URL
+                    website_url:
+                      type: string
+                      description: Exchange website URL
+                    fees_url:
+                      type: string
+                      description: Exchange fees URL
+                    twitter_url:
+                      type: string
+                      description: Exchange Twitter URL
+                    facebook_url:
+                      type: string
+                      description: Exchange Facebook URL
+                    reddit_url:
+                      type: string
+                      description: Exchange Reddit URL
+                    chat_url:
+                      type: string
+                      description: Exchange chat URL
+                    blog_url:
+                      type: string
+                      description: Exchange blog URL
+                    year:
+                      type: string
+                      description: Year exchange became active
+                    transparency_grade:
+                      type: string
+                      description: The [Nomics Transparency Rating](https://blog.nomics.com/essays/transparency-ratings/) for the exchange
+                  example:
+                    id: binance
+                    capability_markets": true
+                    capability_trades": true
+                    capability_trades_by_timestamp": false
+                    capability_trades_snapshot": false
+                    capability_orders_snapshot": true
+                    capability_candles": false
+                    capability_ticker": false
+                    integrated": false
+                    name: Binance
+                    description: The company was created under the tutelage of Changpeng 'CZ' Zhao and his co-founder Yi He.
+                    location: Malta
+                    logo_url: https://s3.us-east-2.amazonaws.com/nomics-api/static/images/exchanges/binance.svg
+                    website_url: https://www.binance.com/
+                    fees_url: https://www.binance.com/en/fee/schedule
+                    twitter_url: https://twitter.com/binance
+                    facebook_url: https://www.facebook.com/binance
+                    reddit_url: https://www.reddit.com/r/binance/
+                    chat_url: https://t.me/binanceexchange
+                    blog_url: https://www.binance.com/en/blog
+                    year: 2017
+                    transparency_grade: A
+            text/csv:
+              schema:
+                type: string
+              example: "Binance"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /markets:
     get:
       tags:
