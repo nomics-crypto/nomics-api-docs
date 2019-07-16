@@ -175,7 +175,7 @@ x-tagGroups:
       - Markets
       - Volume
       - Exchange Rates
-  - name: Business*
+  - name: Enhanced*
     tags:
       - Currencies*
       - Exchanges*
