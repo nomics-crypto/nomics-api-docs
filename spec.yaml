@@ -540,6 +540,133 @@ paths:
               example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /exchanges/ticker:
+    get:
+      tags:
+        - Exchanges*
+      summary: Exchanges Ticker
+      operationId: getExchangesTicker
+      x-code-samples:
+        $ref: "./samples/getExchangesTicker.json"
+      description: |
+        The Exchanges Ticker provides high level information about the exchanges integrated with Nomics.
+        It provides a limited amount of metadata, the type of integration, the time range of available data, pairs,
+        and interval information about the volume and, where applicable, the number of trades.
+      parameters:
+        - name: ids
+          in: query
+          description: Comma separated list of Nomics Exchange IDs to filter result rows
+          required: false
+          schema:
+            type: string
+          example: "binance,gdax"
+        - interval:
+          name: interval
+          in: query
+          description: Comma separated time interval of the ticker(s). Default is `1d`.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 1h
+              - 1d
+              - 7d
+              - 30d
+              - 365d
+              - ytd
+          example: 1d,30d
+      responses:
+        "200":
+          description: Metadata and interval data for exchanges
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Nomics ID of the exchange
+                    name:
+                      type: string
+                      description: Name of the exchange
+                    logo_url:
+                      type: string
+                      description: URL to logo of the exchange
+                    transparency_grade:
+                      type: string
+                      description: Transparency grade of the exchange
+                    coverage_type:
+                      type: string
+                      description: Coverage type of the exchange (trades, candles, tickers)
+                    order_books:
+                      type: boolean
+                      description: Indicates if order books are available
+                    first_trade:
+                      type: string
+                      description: Date of the first trade available
+                    first_candle:
+                      type: string
+                      description: Date of the first candle available
+                    first_order_book:
+                      type: string
+                      description: Date of the first order book available
+                    last_updated:
+                      type: string
+                      description: Timestamp of the last update of data
+                    fiat_currencies:
+                      type: array
+                      description: List of fiat currencies available
+                    num_pairs:
+                      type: string
+                      description: Number of currency pairs (markets) available
+                    interval:
+                      type: object
+                      description: |
+                        Interval-specific ticker attributes. The key will be the name of the interval
+                        (IE: `1d` or `365d`) and will occur for every requested interval.
+                      properties:
+                        volume:
+                          type: string
+                          description: Total volume for the given interval in USD
+                        volume_change:
+                          type: string
+                          description: Amount of volume change for the given interval in USD
+                        volume_change_pct:
+                          type: string
+                          description: Percent change of volume for the given interval
+                        trades:
+                          type: string
+                          description: Total trades for the given interval in USD
+                        trades_change:
+                          type: string
+                          description: Amount of trades change for the given interval in USD
+                        trades_change_pct:
+                          type: string
+                          description: Percent change of trades for the given interval
+                  example:
+                    id: "gdax"
+                    name: "Coinbase Pro"
+                    logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/exchanges/gdax.jpg"
+                    transparency_grade: "A"
+                    coverage_type: "trades"
+                    order_books: true
+                    first_trade: "2014-12-01"
+                    first_candle: "2014-12-01"
+                    first_order_book: "2018-09-11"
+                    last_updated: "2019-08-05T14:53:00.000Z"
+                    fiat_currencies: ["EUR","GBP","USD"]
+                    num_pairs: "52"
+                    1d:
+                      volume: "436797947.38"
+                      volume_change: "265926751.58"
+                      volume_change_pct: "1.5563"
+                      trades: "367197"
+                      trades_change: "167133"
+                      trades_change_pct: "0.8354"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
   /exchanges:
     get:
       tags:
