@@ -233,6 +233,14 @@ paths:
           schema:
             type: string
           example: EUR
+        - include-transparency:
+          name: include-transparency
+          in: query
+          description: Whether to include [Transparent Volume](https://blog.nomics.com/essays/transparent-volume/) information for currencies. Default is `false`. This option is only available to customers of our paid API plans.
+          required: false
+          schema:
+            type: boolean
+          example: true
       responses:
         "200":
           description: Price, volume, market cap, and rank for all currencies
@@ -308,6 +316,12 @@ paths:
                         market_cap_change_pct:
                           type: string
                           description: Percent change of market cap for the given interval
+                        volume_transparency:
+                          type: array
+                          description: An array of `volume`, `volume_change` and `volume_change_pct` by exchange grade
+                        volume_transparency_grade":
+                          type: string
+                          description: The quartile grade assigned to this currency
                   example:
                     currency: "BTC"
                     id: "BTC"
@@ -329,7 +343,16 @@ paths:
                       volume_change: "-24130098.49"
                       volume_change_pct: "-0.02"
                       market_cap_change: "4805518049.63"
-                      market_cap_change_pct: "0.03
+                      market_cap_change_pct: "0.03"
+                      volume_transparency:
+                        - grade: "A"
+                          volume: "2144455081.37"
+                          volume_change: "-235524941.08"
+                          volume_change_pct: "-0.10"
+                        - grade: "B"
+                          volume: "15856762.85"
+                          volume_change: "-6854329.88"
+                          volume_change_pct: "-0.30"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
   /currencies:
