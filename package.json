@@ -12,6 +12,7 @@
     "redoc-cli": "^0.6.1"
   },
   "devDependencies": {
-    "swagger-client": "^3.8.12"
+    "@kyleshockey/js-yaml": "^1.0.1",
+    "swagger-client": "^3.9.4"
   }
 }
