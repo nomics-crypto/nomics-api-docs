@@ -2,6 +2,11 @@
   "name": "nomics-api-docs",
   "version": "1.0.0",
   "description": "Nomics API Documentation",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
     "dev": "redoc-cli serve spec.yaml --template=template.hbs --watch",
     "bundle": "redoc-cli bundle spec.yaml --template=template.hbs",
