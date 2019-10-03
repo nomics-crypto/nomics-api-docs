@@ -1,5 +1,5 @@
 const Swagger = require('swagger-client')
-const jsYaml = require('@kyleshockey/js-yaml')
+const jsYaml = require('js-yaml')
 const fs = require('fs')
 
 const spec = jsYaml.safeLoad(fs.readFileSync("./spec.yaml"))
