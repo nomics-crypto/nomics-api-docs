@@ -1,6 +1,7 @@
 {
   "name": "nomics-api-docs",
   "description": "Nomics API Documentation",
+  "stack": "heroku-18",
   "environments": {
     "test": {
       "scripts": {
