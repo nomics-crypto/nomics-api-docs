@@ -26,24 +26,24 @@ const rubyTemplate = (url) => `require 'net/http'
 uri = URI("${url}")
 puts Net::HTTP.get(uri)`
 
-Swagger({spec}).then((jx) => {
+Swagger({ spec }).then((jx) => {
   Object.keys(jx.spec.paths).forEach((k) => {
     const path = jx.spec.paths[k]
     let params = [`key=${key}`]
     if (path.get && path.get.parameters) {
       path.get.parameters.forEach((p) => {
-        if (p.name && p.example) {
+        if (p.name && p.example && !p.deprecated) {
           params.push(`${p.name}=${p.example}`)
         }
       })
     }
     const url = `${jx.spec.servers[0].url}${k}?${params.join("&")}`
     fs.writeFileSync(`./samples/${path.get.operationId}.json`, JSON.stringify([
-      {lang: "Shell", source: curlTemplate(url)},
-      {lang: "JavaScript", source: javascriptTemplate(url)},
-      {lang: "NodeJS", source: nodeTemplate(url)},
-      {lang: "Ruby", source: rubyTemplate(url)},
-      {lang: "Python", source: pythonTemplate(url)},
+      { lang: "Shell", source: curlTemplate(url) },
+      { lang: "JavaScript", source: javascriptTemplate(url) },
+      { lang: "NodeJS", source: nodeTemplate(url) },
+      { lang: "Ruby", source: rubyTemplate(url) },
+      { lang: "Python", source: pythonTemplate(url) },
     ]))
   })
 })
