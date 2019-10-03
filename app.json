@@ -2,12 +2,14 @@
   "name": "nomics-api-docs",
   "description": "Nomics API Documentation",
   "buildpacks": [
-    { "url": "heroku/nodejs" }
+    {
+      "url": "heroku/nodejs"
+    }
   ],
   "environments": {
     "test": {
       "scripts": {
-        "test": "yarn bundle"
+        "test": "yarn bundle && yarn samples"
       }
     }
   }
