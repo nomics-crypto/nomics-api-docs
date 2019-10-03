@@ -24,12 +24,15 @@ info:
     ## JSON and CSV Support
 
     By default, all endpoints serve data as JSON. However, by passing `format=csv` in the URL,
-    an endpoint will return CSV data. This can be used in Google Sheets via the `IMPORTDATA`
+    some endpoints will return CSV data. This can be used in Google Sheets via the `IMPORTDATA`
     function.
 
     CSV responses will not contain a header row, this is so that data can be easily concatenated
     from multiple requests. The fields will be rendered in the same order as the JSON fields. See
     the endpoint's documentation for an example.
+
+    Not all endpoints support CSV. Endpoints that support CSV will have the `format` parameter in
+    the parameters section.
 
     ## Errors
 
@@ -240,7 +243,7 @@ paths:
           required: false
           schema:
             type: boolean
-          example: true
+          example: false
       responses:
         "200":
           description: Price, volume, market cap, and rank for all currencies
@@ -368,6 +371,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/currency-ids"
         - $ref: "#/components/parameters/currency-attributes"
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of Nomics Currencies
@@ -518,6 +522,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: Open and close supply information
@@ -711,6 +716,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/exchange-ids"
         - $ref: "#/components/parameters/exchange-attributes"
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of Nomics Exchanges
@@ -846,6 +852,7 @@ paths:
           schema:
             type: string
           example: BTC,ETH,BNB
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of markets
@@ -902,6 +909,7 @@ paths:
           schema:
             type: string
           example: BTC
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of markets with their price
@@ -975,6 +983,7 @@ paths:
             type: string
           example: "2018-04-14T00%3A00%3A00Z"
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of markets with price and volume information for a currency
@@ -1015,6 +1024,7 @@ paths:
           schema:
             type: string
           example: binance
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of markets with their prices
@@ -1085,6 +1095,7 @@ paths:
             type: string
           example: "2018-04-14T00%3A00%3A00Z"
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of markets with price and volume information for a currency
@@ -1155,6 +1166,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: Performance over time for the entire market.
@@ -1214,6 +1226,7 @@ paths:
             type: string
           example: "2018-04-14T00%3A00%3A00Z"
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of candles
@@ -1282,6 +1295,7 @@ paths:
           schema:
             type: string
           example: "2018-05-14T00%3A00%3A00Z"
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: Volume over time for all currencies
@@ -1320,6 +1334,8 @@ paths:
         data across markets as well as to provide localization for users.
 
         Currently, this endpoint does not support historical data, but this feature is planned.
+      parameters:
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: List of exchange rates into USD
@@ -1354,6 +1370,7 @@ paths:
         - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: Exchange rates for every point in a time range
@@ -1393,6 +1410,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: List of exchange rates open and close information
@@ -1501,6 +1519,7 @@ paths:
           schema:
             type: string
           example: "1970-01-01T00%3A00%3A00Z"
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: List of trades
@@ -1547,6 +1566,7 @@ paths:
           schema:
             type: string
           example: "2019-04-01T12%3A00%3A00Z"
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: Order book snapshot
@@ -1617,6 +1637,7 @@ paths:
             type: string
           example: "2018-04-14T00%3A00%3A00Z"
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of candles
@@ -1717,6 +1738,7 @@ paths:
             type: string
           example: "2018-04-14T00%3A00%3A00Z"
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of candles
@@ -1773,6 +1795,8 @@ paths:
         $ref: './samples/getPrices.json'
       description: |
         The prices endpoint returns current prices for all currencies. Prices are updated every 10 seconds.
+      parameters:
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of currencies with their price
@@ -1800,6 +1824,8 @@ paths:
       description: |
         The dashboard endpoint is a high level view of the current state of the market. It contains a wide
         variety of information and is updated every 10 seconds.
+      parameters:
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: A list of currency summaries
@@ -1829,6 +1855,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: Open, close, and volume for all currencies in a time range
@@ -1881,6 +1908,8 @@ paths:
         $ref: './samples/getCurrencyHighs.json'
       description: |
         Returns all time high information for all currencies.
+      parameters:
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
           description: All time highs for all currencies
@@ -2226,6 +2255,14 @@ components:
           description: Volume of the trade in the base currency of the market
           example: "0.02122885"
   parameters:
+    format:
+      name: format
+      in: query
+      description: Format of the response. Defaults to JSON when blank.
+      schema:
+        type: string
+        enum:
+          - csv
     candle-interval:
       name: interval
       in: query
