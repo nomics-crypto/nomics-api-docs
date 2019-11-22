@@ -8,7 +8,7 @@
     "node": "12.x"
   },
   "scripts": {
-    "dev": "redoc-cli serve spec.yaml --template=template.hbs --watch",
+    "dev": "redoc-cli serve spec.yaml --template=template.hbs --watch --port=3000",
     "bundle": "redoc-cli bundle spec.yaml --template=template.hbs",
     "samples": "node ./generate_samples.js",
     "start": "redoc-cli serve spec.yaml --template=template.hbs --port=$PORT --ssr"

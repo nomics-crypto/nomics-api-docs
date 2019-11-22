@@ -886,10 +886,192 @@ paths:
               example: "bitfinex,avtbtc,AVT,BTC"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
-  /markets/prices:
+  /exchange-markets/ticker:
     get:
       tags:
         - Markets*
+      summary: Exchange Markets Ticker
+      operationId: getExchangeMarketsTicker
+      x-code-samples:
+        $ref: './samples/getExchangeMarketsTicker.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        The Exchange Markets Ticker provides high level information about individual markets on exchanges integrated
+        with Nomics. It provides metadata, the type of market, aggregation information, current financial data, and
+        financial data over preset intervals.
+      parameters:
+        - name: interval
+          in: query
+          description: Comma separated time interval of the ticker(s).
+          required: false
+          default: 1d
+          schema:
+            type: string
+            enum:
+              - 1h
+              - 1d
+              - 7d
+              - 30d
+              - 365d
+              - ytd
+          example: 1d,30d
+        - name: currency
+          in: query
+          description: A comma separated list of Nomics Currency IDs. A market must have one of the currencies as
+            either its base or quote currency to be included.
+          schema:
+            type: string
+          example: BTC,ETH
+        - name: base
+          in: query
+          description: A comma separated list of Nomics Currency IDs. A market must have one of the currencies as
+            its base currency to be included.
+          schema:
+            type: string
+        - name: quote
+          in: query
+          description: A comma separated list of Nomics Currency IDs. A market must have one of the currencies as
+            its quote currency to be included.
+          schema:
+            type: string
+        - name: exchange
+          in: query
+          description: A comma separated list of Nomics Exchange IDs. A market must be on one of the exchanges to be
+            included.
+          schema:
+            type: string
+          example: binance,gdax
+        - name: market
+          in: query
+          description: A comma separated list of Nomics Market IDs. A market's `market_id` must be one of the provided
+            markets to be included.
+          schema:
+            type: string
+        - name: convert
+          in: query
+          description: Nomics Currency ID to convert all financial data to
+          default: USD
+          schema:
+            type: string
+          example: BTC
+      responses:
+        "200":
+          description: Metadata and interval data for individual markets on exchanges
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    exchange:
+                      type: string
+                      description: Nomics Exchange ID
+                    market:
+                      type: string
+                      description: Nomics Market ID
+                    type:
+                      type: string
+                      enum:
+                        - spot
+                        - derivative
+                        - index
+                      description: Market Type
+                    aggregated:
+                      type: boolean
+                      description: Indicates if the market is used to price the base and quote currencies. See
+                        [Nomics Pricing Methodology](https://blog.nomics.com/newsletter/nomics-pricing-methodology-explained/)
+                        for more information.
+                    price_exclude:
+                      type: boolean
+                      description: Indicates if the market has been excluded from pricing the base and quote currencies.
+                    volume_exclude:
+                      type: boolean
+                      description: Indicates if the market has been excluded from counting towards volume for base and
+                        quote currencies.
+                    base:
+                      type: string
+                      description: Nomics Currency ID of the base of the market
+                    quote:
+                      type: string
+                      description: Nomics Currency ID of the quote of the market
+                    base_symbol:
+                      type: string
+                      description: Nomics display symbol of the base of the market
+                    quote_symbol:
+                      type: string
+                      description: Nomics display symbol of the quote of the market
+                    price:
+                      type: string
+                      description: Latest price of the market in USD
+                    price_quote:
+                      type: string
+                      description: Latest price of the market in the quote currency
+                    last_updated:
+                      type: string
+                      description: Timestamp of when the market was last updated
+                    interval:
+                      type: object
+                      description: |
+                        Interval-specific ticker attributes. The key will be the name of the interval
+                        (IE: `1d` or `365d`) and will occur for every requested interval.
+                      properties:
+                        volume:
+                          type: string
+                          description: Volume in USD
+                        volume_base:
+                          type: string
+                          description: Volume in the base currency
+                        volume_change:
+                          type: string
+                          description: Change of the volume in USD
+                        volume_base_change:
+                          type: string
+                          description: Change of the volume in the base currency
+                        trades:
+                          type: string
+                          description: Number of trades
+                        trades_change:
+                          type: string
+                          description: Change in the number of trades
+                        price_change:
+                          type: string
+                          description: Change in the price in USD
+                        price_quote_change:
+                          type: string
+                          description: Change in the price in the quote currency
+                  example:
+                    exchange: "binance"
+                    market: "BTCUSDT"
+                    type: "spot"
+                    aggregated: false
+                    price_exclude: false
+                    volume_exclude: false
+                    base: "BTC"
+                    quote: "USDT"
+                    base_symbol: "BTC"
+                    quote_symbol: "USDT"
+                    price: "7252.08623165"
+                    price_quote: "7231.48000000"
+                    last_updated: "2019-11-22T18:57:00Z"
+                    1d:
+                      volume: "811359239.06"
+                      volume_base: "111495.36"
+                      volume_base_change: "-56699.74"
+                      volume_change: "367840228.36"
+                      trades: "693395"
+                      trades_change: "-381033"
+                      price_change: "-343.64505167"
+                      price_quote_change: "0.00000000"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
+  /markets/prices:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
       summary: Market Prices
       operationId: getMarketPrices
       x-code-samples:
@@ -945,8 +1127,9 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /markets/interval:
     get:
+      deprecated: true
       tags:
-        - Markets*
+        - Deprecated
       summary: Market Interval
       operationId: getMarketInterval
       x-code-samples:
@@ -1001,8 +1184,9 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
   /exchange-markets/prices:
     get:
+      deprecated: true
       tags:
-        - Markets*
+        - Deprecated
       summary: Exchange Market Prices
       operationId: getExchangeMarketPrices
       x-code-samples:
@@ -1064,8 +1248,9 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /exchange-markets/interval:
     get:
+      deprecated: true
       tags:
-        - Markets*
+        - Deprecated
       summary: Exchange Market Interval
       operationId: getExchangeMarketInterval
       x-code-samples:
@@ -1361,7 +1546,7 @@ paths:
       x-code-samples:
         $ref: './samples/getExchangeRatesHistory.json'
       description: |
-        Exchange rates for every point in a time range. This endpoint can be used with other interval endpoints
+        Exchange rates for every point in a time range. This endpoint can be used with other history endpoints
         to convert values into a desired quote currency.
 
         The currency parameter must be a Nomics Quote Currency, to get all Nomics Quote Currencies, use the
@@ -1394,58 +1579,6 @@ paths:
               schema:
                 type: string
               example: "05/01/2018 00:00:00,1.2079045272261680"
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-  /exchange-rates/interval:
-    get:
-      tags:
-        - Exchange Rates
-      summary: Exchange Rates Interval
-      operationId: getExchangeRatesInterval
-      x-code-samples:
-        $ref: './samples/getExchangeRatesInterval.json'
-      description: |
-        Exchange rates to convert from USD over a time interval. This endpoint can be used with other interval endpoints
-        to convert values into a desired quote currency.
-      parameters:
-        - $ref: '#/components/parameters/interval-start'
-        - $ref: '#/components/parameters/interval-end'
-        - $ref: "#/components/parameters/format"
-      responses:
-        '200':
-          description: List of exchange rates open and close information
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    currency:
-                      type: string
-                      description: Nomics ID of the currency
-                    open:
-                      type: string
-                      description: Open rate of exchange
-                    open_timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the open rate
-                    close:
-                      type: string
-                      description: Close rate of exchange
-                    close_timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the open rate
-                  example:
-                    currency: "EUR"
-                    open: "1.1934028689404969"
-                    open_timestamp: "2018-05-14T00:00:00Z"
-                    close: "1.1707956727391936"
-                    close_timestamp: "2018-05-24T00:00:00Z"
-            text/csv:
-              schema:
-                type: string
-              example: "EUR,1.1934028689404969,05/14/2018 00:00:00,1.1707956727391936,05/24/2018 00:00:00"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
   /trades:
@@ -2033,6 +2166,59 @@ paths:
                       $ref: "#/components/schemas/MarketCapSparklineRow"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /exchange-rates/interval:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: Exchange Rates Interval
+      operationId: getExchangeRatesInterval
+      x-code-samples:
+        $ref: './samples/getExchangeRatesInterval.json'
+      description: |
+        Exchange rates to convert from USD over a time interval. This endpoint can be used with other interval endpoints
+        to convert values into a desired quote currency.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
+      responses:
+        '200':
+          description: List of exchange rates open and close information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    open:
+                      type: string
+                      description: Open rate of exchange
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open rate
+                    close:
+                      type: string
+                      description: Close rate of exchange
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open rate
+                  example:
+                    currency: "EUR"
+                    open: "1.1934028689404969"
+                    open_timestamp: "2018-05-14T00:00:00Z"
+                    close: "1.1707956727391936"
+                    close_timestamp: "2018-05-24T00:00:00Z"
+            text/csv:
+              schema:
+                type: string
+              example: "EUR,1.1934028689404969,05/14/2018 00:00:00,1.1707956727391936,05/24/2018 00:00:00"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
 
 components:
   securitySchemes:
