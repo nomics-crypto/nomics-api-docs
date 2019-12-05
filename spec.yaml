@@ -1748,15 +1748,23 @@ paths:
         The exchange candles endpoint returns raw open, close, high, low, and volume information for Nomics Markets.
         The data is not aggregated, therefore prices are in the quote currency of the market and volume is in the base
         currency of the market.
-        
-        Candles have the following history based on size:
 
-        * `1d`: From inception updated every minute
-        * `4h`: Rolling 120 days updated every minute
-        * `1h`: Rolling 30 days updated every minute
-        * `30m`: Rolling 14 days updated every minute
-        * `5m`: Rolling 3 days updated every 10 seconds
-        * `1m`: Rolling 24 hours updated every 10 seconds
+        History is available for all candle sizes from inception, but
+        there are limits on the length of the date range you can
+        request at a time:
+
+        | interval | limit    |
+        |----------|----------|
+        | `1d`     | no limit |
+        | `4h`     | 120 days |
+        | `1h`     | 30 days  |
+        | `30m`    | 14 days  |
+        | `5m`     | 3 days   |
+        | `1m`     | 1 day    |
+
+        If the difference between your `end` and `start` parameters
+        for the `interval` you're requesting exceeds the limit, then
+        you'll receive an error.
       parameters:
         - $ref: '#/components/parameters/exchange-candle-interval'
         - $ref: '#/components/parameters/exchange'
@@ -1764,7 +1772,13 @@ paths:
         - interval-start:
           name: start
           in: query
-          description: Start time of the interval in RFC3339 (URI escaped). If not provided, starts from first candle.
+          description: |
+            Start time of the interval in RFC3339 (URI escaped).  If
+            not provided, then candles will be returned starting from
+            the current time minus the date range limit for the
+            requested interval.  For example, if you request hourly
+            candles without specifying a start time, then candles
+            spanning the last 30 days will be returned.
           required: false
           schema:
             type: string
@@ -1837,15 +1851,23 @@ paths:
 
         The data is aggregated but not converted to USD, so OHLC values are in the quote currency unit and Volume
         is in the base currency unit.
-        
-        Candles have the following history based on size:
 
-        * `1d`: Inception
-        * `4h`: 120 days
-        * `1h`: 30 days
-        * `30m`: 14 days
-        * `5m`: 3 days
-        * `1m`: 24 hours
+        History is available for all candle sizes from inception, but
+        there are limits on the length of the date range you can
+        request at a time:
+
+        | interval | limit    |
+        |----------|----------|
+        | `1d`     | no limit |
+        | `4h`     | 120 days |
+        | `1h`     | 30 days  |
+        | `30m`    | 14 days  |
+        | `5m`     | 3 days   |
+        | `1m`     | 1 day    |
+
+        If the difference between your `end` and `start` parameters
+        for the `interval` you're requesting exceeds the limit, then
+        you'll receive an error.
       parameters:
         - $ref: '#/components/parameters/exchange-candle-interval'
         - name: base
@@ -1865,7 +1887,13 @@ paths:
         - interval-start:
           name: start
           in: query
-          description: Start time of the interval in RFC3339 (URI escaped). If not provided, starts from first candle.
+          description: |
+            Start time of the interval in RFC3339 (URI escaped).  If
+            not provided, then candles will be returned starting from
+            the current time minus the date range limit for the
+            requested interval.  For example, if you request hourly
+            candles without specifying a start time, then candles
+            spanning the last 30 days will be returned.
           required: false
           schema:
             type: string
