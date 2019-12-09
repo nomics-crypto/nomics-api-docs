@@ -1395,22 +1395,39 @@ paths:
         Candles are aggregated across all markets for the base currencies, which necessitates converting to a common
         quote currency. Nomics converts all markets into USD in order to aggregated candles.
 
-        Candles have the following history based on size:
-
-        * `1d`: From inception updated every 15 minutes
-        * `1h`: Rolling 30 days updated every 5 minutes
+        Historical candles are available for both intervals from
+        inception.  However, hourly aggregated candles have a 7 day
+        limit on the length of the date range you can request if you
+        request a date range whose start timestamp is older than 30
+        days.
       parameters:
         - $ref: '#/components/parameters/candle-interval'
         - $ref: '#/components/parameters/currency'
         - interval-start:
           name: start
           in: query
-          description: Start time of the interval in RFC3339 (URI escaped). If not provided, starts from first candle.
+          description: |
+            Start time of the interval in RFC3339 (URI escaped). If
+            not provided, starts from the first candle for daily
+            candles and from the current time minus 30 days for hourly
+            candles.
           required: false
           schema:
             type: string
           example: "2018-04-14T00%3A00%3A00Z"
-        - $ref: '#/components/parameters/interval-end'
+        - interval-end:
+          name: end
+          in: query
+          description: |
+            End time of the interval in RFC3339 (URI escaped). If not
+            provided, the current time is used except for when hourly
+            candles with a `start` time older than 30 days are
+            requested.  In that case, the `end` time defaults to the
+            `start` time plus 7 days.
+          required: false
+          schema:
+            type: string
+          example: "2018-05-14T00%3A00%3A00Z"
         - $ref: "#/components/parameters/format"
       responses:
         '200':
