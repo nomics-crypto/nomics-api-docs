@@ -1395,11 +1395,12 @@ paths:
         Candles are aggregated across all markets for the base currencies, which necessitates converting to a common
         quote currency. Nomics converts all markets into USD in order to aggregated candles.
 
-        Historical candles are available for both intervals from
-        inception.  However, hourly aggregated candles have a 7 day
-        limit on the length of the date range you can request if you
-        request a date range whose start timestamp is older than 30
-        days.
+        Candles have the following time range limits based on interval and time:
+
+        * `1d`: Available from inception with no range limit
+        * `1h`: Available from inception. Time range limits:
+          * Past 30 days: accessible in a single request
+          * Older than 30 days: 7 days at a time
       parameters:
         - $ref: '#/components/parameters/candle-interval'
         - $ref: '#/components/parameters/currency'
