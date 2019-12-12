@@ -1498,6 +1498,14 @@ paths:
           schema:
             type: string
           example: "2018-05-14T00%3A00%3A00Z"
+        - convert:
+          name: convert
+          in: query
+          description: Currency to quote volume values. May be a Fiat Currency or Cryptocurrency. Default is `USD`.
+          required: false
+          schema:
+            type: string
+          example: EUR
         - $ref: "#/components/parameters/format"
       responses:
         '200':
