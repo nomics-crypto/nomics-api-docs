@@ -477,6 +477,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
+        - $ref: '#/components/parameters/convert'
       responses:
         '200':
           description: Currency performance over time for all currencies over the requested time period.
@@ -1351,6 +1352,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
+        - $ref: '#/components/parameters/convert'
         - $ref: "#/components/parameters/format"
       responses:
         '200':
@@ -2514,6 +2516,14 @@ components:
           - 1d
           - 1h
       example: 1d
+    convert:
+      name: convert
+      in: query
+      description: Currency to quote ticker price, market cap, and volume values. May be a Fiat Currency or Cryptocurrency. Default is `USD`.
+      required: false
+      schema:
+        type: string
+        example: EUR
     exchange-candle-interval:
       name: interval
       in: query
