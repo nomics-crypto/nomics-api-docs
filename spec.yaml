@@ -1781,14 +1781,14 @@ paths:
         there are limits on the length of the date range you can
         request at a time:
 
-        | interval | limit    |
-        |----------|----------|
-        | `1d`     | no limit |
-        | `4h`     | 120 days |
-        | `1h`     | 30 days  |
-        | `30m`    | 14 days  |
-        | `5m`     | 3 days   |
-        | `1m`     | 1 day    |
+        | interval | limit per request |
+        |----------|-------------------|
+        | `1d`     | no limit          |
+        | `4h`     | 120 days          |
+        | `1h`     | 30 days           |
+        | `30m`    | 14 days           |
+        | `5m`     | 3 days            |
+        | `1m`     | 1 day             |
 
         If the difference between your `end` and `start` parameters
         for the `interval` you're requesting exceeds the limit, then
