@@ -475,6 +475,7 @@ paths:
         is designed to serve as a convenient way to render sparklines, if you need exactly aligned times and prices you can use the
         [Aggregated OHLCV Candles endpoint](#operation/getCandles).
       parameters:
+        - $ref: '#/components/parameters/currency-ids'
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
         - $ref: '#/components/parameters/convert'
