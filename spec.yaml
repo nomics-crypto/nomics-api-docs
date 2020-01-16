@@ -509,6 +509,52 @@ paths:
                         example: "7436.82313"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /supplies/history:
+    get:
+      tags:
+        - Currencies*
+      summary: Supply History
+      operationId: getSupplyHistory
+      x-code-samples:
+        $ref: './samples/getSupplyHistory.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        Supply history per currency for every day in a time range.
+      parameters:
+        - $ref: '#/components/parameters/currency'
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
+      responses:
+        '200':
+          description: Daily supply history for a currency.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: RFC3999 timestamp
+                    available:
+                      type: string
+                      description: available supply at `timestamp`
+                    max:
+                      type: string
+                      description: max supply at `timestamp`
+                  example:
+                    timestamp: "2018-05-14T00:04:31Z"
+                    available: "17052037.0"
+                    max: "21000000.0"
+            text/csv:
+              schema:
+                type: string
+              example: "05/14/2018 00:04:31,17052037.0,21000000.0"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
   /supplies/interval:
     get:
       deprecated: true
