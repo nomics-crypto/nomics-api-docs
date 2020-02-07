@@ -6,7 +6,7 @@ const spec = jsYaml.safeLoad(fs.readFileSync("./spec.yaml"))
 
 // Rotated often! For demo use only! Get a free key here:
 // https://p.nomics.com/cryptocurrency-bitcoin-api/
-const key = "2018-09-demo-dont-deploy-b69315e440beb145"
+const key = "demo-26240835858194712a4f8cc0dc635c7a"
 
 const curlTemplate = (url) => `curl "${url}"`;
 
