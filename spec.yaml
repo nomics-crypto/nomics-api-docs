@@ -267,6 +267,9 @@ paths:
                     price_date:
                       type: string
                       description: Date of the price
+                    price_timestamp:
+                      type: string
+                      description: Timestamp of the price
                     symbol:
                       type: string
                       description: Display symbol of the currency (may be duplicated)
@@ -329,7 +332,8 @@ paths:
                     currency: "BTC"
                     id: "BTC"
                     price: "8451.36516421"
-                    price_date: "2019-06-14"
+                    price_date: "2019-06-14T00:00:00Z"
+                    price_timestamp: "2019-06-14T12:35:00Z"
                     symbol: "BTC"
                     circulating_supply: "17758462"
                     max_supply: "21000000"
