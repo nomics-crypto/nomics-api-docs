@@ -186,6 +186,7 @@ x-tagGroups:
       - Candles*
       - Trades*
       - Orders*
+      - Predictions*
   - name: Other
     tags:
       - Deprecated
@@ -2030,6 +2031,162 @@ paths:
               schema:
                 type: string
               example: "04/14/2018 00:00:00,0.06101,0.06267940,0.06282333,0.066667,193325.66033455,185948"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /currencies/predictions/ticker:
+    get:
+      tags:
+        - Predictions*
+      summary: Currency Predictions Ticker
+      operationId: getCurrenciesPredictionsTicker
+      x-code-samples:
+        $ref: './samples/getCurrenciesPredictionsTicker.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        The Currencies Predictions Ticker endpoint returns the current price prediction for all currencies.
+        [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
+      parameters:
+        - name: ids
+          in: query
+          description: Comma separated list of Nomics currency IDs
+          schema:
+            type: string
+          example: BTC,ETH
+      responses:
+        '200':
+          description: A list of currency prediction tickers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Currency ID
+                    predictions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          avg_error_pct:
+                            type: string
+                            description: Historical mean error percentage
+                          avg_error_pct_30d:
+                            type: string
+                            description: 30 day mean error percentage
+                          avg_error_pct_7d:
+                            type: string
+                            description: 7 day mean error percentage
+                          interval:
+                            type: string
+                            description: Prediction size as Nomics interval
+                          price_change_pct:
+                            type: string
+                            description: Predicted price change percent
+                          price_end:
+                            type: string
+                            description: Predicted price at the end of the interval (USD)
+                          price_start:
+                            type: string
+                            description: Price when the prediction was made (USD)
+                          timestamp_end:
+                            type: string
+                            description: Timestamp at the end of the interval
+                          timestamp_start:
+                            type: string
+                            description: Timestamp when the prediction was made
+                example:
+                  - id: "BTC"
+                    predictions:
+                      - avg_error_pct: "0.0287"
+                        avg_error_pct_30d: "0.0768"
+                        avg_error_pct_7d: "0.0720"
+                        interval: "7d"
+                        price_change_pct: "-0.028"
+                        price_end: "6940.17363192"
+                        price_start: "7139.92807691"
+                        timestamp_end: "2020-04-29T00:00:00Z"
+                        timestamp_start: "2020-04-23T00:00:00Z"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /currencies/predictions/history:
+    get:
+      tags:
+        - Predictions*
+      summary: Currency Predictions History
+      operationId: getCurrenciesPredictionsHistory
+      x-code-samples:
+        $ref: './samples/getCurrenciesPredictionsHistory.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        The Currencies Predictions History endpoint returns historical price prediction for one currency.
+        [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
+      parameters:
+        - name: id
+          in: query
+          description: Nomics currency ID
+          schema:
+            type: string
+          example: BTC
+        - name: interval
+          in: query
+          description: Prediction interval
+          schema:
+            type: string
+            enum:
+              - 7d
+          example: 7d
+      responses:
+        '200':
+          description: A list of currency predictions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Currency ID
+                  interval:
+                    type: string
+                    description: Prediction interval
+                  predictions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        price_change_pct:
+                          type: string
+                          description: Predicted price change percent
+                        price_end:
+                          type: string
+                          description: Predicted price at the end of the interval (USD)
+                        actual_price_end:
+                          type: string
+                          description: Actual price at the end of the interval (USD)
+                        price_start:
+                          type: string
+                          description: Price when the prediction was made (USD)
+                        timestamp_end:
+                          type: string
+                          description: Timestamp at the end of the interval
+                        timestamp_start:
+                          type: string
+                          description: Timestamp when the prediction was made
+                example:
+                  id: BTC
+                  interval: 7d
+                  predictions:
+                    - actual_price_end: "7.40000000"
+                      price_change_pct: "-0.1954"
+                      price_end: "8.04649976"
+                      price_start: "10.00000000"
+                      timestamp_end: "2011-09-05T00:00:00Z"
+                      timestamp_start: "2011-08-30T00:00:00Z"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /prices:
