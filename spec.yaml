@@ -2042,6 +2042,8 @@ paths:
       x-code-samples:
         $ref: './samples/getCurrenciesPredictionsTicker.json'
       description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
         The Currencies Predictions Ticker endpoint returns the current price prediction for all currencies.
         [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
       parameters:
@@ -2119,6 +2121,8 @@ paths:
       x-code-samples:
         $ref: './samples/getCurrenciesPredictionsHistory.json'
       description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
         The Currencies Predictions History endpoint returns historical price prediction for one currency.
         [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
       parameters:
