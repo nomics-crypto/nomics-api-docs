@@ -180,6 +180,7 @@ x-tagGroups:
       - Exchange Rates
   - name: Enhanced*
     tags:
+      - Global*
       - Currencies*
       - Exchanges*
       - Markets*
@@ -531,6 +532,49 @@ paths:
                         example: "7436.82313"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /global-ticker:
+    get:
+      tags:
+        - Global*
+      summary: Global Ticker
+      operationId: getGlobalTicker
+      x-code-samples:
+        $ref: './samples/getGlobalTicker.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        Globally-aggregated market cap and volume data over various intervals across all currencies.
+      parameters:
+        - $ref: '#/components/parameters/convert'
+      responses:
+        '200':
+          description: The global ticker
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  market_cap:
+                    type: string
+                    description: Current global market cap
+                    example: "248861540057"
+                  transparent_market_cap:
+                    type: string
+                    description: Current global transparent market cap
+                    example: "246284997971"
+                  1d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  7d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  30d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  365d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  ytd:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
   /supplies/history:
     get:
       tags:
@@ -2778,6 +2822,49 @@ components:
           type: string
           description: Volume of the trade in the base currency of the market
           example: "0.02122885"
+    GlobalTickerInterval:
+      type: object
+      properties:
+        market_cap_change:
+          type: string
+          description: Amount of market cap change for the given interval
+          example: "8829796231"
+        market_cap_change_pct:
+          type: string
+          description: Percent change of market cap for the given interval
+          example: "0.0368"
+        transparent_market_cap_change:
+          type: string
+          description: Amount of transparent market cap change for the given interval
+          example: "8369460319"
+        transparent_market_cap_change_pct:
+          type: string
+          description: Percent change of transparent market cap for the given interval
+          example: "0.0352"
+        volume:
+          type: string
+          description: Total volume for the given interval
+          example: "157172023545.15"
+        volume_change:
+          type: string
+          description: Amount of volume change for the given interval
+          example: "53106912217.10"
+        volume_change_pct:
+          type: string
+          description: Percent change of volume for the given interval
+          example: "0.5103"
+        transparent_volume:
+          type: string
+          description: Total transparent volume for the given interval
+          example: "13279562924.38"
+        transparent_volume_change:
+          type: string
+          description: Amount of transparent volume change for the given interval
+          example: "7112923695.64"
+        transparent_volume_change_pct:
+          type: string
+          description: Percent change of transparent volume for the given interval
+          example: "1.1535"
   parameters:
     format:
       name: format
