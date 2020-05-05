@@ -2865,6 +2865,18 @@ components:
           type: string
           description: Percent change of transparent volume for the given interval
           example: "1.1535"
+        volume_transparency:
+          type: array
+          description: An array of `volume`, `volume_change` and `volume_change_pct` by exchange grade for the given interval
+          example:
+            - grade: "A"
+              volume: "172119803282.17"
+              volume_change: "85675283606.62"
+              volume_change_pct: "0.9911"
+            - grade: "B"
+              volume: "35407650.11"
+              volume_change: "-5910444.92"
+              volume_change_pct: "-0.1430"
   parameters:
     format:
       name: format
