@@ -444,12 +444,6 @@ paths:
                     block_explorer_url:
                       type: string
                       description: Currency Block Explorer URL
-                    platform_symbol:
-                      type: string
-                      description: Currency Platform Symbol
-                    platform_contract_address:
-                      type: string
-                      description: Currency Platform Contract Address
                     replaced_by:
                       type: string
                       description: Nomics Currency ID of the currency that replaced the given currency. This can happen on hard forks or blockchain swaps as an example.
@@ -473,8 +467,6 @@ paths:
                     linkedin_url: ''
                     block_explorer_url: ''
                     bitcointalk_url: ''
-                    platform_symbol: null
-                    platform_contract_address: ''
                     replaced_by: null
             text/csv:
               schema:
