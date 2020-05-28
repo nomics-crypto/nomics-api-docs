@@ -180,6 +180,7 @@ x-tagGroups:
       - Exchange Rates
   - name: Enhanced*
     tags:
+      - Global*
       - Currencies*
       - Exchanges*
       - Markets*
@@ -237,14 +238,7 @@ paths:
           schema:
             type: string
           example: EUR
-        - include-transparency:
-          name: include-transparency
-          in: query
-          description: Whether to include [Transparent Volume](https://blog.nomics.com/essays/transparent-volume/) information for currencies. Default is `false`. This option is only available to customers of our paid API plans.
-          required: false
-          schema:
-            type: boolean
-          example: false
+        - $ref: "#/components/parameters/include-transparency"
       responses:
         "200":
           description: Price, volume, market cap, and rank for all currencies
@@ -289,6 +283,9 @@ paths:
                     market_cap:
                       type: string
                       description: Current market cap
+                    transparent_market_cap:
+                      type: string
+                      description: Current transparent market cap
                     rank:
                       type: string
                       description: Rank of the currency by market cap
@@ -323,6 +320,12 @@ paths:
                         market_cap_change_pct:
                           type: string
                           description: Percent change of market cap for the given interval
+                        transparent_market_cap_change:
+                          type: string
+                          description: Amount of transparent market cap change for the given interval in USD
+                        transparent_market_cap_change_pct:
+                          type: string
+                          description: Percent change of transparent market cap for the given interval
                         volume_transparency:
                           type: array
                           description: An array of `volume`, `volume_change` and `volume_change_pct` by exchange grade
@@ -341,6 +344,7 @@ paths:
                     name: "Bitcoin"
                     logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/btc.svg"
                     market_cap: "150083247116.70"
+                    transparent_market_cap: "150003247116.70"
                     rank: "1"
                     high: "19404.81116899"
                     high_timestamp: "2017-12-16"
@@ -352,6 +356,8 @@ paths:
                       volume_change_pct: "-0.02"
                       market_cap_change: "4805518049.63"
                       market_cap_change_pct: "0.03"
+                      transparent_market_cap_change: "4800518049.00"
+                      transparent_market_cap_change_pct: "0.0430"
                       volume_transparency:
                         - grade: "A"
                           volume: "2144455081.37"
@@ -526,6 +532,49 @@ paths:
                         example: "7436.82313"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /global-ticker:
+    get:
+      tags:
+        - Global*
+      summary: Global Ticker
+      operationId: getGlobalTicker
+      x-code-samples:
+        $ref: './samples/getGlobalTicker.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        Globally-aggregated market cap and volume data over various intervals across all currencies.
+      parameters:
+        - $ref: '#/components/parameters/convert'
+      responses:
+        '200':
+          description: The global ticker
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  market_cap:
+                    type: string
+                    description: Current global market cap
+                    example: "248861540057"
+                  transparent_market_cap:
+                    type: string
+                    description: Current global transparent market cap
+                    example: "246284997971"
+                  1d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  7d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  30d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  365d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  ytd:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+
   /supplies/history:
     get:
       tags:
@@ -1419,6 +1468,7 @@ paths:
         - $ref: '#/components/parameters/interval-end'
         - $ref: '#/components/parameters/convert'
         - $ref: "#/components/parameters/format"
+        - $ref: "#/components/parameters/include-transparency"
       responses:
         '200':
           description: Performance over time for the entire market.
@@ -1435,8 +1485,12 @@ paths:
                       example: "2018-07-05T15:00:00Z"
                     market_cap:
                       type: string
-                      description: Total market cap in USD
+                      description: Total market cap in the target currency (`USD` by default)
                       example: "269222501959"
+                    transparent_market_cap:
+                      type: string
+                      description: Total transparent market cap in the target currency (`USD` by default)
+                      example: "270122591259"
             test/csv:
               schema:
                 type: string
@@ -1525,13 +1579,52 @@ paths:
                     volume:
                       type: string
                       description: Volume in USD
+                    transparent_low:
+                      type: string
+                      description: Lowest transparent price in USD
+                    transparent_open:
+                      type: string
+                      description: First transparent trade price in USD
+                    transparent_close:
+                      type: string
+                      description: Last transparent trade price in USD
+                    transparent_high:
+                      type: string
+                      description: Highest transparent price in USD
+                    transparent_volume:
+                      type: string
+                      description: Transparent volume in USD
+                    volume_transparency:
+                      type: object
+                      properties:
+                        ?:
+                          type: string
+                        A:
+                          type: string
+                        B:
+                          type: string
+                        C:
+                          type: string
+                        D:
+                          type: string
                   example:
-                    timestamp: "2018-04-14T00:00:00Z"
-                    low: "6737.42284"
-                    open: "7876.07784"
-                    close: "7992.22799"
-                    high: "8226.35323"
-                    volume: "1977895013"
+                    timestamp: "2020-03-30T15:00:00Z"
+                    open: "6362.19740968"
+                    high: "6440.12784982"
+                    low: "6362.13190948"
+                    close: "6372.30963698"
+                    volume: "2063249447"
+                    transparent_open: "6361.48718894"
+                    transparent_high: "6479.69105111"
+                    transparent_low: "6351.20910437"
+                    transparent_close: "6372.80226823"
+                    transparent_volume: "192668445"
+                    volume_transparency:
+                      ?: "141033501"
+                      A: "192668444"
+                      B: "1881706"
+                      C: "1324902748"
+                      D: "402763045"
             text/csv:
               schema:
                 type: string
@@ -1574,6 +1667,7 @@ paths:
             type: string
           example: EUR
         - $ref: "#/components/parameters/format"
+        - $ref: "#/components/parameters/include-transparency"
       responses:
         '200':
           description: Volume over time for all currencies
@@ -1590,8 +1684,12 @@ paths:
                       example: "2018-04-14T00:00:00Z"
                     volume:
                       type: string
-                      description: Total volume in USD
+                      description: Total volume in the target currency (`USD` by default)
                       example: "5209035491"
+                    transparent_volume:
+                      type: string
+                      description: Total transparent volume in the target currency (`USD` by default)
+                      example: "4209035491"
             test/csv:
               schema:
                 type: string
@@ -2724,6 +2822,61 @@ components:
           type: string
           description: Volume of the trade in the base currency of the market
           example: "0.02122885"
+    GlobalTickerInterval:
+      type: object
+      properties:
+        market_cap_change:
+          type: string
+          description: Amount of market cap change for the given interval
+          example: "8829796231"
+        market_cap_change_pct:
+          type: string
+          description: Percent change of market cap for the given interval
+          example: "0.0368"
+        transparent_market_cap_change:
+          type: string
+          description: Amount of transparent market cap change for the given interval
+          example: "8369460319"
+        transparent_market_cap_change_pct:
+          type: string
+          description: Percent change of transparent market cap for the given interval
+          example: "0.0352"
+        volume:
+          type: string
+          description: Total volume for the given interval
+          example: "157172023545.15"
+        volume_change:
+          type: string
+          description: Amount of volume change for the given interval
+          example: "53106912217.10"
+        volume_change_pct:
+          type: string
+          description: Percent change of volume for the given interval
+          example: "0.5103"
+        transparent_volume:
+          type: string
+          description: Total transparent volume for the given interval
+          example: "13279562924.38"
+        transparent_volume_change:
+          type: string
+          description: Amount of transparent volume change for the given interval
+          example: "7112923695.64"
+        transparent_volume_change_pct:
+          type: string
+          description: Percent change of transparent volume for the given interval
+          example: "1.1535"
+        volume_transparency:
+          type: array
+          description: An array of `volume`, `volume_change` and `volume_change_pct` by exchange grade for the given interval
+          example:
+            - grade: "A"
+              volume: "172119803282.17"
+              volume_change: "85675283606.62"
+              volume_change_pct: "0.9911"
+            - grade: "B"
+              volume: "35407650.11"
+              volume_change: "-5910444.92"
+              volume_change_pct: "-0.1430"
   parameters:
     format:
       name: format
@@ -2845,6 +2998,15 @@ components:
       schema:
         type: string
       example: "id,name,transparency_grade"
+    include-transparency:
+      name: include-transparency
+      in: query
+      description: |
+        Whether to include [Transparent Volume](https://blog.nomics.com/essays/transparent-volume/) and transparent market cap information in the response. Default is `false`. This option is only available to customers of our paid API plans.
+      required: false
+      schema:
+        type: boolean
+      example: false
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
