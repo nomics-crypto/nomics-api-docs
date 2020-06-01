@@ -453,6 +453,9 @@ paths:
                     replaced_by:
                       type: string
                       description: Nomics Currency ID of the currency that replaced the given currency. This can happen on hard forks or blockchain swaps as an example.
+                    cryptocontrol_coin_id:
+                      type: string
+                      description: Coin ID for CryptoControl.io
                   example:
                     id: BTC
                     original_symbol: BTC
@@ -474,6 +477,7 @@ paths:
                     block_explorer_url: ''
                     bitcointalk_url: ''
                     replaced_by: null
+                    cryptocontrol_coin_id: "bitcoin"
             text/csv:
               schema:
                 type: string
