@@ -477,6 +477,7 @@ paths:
                     block_explorer_url: ''
                     bitcointalk_url: ''
                     replaced_by: null
+                    cryptocontrol_coin_id: "bitcoin"
             text/csv:
               schema:
                 type: string
