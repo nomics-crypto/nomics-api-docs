@@ -2342,7 +2342,7 @@ paths:
         $ref: './samples/getDashboard.json'
       description: |
         The dashboard endpoint is a high level view of the current state of the market. It contains a wide
-        variety of information and is updated every 10 seconds.
+        variety of information and is updated every minute.
       parameters:
         - $ref: "#/components/parameters/format"
       responses:
