@@ -912,6 +912,9 @@ paths:
                     transparency_grade:
                       type: string
                       description: The [Nomics Transparency Rating](https://blog.nomics.com/essays/transparency-ratings/) for the exchange
+                    order_books_interval:
+                      type: number
+                      description: The maximum frequency (in milliseconds) at which order book snapshots are taken for this exchange
                   example:
                     id: binance
                     capability_markets": true
@@ -935,6 +938,7 @@ paths:
                     blog_url: https://www.binance.com/en/blog
                     year: 2017
                     transparency_grade: A
+                    order_books_interval: 60000
             text/csv:
               schema:
                 type: string
@@ -2342,7 +2346,7 @@ paths:
         $ref: './samples/getDashboard.json'
       description: |
         The dashboard endpoint is a high level view of the current state of the market. It contains a wide
-        variety of information and is updated every 10 seconds.
+        variety of information and is updated every minute.
       parameters:
         - $ref: "#/components/parameters/format"
       responses:
