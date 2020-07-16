@@ -1530,6 +1530,8 @@ paths:
         * `1h`: Available from inception. Time range limits:
           * Past 30 days: accessible in a single request
           * Older than 30 days: 7 days at a time
+
+        CSV format is: `timestamp,open,high,low,close,volume,empty,transparent_open,transparent_high,transparent_low,transparent_close,transparent_volume`
       parameters:
         - $ref: '#/components/parameters/candle-interval'
         - $ref: '#/components/parameters/currency'
