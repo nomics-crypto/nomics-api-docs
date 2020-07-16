@@ -1530,6 +1530,8 @@ paths:
         * `1h`: Available from inception. Time range limits:
           * Past 30 days: accessible in a single request
           * Older than 30 days: 7 days at a time
+
+        CSV format is: `timestamp,open,high,low,close,volume,empty,transparent_open,transparent_high,transparent_low,transparent_close,transparent_volume`
       parameters:
         - $ref: '#/components/parameters/candle-interval'
         - $ref: '#/components/parameters/currency'
@@ -1572,33 +1574,33 @@ paths:
                     timestamp:
                       type: string
                       description: Start time of the candle in RFC3339
-                    low:
-                      type: string
-                      description: Lowest price in USD
                     open:
                       type: string
                       description: First trade price in USD
-                    close:
-                      type: string
-                      description: Last trade price in USD
                     high:
                       type: string
                       description: Highest price in USD
+                    low:
+                      type: string
+                      description: Lowest price in USD
+                    close:
+                      type: string
+                      description: Last trade price in USD
                     volume:
                       type: string
                       description: Volume in USD
-                    transparent_low:
-                      type: string
-                      description: Lowest transparent price in USD
                     transparent_open:
                       type: string
                       description: First transparent trade price in USD
-                    transparent_close:
-                      type: string
-                      description: Last transparent trade price in USD
                     transparent_high:
                       type: string
                       description: Highest transparent price in USD
+                    transparent_low:
+                      type: string
+                      description: Lowest transparent price in USD
+                    transparent_close:
+                      type: string
+                      description: Last transparent trade price in USD
                     transparent_volume:
                       type: string
                       description: Transparent volume in USD
