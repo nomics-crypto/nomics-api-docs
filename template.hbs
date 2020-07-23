@@ -473,7 +473,7 @@
                 <ul>
                     <li>
                     <div class="nsh-menu-section">
-                        <a class="nsh-menu-item nsh-menu-toggle">
+                        <a class="nsh-menu-item nsh-menu-toggle" href="https://nomics.com/guides">
                         Product Rankings
                         <svg class="nsh-menu-caret" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         <span class="menu-tag">New</span>
@@ -540,10 +540,20 @@
             </div>
             </div>
             <script type="application/javascript">
+            var isMobile;
+            var setViewportWidth = function () {
+                var viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+                isMobile = viewportWidth < 960;
+            }
+            setViewportWidth();
+            window.addEventListener('resize', function () {
+                setViewportWidth();
+            }, false);
             function toggleHeaderItem (event) {
+                if (isMobile) {
                 event.currentTarget.parentNode.classList.toggle('active');
                 event.preventDefault();
-                return false;
+                }
             }
             var el = document.getElementsByClassName('nsh-menu-toggle');
             for (var i = 0; i < el.length; i++) {
