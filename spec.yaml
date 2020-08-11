@@ -791,6 +791,24 @@ paths:
                         volume_change_pct:
                           type: string
                           description: Percent change of volume for the given interval
+                        spot_volume:
+                          type: string
+                          description: Total spot market volume for the given interval in USD
+                        spot_volume_change:
+                          type: string
+                          description: Amount of spot market volume change for the given interval in USD
+                        spot_volume_change_pct:
+                          type: string
+                          description: Percent change of spot market volume for the given interval
+                        derivative_volume:
+                          type: string
+                          description: Total derivative market volume for the given interval in USD
+                        derivative_volume_change:
+                          type: string
+                          description: Amount of derivative market volume change for the given interval in USD
+                        derivative_volume_change_pct:
+                          type: string
+                          description: Percent change of derivative market volume for the given interval
                         trades:
                           type: string
                           description: Total trades for the given interval in USD
@@ -817,6 +835,9 @@ paths:
                       volume: "436797947.38"
                       volume_change: "265926751.58"
                       volume_change_pct: "1.5563"
+                      spot_volume: "436797947.38"
+                      spot_volume_change: "265926751.58"
+                      spot_volume_change_pct: "1.5563"
                       trades: "367197"
                       trades_change: "167133"
                       trades_change_pct: "0.8354"
