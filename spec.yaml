@@ -1899,7 +1899,9 @@ paths:
       description: |
         ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
 
-        The most recent order book snapshot for the given exchange and market.
+        The most recent order book snapshot for the given exchange and
+        market.  An empty result is returned if no snapshot is found
+        within 24 hours prior to the provided timestamp.
 
         CSV format is: `timestamp,bidPrice,bidAmount,askPrice,askAmount`
       parameters:
