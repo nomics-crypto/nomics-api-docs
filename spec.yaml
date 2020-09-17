@@ -843,6 +843,53 @@ paths:
                       trades_change_pct: "0.8354"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+  /exchanges/volume/history:
+    get:
+      tags:
+        - Exchanges*
+      summary: Exchanges Volume History
+      operationId: getExchangeVolumeHistory
+      x-code-samples:
+        $ref: './samples/getExchangeVolumeHistory.json'
+      description: |
+        Exchange Volume History is the total volume for all
+        cryptoassets of an exchange in USD at intervals between the
+        requested time period.
+      parameters:
+        - $ref: "#/components/parameters/exchange"
+        - $ref: "#/components/parameters/interval-start"
+        - $ref: "#/components/parameters/interval-end"
+        - $ref: "#/components/parameters/convert"
+        - $ref: "#/components/parameters/format"
+        - $ref: "#/components/parameters/include-transparency"
+      responses:
+        '200':
+          description: Volume over time for all currencies of an exchange
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: RFC3339 timestamp
+                      example: "2018-04-14T00:00:00Z"
+                    volume:
+                      type: string
+                      description: Total volume in the target currency (`USD` by default)
+                      example: "5209035491"
+                    transparent_volume:
+                      type: string
+                      description: Total transparent volume in the target currency (`USD` by default)
+                      example: "4209035491"
+            test/csv:
+              schema:
+                type: string
+              example: "04/14/2018 00:00:00,5209035491"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /exchanges:
     get:
       tags:
