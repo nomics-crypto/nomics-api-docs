@@ -286,6 +286,21 @@ paths:
                     transparent_market_cap:
                       type: string
                       description: Current transparent market cap
+                    num_exchanges:
+                      type: string
+                      description: The number of exchanges on which this asset is traded
+                    num_pairs:
+                      type: string
+                      description: Number of currency pairs (markets) this asset is a part of
+                    first_candle:
+                      type: string
+                      description: RFC3999 timestamp of the first `1d` candle available via the Nomics API
+                    first_trade:
+                      type: string
+                      description: RFC3999 timestamp of the first trade available via the Nomics API
+                    first_order_book:
+                      type: string
+                      description: RFC3999 timestamp of the first order book snapshot available via the Nomics API
                     rank:
                       type: string
                       description: Rank of the currency by market cap
@@ -345,6 +360,11 @@ paths:
                     logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/btc.svg"
                     market_cap: "150083247116.70"
                     transparent_market_cap: "150003247116.70"
+                    num_exchanges: "357"
+                    num_pairs: "37363"
+                    first_candle: "2011-08-18T00:00:00Z"
+                    first_trade: "2011-08-18T00:00:00Z"
+                    first_order_book: "2017-01-06T00:00:00Z"
                     rank: "1"
                     high: "19404.81116899"
                     high_timestamp: "2017-12-16"
