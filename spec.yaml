@@ -256,6 +256,10 @@ paths:
                     id:
                       type: string
                       description: Unique Nomics ID of the currency
+                    status:
+                      type: string
+                      enum: [active, inactive, dead]
+                      description: Current status
                     price:
                       type: string
                       description: Current price
@@ -304,6 +308,9 @@ paths:
                     rank:
                       type: string
                       description: Rank of the currency by market cap
+                    rank_delta:
+                      type: string
+                      description: Relative rank change based on the first specified `interval` other than `1h`
                     high:
                       type: string
                       description: All time high price
@@ -350,6 +357,7 @@ paths:
                   example:
                     currency: "BTC"
                     id: "BTC"
+                    status: "active"
                     price: "8451.36516421"
                     price_date: "2019-06-14T00:00:00Z"
                     price_timestamp: "2019-06-14T12:35:00Z"
@@ -366,6 +374,7 @@ paths:
                     first_trade: "2011-08-18T00:00:00Z"
                     first_order_book: "2017-01-06T00:00:00Z"
                     rank: "1"
+                    rank_delta: "0"
                     high: "19404.81116899"
                     high_timestamp: "2017-12-16"
                     1d:
