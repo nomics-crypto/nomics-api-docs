@@ -242,7 +242,7 @@ paths:
           name: status
           in: query
           description: |
-            Status by which to filter currencies. All currencies are shown by default, regardless of status.
+            Status by which to filter currencies. If not provided, all currencies are shown.
           schema:
             type: string
             enum: [active, inactive, dead]
@@ -789,7 +789,7 @@ paths:
           name: status
           in: query
           description: |
-            Status by which to filter exchanges. All exchanges are shown by default, regardless of status.
+            Status by which to filter exchanges.  If not provided, all exchanges are shown.
           schema:
             type: string
             enum: [active, inactive]
@@ -797,7 +797,7 @@ paths:
           name: type
           in: query
           description: |
-            Type by which to filter exchanges. All exchanges are shown by default, regardless of type.
+            Type by which to filter exchanges.  If not provided, all exchanges are shown.
           schema:
             type: string
             enum: [spot, derivative]
@@ -1455,7 +1455,7 @@ paths:
         - name: start
           in: query
           description: |
-            Start time of the interval in RFC3339 (URI escaped). If not provided, it is computed using the
+            Start time of the interval in RFC3339 (URI escaped).  If not provided, it is computed using the
             hours parameter.
           required: false
           schema:
