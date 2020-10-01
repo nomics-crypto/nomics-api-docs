@@ -238,7 +238,17 @@ paths:
           schema:
             type: string
           example: EUR
+        - status:
+          name: status
+          in: query
+          description: |
+            Status by which to filter currencies. If not provided, all currencies are shown.
+          schema:
+            type: string
+            enum: [active, inactive, dead]
         - $ref: "#/components/parameters/include-transparency"
+        - $ref: "#/components/parameters/per-page"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Price, volume, market cap, and rank for all currencies
@@ -256,6 +266,10 @@ paths:
                     id:
                       type: string
                       description: Unique Nomics ID of the currency
+                    status:
+                      type: string
+                      enum: [active, inactive, dead]
+                      description: Current status
                     price:
                       type: string
                       description: Current price
@@ -286,9 +300,27 @@ paths:
                     transparent_market_cap:
                       type: string
                       description: Current transparent market cap
+                    num_exchanges:
+                      type: string
+                      description: The number of exchanges on which this asset is traded
+                    num_pairs:
+                      type: string
+                      description: Number of currency pairs (markets) this asset is a part of
+                    first_candle:
+                      type: string
+                      description: RFC3999 timestamp of the first `1d` candle available via the Nomics API
+                    first_trade:
+                      type: string
+                      description: RFC3999 timestamp of the first trade available via the Nomics API
+                    first_order_book:
+                      type: string
+                      description: RFC3999 timestamp of the first order book snapshot available via the Nomics API
                     rank:
                       type: string
                       description: Rank of the currency by market cap
+                    rank_delta:
+                      type: string
+                      description: Relative rank change based on the first specified `interval` other than `1h`.  This field is only present on `active` currencies.
                     high:
                       type: string
                       description: All time high price
@@ -335,6 +367,7 @@ paths:
                   example:
                     currency: "BTC"
                     id: "BTC"
+                    status: "active"
                     price: "8451.36516421"
                     price_date: "2019-06-14T00:00:00Z"
                     price_timestamp: "2019-06-14T12:35:00Z"
@@ -345,7 +378,13 @@ paths:
                     logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/btc.svg"
                     market_cap: "150083247116.70"
                     transparent_market_cap: "150003247116.70"
+                    num_exchanges: "357"
+                    num_pairs: "37363"
+                    first_candle: "2011-08-18T00:00:00Z"
+                    first_trade: "2011-08-18T00:00:00Z"
+                    first_order_book: "2017-01-06T00:00:00Z"
                     rank: "1"
+                    rank_delta: "0"
                     high: "19404.81116899"
                     high_timestamp: "2017-12-16"
                     1d:
@@ -558,6 +597,22 @@ paths:
               schema:
                 type: object
                 properties:
+                  num_currencies:
+                    type: string
+                    description: The total number of currencies
+                    example: "9988"
+                  num_currencies_active:
+                    type: string
+                    description: The total number of active currencies
+                    example: "2918"
+                  num_currencies_inative:
+                    type: string
+                    description: The total number of inactive currencies
+                    example: "6351"
+                  num_currencies_dead:
+                    type: string
+                    description: The total number of dead currencies
+                    example: "719"
                   market_cap:
                     type: string
                     description: Current global market cap
@@ -730,6 +785,24 @@ paths:
           schema:
             type: string
           example: EUR
+        - status:
+          name: status
+          in: query
+          description: |
+            Status by which to filter exchanges.  If not provided, all exchanges are shown.
+          schema:
+            type: string
+            enum: [active, inactive]
+        - status:
+          name: type
+          in: query
+          description: |
+            Type by which to filter exchanges.  If not provided, all exchanges are shown.
+          schema:
+            type: string
+            enum: [spot, derivative]
+        - $ref: "#/components/parameters/per-page"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Metadata and interval data for exchanges
@@ -749,6 +822,9 @@ paths:
                     logo_url:
                       type: string
                       description: URL to logo of the exchange
+                    rank:
+                      type: string
+                      description: Rank of the exchange relative to other exchanges after the `status` and `type` filters are applied
                     transparency_grade:
                       type: string
                       description: Transparency grade of the exchange
@@ -776,6 +852,9 @@ paths:
                     num_pairs:
                       type: string
                       description: Number of currency pairs (markets) available
+                    num_pairs_unmapped:
+                      type: string
+                      description: Number of currency pairs (markets) that we know about, but are not yet available
                     interval:
                       type: object
                       description: |
@@ -822,6 +901,7 @@ paths:
                     id: "gdax"
                     name: "Coinbase Pro"
                     logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/exchanges/gdax.jpg"
+                    rank: "7"
                     transparency_grade: "A"
                     coverage_type: "trades"
                     order_books: true
@@ -831,6 +911,7 @@ paths:
                     last_updated: "2019-08-05T14:53:00.000Z"
                     fiat_currencies: ["EUR","GBP","USD"]
                     num_pairs: "52"
+                    num_pairs_unmapped: "0"
                     1d:
                       volume: "436797947.38"
                       volume_change: "265926751.58"
@@ -1146,6 +1227,26 @@ paths:
           schema:
             type: string
           example: BTC
+        - status:
+          name: status
+          in: query
+          description: |
+            Status by which to filter markets. All markets are shown
+            by default, regardless of status.
+          schema:
+            type: string
+            enum: [mapped, unmapped]
+        - search:
+          name: search
+          in: query
+          description: |
+            Search string by which to filter markets.  Items match the
+            search query if it's a substring of their exchange id,
+            market id, base currency symbol or quote currency symbol.
+          schema:
+            type: string
+        - $ref: "#/components/parameters/per-page"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Metadata and interval data for individual markets on exchanges
@@ -1199,6 +1300,9 @@ paths:
                     price_quote:
                       type: string
                       description: Latest price of the market in the quote currency
+                    volume_usd:
+                      type: string
+                      description: Market volume in USD based on the first `interval` (or `1d` if none specified)
                     last_updated:
                       type: string
                       description: Timestamp of when the market was last updated
@@ -1245,6 +1349,7 @@ paths:
                     quote_symbol: "USDT"
                     price: "7252.08623165"
                     price_quote: "7231.48000000"
+                    volume_usd: "455152159.26"
                     last_updated: "2019-11-22T18:57:00Z"
                     1d:
                       volume: "811359239.06"
@@ -1350,7 +1455,7 @@ paths:
         - name: start
           in: query
           description: |
-            Start time of the interval in RFC3339 (URI escaped). If not provided, it is computed using the
+            Start time of the interval in RFC3339 (URI escaped).  If not provided, it is computed using the
             hours parameter.
           required: false
           schema:
@@ -3087,6 +3192,31 @@ components:
       schema:
         type: boolean
       example: false
+    per-page:
+      name: per-page
+      in: query
+      description: |
+        The maximum number of items to return per paginated response.
+        Paginated responses include an additional response header,
+        `X-Pagination-Total-Items`, which represents the total number
+        of items available after all the request filters have been
+        applied.
+      required: false
+      schema:
+        type: integer
+        min: 1
+        max: 100
+      example: 100
+    page:
+      name: page
+      in: query
+      description: |
+        Which page of items to get.  Only applicable when `per-page` is also supplied.
+      required: false
+      schema:
+        type: integer
+        min: 1
+      example: 1
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
