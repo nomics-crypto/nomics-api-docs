@@ -1211,6 +1211,24 @@ paths:
           schema:
             type: string
           example: BTC
+        - status:
+          name: status
+          in: query
+          description: |
+            Status by which to filter markets. All markets are shown
+            by default, regardless of status.
+          schema:
+            type: string
+            enum: [mapped, unmapped]
+        - search:
+          name: search
+          in: query
+          description: |
+            Search string by which to filter markets.  Items match the
+            search query if it's a substring of their exchange id,
+            market id, base currency symbol or quote currency symbol.
+          schema:
+            type: string
         - $ref: "#/components/parameters/per-page"
         - $ref: "#/components/parameters/page"
       responses:
@@ -1266,6 +1284,9 @@ paths:
                     price_quote:
                       type: string
                       description: Latest price of the market in the quote currency
+                    volume_usd:
+                      type: string
+                      description: Market volume in USD based on the first `interval` (or `1d` if none specified)
                     last_updated:
                       type: string
                       description: Timestamp of when the market was last updated
@@ -1312,6 +1333,7 @@ paths:
                     quote_symbol: "USDT"
                     price: "7252.08623165"
                     price_quote: "7231.48000000"
+                    volume_usd: "455152159.26"
                     last_updated: "2019-11-22T18:57:00Z"
                     1d:
                       volume: "811359239.06"
