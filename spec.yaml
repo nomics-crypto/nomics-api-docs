@@ -238,6 +238,14 @@ paths:
           schema:
             type: string
           example: EUR
+        - status:
+          name: status
+          in: query
+          description: |
+            Status by which to filter currencies. All currencies are shown by default, regardless of status.
+          schema:
+            type: string
+            enum: [active, inactive, dead]
         - $ref: "#/components/parameters/include-transparency"
         - $ref: "#/components/parameters/per-page"
         - $ref: "#/components/parameters/page"
