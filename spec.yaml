@@ -320,7 +320,7 @@ paths:
                       description: Rank of the currency by market cap
                     rank_delta:
                       type: string
-                      description: Relative rank change based on the first specified `interval` other than `1h`
+                      description: Relative rank change based on the first specified `interval` other than `1h`.  This field is only present on `active` currencies.
                     high:
                       type: string
                       description: All time high price
