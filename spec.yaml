@@ -769,6 +769,22 @@ paths:
           schema:
             type: string
           example: EUR
+        - status:
+          name: status
+          in: query
+          description: |
+            Status by which to filter exchanges. All exchanges are shown by default, regardless of status.
+          schema:
+            type: string
+            enum: [active, inactive]
+        - status:
+          name: type
+          in: query
+          description: |
+            Type by which to filter exchanges. All exchanges are shown by default, regardless of type.
+          schema:
+            type: string
+            enum: [spot, derivative]
         - $ref: "#/components/parameters/per-page"
         - $ref: "#/components/parameters/page"
       responses:
@@ -790,6 +806,9 @@ paths:
                     logo_url:
                       type: string
                       description: URL to logo of the exchange
+                    rank:
+                      type: string
+                      description: Rank of the exchange relative to other exchanges after the `status` and `type` filters are applied
                     transparency_grade:
                       type: string
                       description: Transparency grade of the exchange
@@ -817,6 +836,9 @@ paths:
                     num_pairs:
                       type: string
                       description: Number of currency pairs (markets) available
+                    num_pairs_unmapped:
+                      type: string
+                      description: Number of currency pairs (markets) that we know about, but are not yet available
                     interval:
                       type: object
                       description: |
@@ -863,6 +885,7 @@ paths:
                     id: "gdax"
                     name: "Coinbase Pro"
                     logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/exchanges/gdax.jpg"
+                    rank: "7"
                     transparency_grade: "A"
                     coverage_type: "trades"
                     order_books: true
@@ -872,6 +895,7 @@ paths:
                     last_updated: "2019-08-05T14:53:00.000Z"
                     fiat_currencies: ["EUR","GBP","USD"]
                     num_pairs: "52"
+                    num_pairs_unmapped: "0"
                     1d:
                       volume: "436797947.38"
                       volume_change: "265926751.58"
