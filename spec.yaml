@@ -597,6 +597,22 @@ paths:
               schema:
                 type: object
                 properties:
+                  num_currencies:
+                    type: string
+                    description: The total number of currencies
+                    example: "9988"
+                  num_currencies_active:
+                    type: string
+                    description: The total number of active currencies
+                    example: "2918"
+                  num_currencies_inative:
+                    type: string
+                    description: The total number of inactive currencies
+                    example: "6351"
+                  num_currencies_dead:
+                    type: string
+                    description: The total number of dead currencies
+                    example: "719"
                   market_cap:
                     type: string
                     description: Current global market cap
