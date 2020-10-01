@@ -239,6 +239,8 @@ paths:
             type: string
           example: EUR
         - $ref: "#/components/parameters/include-transparency"
+        - $ref: "#/components/parameters/per-page"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Price, volume, market cap, and rank for all currencies
@@ -759,6 +761,8 @@ paths:
           schema:
             type: string
           example: EUR
+        - $ref: "#/components/parameters/per-page"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Metadata and interval data for exchanges
@@ -1175,6 +1179,8 @@ paths:
           schema:
             type: string
           example: BTC
+        - $ref: "#/components/parameters/per-page"
+        - $ref: "#/components/parameters/page"
       responses:
         "200":
           description: Metadata and interval data for individual markets on exchanges
@@ -3116,6 +3122,31 @@ components:
       schema:
         type: boolean
       example: false
+    per-page:
+      name: per-page
+      in: query
+      description: |
+        The maximum number of items to return per paginated response.
+        Paginated responses include an additional response header,
+        `X-Pagination-Total-Items`, which represents the total number
+        of items available after all the request filters have been
+        applied.
+      required: false
+      schema:
+        type: integer
+        min: 1
+        max: 100
+      example: 100
+    page:
+      name: page
+      in: query
+      description: |
+        Which page of items to get.  Only applicable when `per-page` is also supplied.
+      required: false
+      schema:
+        type: integer
+        min: 1
+      example: 1
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
