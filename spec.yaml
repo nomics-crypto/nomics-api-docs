@@ -246,6 +246,24 @@ paths:
           schema:
             type: string
             enum: [active, inactive, dead]
+        - status:
+          name: filter
+          in: query
+          description: |
+            Further filter the set of currencies.  The `new` filter returns currencies that have recently been priced by Nomics.
+          schema:
+            type: string
+            enum: [new]
+        - sort:
+          name: sort
+          in: query
+          description: |
+            How to sort the returned currencies.  `rank` sorts by rank
+            ascending and `first_priced_at` sorts by when each
+            currency was first priced by Nomics descending.
+          schema:
+            type: string
+            enum: [rank, first_priced_at]
         - $ref: "#/components/parameters/include-transparency"
         - $ref: "#/components/parameters/per-page"
         - $ref: "#/components/parameters/page"
@@ -315,6 +333,9 @@ paths:
                     first_order_book:
                       type: string
                       description: RFC3999 timestamp of the first order book snapshot available via the Nomics API
+                    first_priced_at:
+                      type: string
+                      description: RFC3999 timestamp representing the currency was first priced by Nomics
                     rank:
                       type: string
                       description: Rank of the currency by market cap
@@ -383,6 +404,7 @@ paths:
                     first_candle: "2011-08-18T00:00:00Z"
                     first_trade: "2011-08-18T00:00:00Z"
                     first_order_book: "2017-01-06T00:00:00Z"
+                    first_priced_at: "2017-08-18T18:22:19Z"
                     rank: "1"
                     rank_delta: "0"
                     high: "19404.81116899"
