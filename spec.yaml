@@ -635,6 +635,10 @@ paths:
                     type: string
                     description: The total number of dead currencies
                     example: "719"
+                  num_currencies_new:
+                    type: string
+                    description: The total number of new currencies
+                    example: "80"
                   market_cap:
                     type: string
                     description: Current global market cap
