@@ -1,0 +1,3 @@
+[build]
+  command = "yarn bundle"
+  publish = "publish"
