@@ -1,3 +1,2 @@
 /*
-  surrogate-control: max-age=3600
-  cache-control: must-revalidate
+  cache-control: no-cache
