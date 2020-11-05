@@ -323,7 +323,10 @@ paths:
                       description: The number of exchanges on which this asset is traded
                     num_pairs:
                       type: string
-                      description: Number of currency pairs (markets) this asset is a part of
+                      description: Number of currency pairs (markets) this asset is a part of, where both assets are known
+                    num_pairs_unmapped:
+                      type: string
+                      description: Number of currency pairs (markets) this asset is a part of, but where the other asset is unknown
                     first_candle:
                       type: string
                       description: RFC3999 timestamp of the first `1d` candle available via the Nomics API
@@ -400,7 +403,8 @@ paths:
                     market_cap: "150083247116.70"
                     transparent_market_cap: "150003247116.70"
                     num_exchanges: "357"
-                    num_pairs: "37363"
+                    num_pairs: "42118"
+                    num_pairs_unmapped: "4591"
                     first_candle: "2011-08-18T00:00:00Z"
                     first_trade: "2011-08-18T00:00:00Z"
                     first_order_book: "2017-01-06T00:00:00Z"
