@@ -250,10 +250,10 @@ paths:
           name: filter
           in: query
           description: |
-            Further filter the set of currencies.  The `new` filter returns currencies that have recently been priced by Nomics.
+            Further filter the set of currencies.  The `new` filter returns currencies that have recently been priced by Nomics and `any` returns currencies regardless of their state.  The `any` filer may be used to retrieve new-but-stale currencies that are listed under `new`, but are no longer active.
           schema:
             type: string
-            enum: [new]
+            enum: [any, new]
         - sort:
           name: sort
           in: query
