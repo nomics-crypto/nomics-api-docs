@@ -1299,7 +1299,17 @@ paths:
                         - spot
                         - derivative
                         - index
+                        - test
                       description: Market Type
+                    subtype:
+                      type: string
+                      enum:
+                        - funding
+                        - future
+                        - leverage
+                        - option
+                        - perpetual
+                      description: Market Subtype
                     aggregated:
                       type: boolean
                       description: Indicates if the market is used to price the base and quote currencies. See
