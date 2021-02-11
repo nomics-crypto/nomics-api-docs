@@ -463,7 +463,7 @@ paths:
                       description: Nomics Currency ID
                     original_symbol:
                       type: string
-                      description: Original symbol from exchange
+                      description: Display ticker symbol, not unique
                     name:
                       type: string
                       description: Currency Name
@@ -521,6 +521,12 @@ paths:
                     cryptocontrol_coin_id:
                       type: string
                       description: Coin ID for CryptoControl.io
+                    platform_currency_id:
+                      type: string
+                      description: Parent BlockChain, if any
+                    platform_contract_address:
+                      type: string
+                      description: Platform contract address, if any
                   example:
                     id: BTC
                     original_symbol: BTC
