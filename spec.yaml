@@ -849,7 +849,8 @@ paths:
           schema:
             type: string
             enum: [spot, derivative]
-        - $ref: "#/components/parameters/exchange-filter"
+        - $ref: "#/components/parameters/exchange-centralized"
+        - $ref: "#/components/parameters/exchange-decentralized"
         - $ref: "#/components/parameters/per-page"
         - $ref: "#/components/parameters/page"
       responses:
@@ -1062,7 +1063,8 @@ paths:
       parameters:
         - $ref: "#/components/parameters/exchange-ids"
         - $ref: "#/components/parameters/exchange-attributes"
-        - $ref: "#/components/parameters/exchange-filter"
+        - $ref: "#/components/parameters/exchange-centralized"
+        - $ref: "#/components/parameters/exchange-decentralized"
         - $ref: "#/components/parameters/format"
       responses:
         '200':
@@ -3401,14 +3403,28 @@ components:
       schema:
         type: string
       example: "id,name,transparency_grade"
-    exchange-filter:
-      name: filter
+    exchange-centralized:
+      name: centralized
       in: query
       description: |
-        Filters to be applied to the exchange list.  Multiple comma-separated filters may be provided; filters are `or`ed together.  If not provided, all exchanges are shown.
+        When `true`, selects centralized exchanges.  When `false`,
+        removes centralized exchanges.  If omitted, all exchange types
+        are shown.  May be used in conjunction with `decentralized` to
+        form an "and" filter.
       schema:
         type: string
-        enum: [centralized, decentralized]
+        enum: [true, false]
+    exchange-decentralized:
+      name: decentralized
+      in: query
+      description: |
+        When `true`, selects decentralized exchanges.  When `false`,
+        removes decentralized exchanges.  If omitted, all exchange
+        types are shown.  May be used in conjunction with
+        `centralized` to form an "and" filter.
+      schema:
+        type: string
+        enum: [true, false]
     include-transparency:
       name: include-transparency
       in: query
