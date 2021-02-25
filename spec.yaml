@@ -2851,9 +2851,8 @@ components:
 
         For example:
 
-        https://api.nomics.com/v1/markets?key=your-api-key-goes-here
+        https://api.nomics.com/v1/markets?key=your-key-here
 
-        **The key used in the examples on this page is changed regularly** and is intended only as a demo.
         [Get your free Nomics API key here](https://p.nomics.com/cryptocurrency-bitcoin-api/)
   schemas:
     MarketInterval:
