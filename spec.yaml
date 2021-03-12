@@ -89,7 +89,7 @@ info:
     <iframe width="100%" height="400px" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vShn2iWjvqQ0ueBa9l9g1UBYVM92OZSgZ4nmp0rWuykvHPrvyMyMeSN4r0Orj0ACEIIKdCz6cc5abCw/pubhtml?widget=true&amp;headers=false"></iframe>
 
     ### Formulas
-    
+
     * A2: `=IMPORTDATA("https://api.nomics.com/v1/prices?key=your-key-here&format=csv")`
     * Column F: `=LOOKUP(D2,A:A,B:B)` finds D2 (BTC) in column A and pulls the price from column B
     * Column G: `=E2*F2`
@@ -531,6 +531,9 @@ paths:
                     platform_contract_address:
                       type: string
                       description: Platform contract address, if any
+                    used_for_pricing:
+                      type: boolean
+                      description: Whether or not Nomics uses this currency to price other currencies
                   example:
                     id: BTC
                     original_symbol: BTC
@@ -553,6 +556,7 @@ paths:
                     bitcointalk_url: ''
                     replaced_by: null
                     cryptocontrol_coin_id: "bitcoin"
+                    used_for_pricing: true
             text/csv:
               schema:
                 type: string
