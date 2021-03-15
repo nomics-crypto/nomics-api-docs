@@ -2174,10 +2174,9 @@ paths:
         basis from 8 days prior to the current date until 2 days prior
         to the current date, inclusive.
 
-        This endpoint does not return data directly.  Instead, it
-        redirects to another endpoint that whose respose is the Zip
-        file.  Because of this, you must take care to ensure that your
-        API client properly follows redirects.
+        This endpoint responds with an HTTP redirect to the desired
+        archive file.  Because of this, you must take care to ensure that
+        your API client properly follows redirects.
 
         The Zip file contains a single CSV file, named `books.csv`,
         containing the order book snapshots for each day.
