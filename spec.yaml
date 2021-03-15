@@ -2174,7 +2174,7 @@ paths:
         basis from 8 days prior to the current date until 2 days prior
         to the current date, inclusive.
 
-        This endpoint does not return data directly.  Instead
+        This endpoint does not return data directly.  Instead, it
         redirects to another endpoint that whose respose is the Zip
         file.  Because of this, you must take care to ensure that your
         API client properly follows redirects.
