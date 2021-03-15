@@ -3256,7 +3256,7 @@ components:
         Paginated responses include an additional response header,
         `X-Pagination-Total-Items`, which represents the total number
         of items available after all the request filters have been
-        applied.
+        applied.  Must be between `1` and `100` (inclusive).
       required: false
       schema:
         type: integer
