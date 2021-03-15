@@ -2158,6 +2158,62 @@ paths:
               example: "08/29/2018 20:14:04,7014.31,0.178164,7015.99,0.000044"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /orders/batches:
+    get:
+      tags:
+        - Orders*
+      summary: Order Book Batches
+      operationId: getOrderBookBatches
+      x-code-samples:
+        $ref: './samples/getOrderBookBatches.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        This endpoint returns daily batches of order book snapshots as
+        Zip archived CSV files.  Batches are available on a rolling
+        basis from 8 days prior to the current date until 2 days prior
+        to the current date, inclusive.
+
+        This endpoint does not return data directly.  Instead, it
+        redirects to another endpoint that whose respose is the Zip
+        file.  Because of this, you must take care to ensure that your
+        API client properly follows redirects.
+
+        The Zip file contains a single CSV file, named `books.csv`,
+        containing the order book snapshots for each day.
+
+        CSV format is: `time of day,kind (bid or ask),amount,price`
+      parameters:
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/market'
+        - date:
+          name: date
+          in: query
+          description: |
+            The date for which to export a batch.  Must be a date
+            starting at most 8 days prior to the current date and
+            ending at most 2 days prior to the current date.
+          schema:
+            type: string
+          example: "2021-03-15"
+      responses:
+        '200':
+          description: Order book batch
+          content:
+            text/csv:
+              schema:
+                type: string
+              example: |
+                00:00:00.129,bid,57794.270000,1.424075
+                00:00:00.129,bid,57794.260000,0.024794
+                00:00:00.129,bid,57794.250000,1.565000
+                00:00:00.129,bid,57789.690000,0.009109
+                00:00:00.129,ask,57794.280000,0.035800
+                00:00:00.129,ask,57794.990000,0.012111
+                00:00:00.129,ask,57798.930000,0.003371
+                00:00:00.129,ask,57798.940000,0.001379
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
   /exchange_candles:
     get:
       tags:
