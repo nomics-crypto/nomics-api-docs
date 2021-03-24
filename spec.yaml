@@ -626,7 +626,11 @@ paths:
       description: |
         ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
 
-        Globally-aggregated market cap and volume data over various intervals across all currencies.
+        Globally-aggregated market cap and volume data over various
+        intervals across all currencies.
+
+        The total `volume` fields are computed by summing the
+        `spot_volume` and `derivative_volume` fields at each interval.
       parameters:
         - $ref: '#/components/parameters/convert'
       responses:
@@ -640,31 +644,31 @@ paths:
                   num_currencies:
                     type: string
                     description: The total number of currencies
-                    example: "9988"
+                    example: "12801"
                   num_currencies_active:
                     type: string
                     description: The total number of active currencies
-                    example: "2918"
+                    example: "5277"
                   num_currencies_inative:
                     type: string
                     description: The total number of inactive currencies
-                    example: "6351"
+                    example: "6337"
                   num_currencies_dead:
                     type: string
                     description: The total number of dead currencies
-                    example: "719"
+                    example: "1187"
                   num_currencies_new:
                     type: string
                     description: The total number of new currencies
-                    example: "80"
+                    example: "312"
                   market_cap:
                     type: string
                     description: Current global market cap
-                    example: "248861540057"
+                    example: "1799044056712"
                   transparent_market_cap:
                     type: string
                     description: Current global transparent market cap
-                    example: "246284997971"
+                    example: "1759092897670"
                   1d:
                     $ref: "#/components/schemas/GlobalTickerInterval"
                   7d:
@@ -982,7 +986,9 @@ paths:
       description: |
         Exchange Volume History is the total volume for all
         cryptoassets of an exchange in USD at intervals between the
-        requested time period.
+        requested time period.  For each entry, the `volume` field
+        represents the sum of the `spot_volume` and
+        `derivative_volume` fields.
       parameters:
         - $ref: "#/components/parameters/exchange"
         - $ref: "#/components/parameters/interval-start"
@@ -1003,15 +1009,31 @@ paths:
                     timestamp:
                       type: string
                       description: RFC3339 timestamp
-                      example: "2018-04-14T00:00:00Z"
+                      example: "2020-04-14T00:00:00Z"
                     volume:
                       type: string
-                      description: Total volume in the target currency (`USD` by default)
-                      example: "5209035491"
+                      description: Total volume (spot volume + derivative volume) in the target currency (`USD` by default)
+                      example: "3747500000"
+                    spot_volume:
+                      type: string
+                      description: Total spot market volume in the target currency (`USD` by default)
+                      example: "1197368698"
+                    derivative_volume:
+                      type: string
+                      description: Total derivative market volume in the target currency (`USD` by default)
+                      example: "2550131302"
                     transparent_volume:
                       type: string
                       description: Total transparent volume in the target currency (`USD` by default)
-                      example: "4209035491"
+                      example: "3747500000"
+                    transparent_spot_volume:
+                      type: string
+                      description: Total transparent spot market volume in the target currency (`USD` by default)
+                      example: "1197368698"
+                    transparent_derivative_volume:
+                      type: string
+                      description: Total transparent derivative market volume in the target currency (`USD` by default)
+                      example: "2550131302"
             test/csv:
               schema:
                 type: string
@@ -1880,7 +1902,10 @@ paths:
       x-code-samples:
         $ref: './samples/getVolumeHistory.json'
       description: |
-        Volume History is the total volume for all cryptoassets in USD at intervals between the requested time period.
+        Volume History is the total volume for all cryptoassets in USD
+        at intervals between the requested time period.  For each
+        entry, the `volume` field represents the sum of the
+        `spot_volume` and `derivative_volume` fields.
       parameters:
         - start:
           name: start
@@ -1924,12 +1949,28 @@ paths:
                       example: "2018-04-14T00:00:00Z"
                     volume:
                       type: string
-                      description: Total volume in the target currency (`USD` by default)
-                      example: "5209035491"
+                      description: Total volume (spot volume + derivative volume) in the target currency (`USD` by default)
+                      example: "10177952765"
+                    spot_volume:
+                      type: string
+                      description: Total spot market volume in the target currency (`USD` by default)
+                      example: "7706914494"
+                    derivative_volume:
+                      type: string
+                      description: Total derivative market volume in the target currency (`USD` by default)
+                      example: "2471038271"
                     transparent_volume:
                       type: string
                       description: Total transparent volume in the target currency (`USD` by default)
-                      example: "4209035491"
+                      example: "6608950947"
+                    transparent_spot_volume:
+                      type: string
+                      description: Total transparent spot market volume in the target currency (`USD` by default)
+                      example: "4137912676"
+                    transparent_derivative_volume:
+                      type: string
+                      description: Total transparent derivative market volume in the target currency (`USD` by default)
+                      example: "2471038271"
             test/csv:
               schema:
                 type: string
@@ -3124,55 +3165,103 @@ components:
         market_cap_change:
           type: string
           description: Amount of market cap change for the given interval
-          example: "8829796231"
+          example: "12684321666"
         market_cap_change_pct:
           type: string
           description: Percent change of market cap for the given interval
-          example: "0.0368"
+          example: "0.0071"
         transparent_market_cap_change:
           type: string
           description: Amount of transparent market cap change for the given interval
-          example: "8369460319"
+          example: "9913761626"
         transparent_market_cap_change_pct:
           type: string
           description: Percent change of transparent market cap for the given interval
-          example: "0.0352"
+          example: "0.0057"
         volume:
           type: string
-          description: Total volume for the given interval
-          example: "157172023545.15"
+          description: Total volume (spot + derivative volume) for the given interval
+          example: "261184503290.13"
         volume_change:
           type: string
           description: Amount of volume change for the given interval
-          example: "53106912217.10"
+          example: "-36297038690.90"
         volume_change_pct:
           type: string
           description: Percent change of volume for the given interval
-          example: "0.5103"
+          example: "-0.1220"
+        spot_volume:
+          type: string
+          description: Total spot market volume for the given interval
+          example: "183847018626.59"
+        spot_volume_change:
+          type: string
+          description: Amount of spot volume change for the given interval
+          example: "-21057431830.52"
+        spot_volume_change_pct:
+          type: string
+          description: Percent change of spot volume for the given interval
+          example: "-0.1028"
+        derivative_volume:
+          type: string
+          description: Total derivative market volume for the given interval
+          example: "77337484663.54"
+        derivative_volume_change:
+          type: string
+          description: Amount of derivative volume change for the given interval
+          example: "-15239606860.37"
+        derivative_volume_change_pct:
+          type: string
+          description: Percent change of derivative volume for the given interval
+          example: "-0.1646"
         transparent_volume:
           type: string
           description: Total transparent volume for the given interval
-          example: "13279562924.38"
+          example: "83650606519.52"
         transparent_volume_change:
           type: string
           description: Amount of transparent volume change for the given interval
-          example: "7112923695.64"
+          example: "-13318816933.73"
         transparent_volume_change_pct:
           type: string
           description: Percent change of transparent volume for the given interval
-          example: "1.1535"
+          example: "-0.1374"
+        transparent_spot_volume:
+          type: string
+          description: Total transparent spot market volume for the given interval
+          example: "35168278207.40"
+        transparent_spot_volume_change:
+          type: string
+          description: Amount of transparent spot market volume change for the given interval
+          example: "-4606944979.20"
+        transparent_spot_volume_change_pct:
+          type: string
+          description: Percent change of transparent spot market volume for the given interval
+          example: "-0.1158"
+        transparent_derivative_volume:
+          type: string
+          description: Total transparent derivative market volume for the given interval
+          example: "48482328312.12"
+        transparent_derivative_volume_change:
+          type: string
+          description: Amount of transparent derivative market volume change for the given interval
+          example: "-8711871954.54"
+        transparent_derivative_volume_change_pct:
+          type: string
+          description: Percent change of transparent derivative market volume for the given interval
+          example: "-0.1523"
         volume_transparency:
           type: array
           description: An array of `volume`, `volume_change` and `volume_change_pct` by exchange grade for the given interval
           example:
             - grade: "A"
-              volume: "172119803282.17"
-              volume_change: "85675283606.62"
-              volume_change_pct: "0.9911"
+              volume: "83650606519.52"
+              volume_change: "-13318816933.73"
+              volume_change_pct: "-0.1374"
             - grade: "B"
-              volume: "35407650.11"
-              volume_change: "-5910444.92"
-              volume_change_pct: "-0.1430"
+              volume: "466859661.78"
+              volume_change: "-104098455.53"
+              volume_change_pct: "-0.1823"
   parameters:
     format:
       name: format
