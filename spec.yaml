@@ -626,7 +626,11 @@ paths:
       description: |
         ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
 
-        Globally-aggregated market cap and volume data over various intervals across all currencies.
+        Globally-aggregated market cap and volume data over various
+        intervals across all currencies.
+
+        The total `volume` fields are computed by summing the
+        `spot_volume` and `derivative_volume` fields at each interval.
       parameters:
         - $ref: '#/components/parameters/convert'
       responses:
@@ -982,7 +986,9 @@ paths:
       description: |
         Exchange Volume History is the total volume for all
         cryptoassets of an exchange in USD at intervals between the
-        requested time period.
+        requested time period.  For each entry, the `volume` field
+        represents the sum of the `spot_volume` and
+        `derivative_volume` fields.
       parameters:
         - $ref: "#/components/parameters/exchange"
         - $ref: "#/components/parameters/interval-start"
@@ -1896,7 +1902,10 @@ paths:
       x-code-samples:
         $ref: './samples/getVolumeHistory.json'
       description: |
-        Volume History is the total volume for all cryptoassets in USD at intervals between the requested time period.
+        Volume History is the total volume for all cryptoassets in USD
+        at intervals between the requested time period.  For each
+        entry, the `volume` field represents the sum of the
+        `spot_volume` and `derivative_volume` fields.
       parameters:
         - start:
           name: start
