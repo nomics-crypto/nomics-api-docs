@@ -841,7 +841,7 @@ paths:
           schema:
             type: string
             enum: [active, inactive]
-        - status:
+        - type:
           name: type
           in: query
           description: |
@@ -849,6 +849,8 @@ paths:
           schema:
             type: string
             enum: [spot, derivative]
+        - $ref: "#/components/parameters/exchange-centralized"
+        - $ref: "#/components/parameters/exchange-decentralized"
         - $ref: "#/components/parameters/per-page"
         - $ref: "#/components/parameters/page"
       responses:
@@ -903,6 +905,12 @@ paths:
                     num_pairs_unmapped:
                       type: string
                       description: Number of currency pairs (markets) that we know about, but are not yet available
+                    centralized:
+                      type: boolean
+                      description: Whether or not the exchange is centralized
+                    decentralized:
+                      type: boolean
+                      description: Whether or not the exchange is decentralized
                     interval:
                       type: object
                       description: |
@@ -960,6 +968,8 @@ paths:
                     last_updated: "2021-02-09T17:41:49.274Z"
                     fiat_currencies: ["AUD", "BRL", "EUR", "GBP", "NGN", "RUB", "TRY", "UAH", "ZAR"]
                     rank: "1"
+                    centralized: true
+                    decentralized: false
                     1d:
                       volume: "69502395456.05"
                       volume_change: "8271350165.81"
@@ -1053,6 +1063,8 @@ paths:
       parameters:
         - $ref: "#/components/parameters/exchange-ids"
         - $ref: "#/components/parameters/exchange-attributes"
+        - $ref: "#/components/parameters/exchange-centralized"
+        - $ref: "#/components/parameters/exchange-decentralized"
         - $ref: "#/components/parameters/format"
       responses:
         '200':
@@ -1133,6 +1145,12 @@ paths:
                     order_books_interval:
                       type: number
                       description: The maximum frequency (in milliseconds) at which order book snapshots are taken for this exchange
+                    centralized:
+                      type: boolean
+                      description: Whether or not the exchange is centralized
+                    decentralized:
+                      type: boolean
+                      description: Whether or not the exchange is decentralized
                   example:
                     id: binance
                     capability_markets": true
@@ -1157,6 +1175,8 @@ paths:
                     year: 2017
                     transparency_grade: A
                     order_books_interval: 60000
+                    centralized: true
+                    decentralized: false
             text/csv:
               schema:
                 type: string
@@ -3383,6 +3403,28 @@ components:
       schema:
         type: string
       example: "id,name,transparency_grade"
+    exchange-centralized:
+      name: centralized
+      in: query
+      description: |
+        When `true`, selects centralized exchanges.  When `false`,
+        removes centralized exchanges.  If omitted, all exchange types
+        are shown.  May be used in conjunction with `decentralized` to
+        form an "and" filter.
+      schema:
+        type: string
+        enum: [true, false]
+    exchange-decentralized:
+      name: decentralized
+      in: query
+      description: |
+        When `true`, selects decentralized exchanges.  When `false`,
+        removes decentralized exchanges.  If omitted, all exchange
+        types are shown.  May be used in conjunction with
+        `centralized` to form an "and" filter.
+      schema:
+        type: string
+        enum: [true, false]
     include-transparency:
       name: include-transparency
       in: query
