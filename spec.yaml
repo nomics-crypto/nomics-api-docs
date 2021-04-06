@@ -2231,9 +2231,8 @@ paths:
         ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
 
         This endpoint returns daily batches of order book snapshots as
-        Zip archived CSV files.  Batches are available on a rolling
-        basis from 8 days prior to the current date until 2 days prior
-        to the current date, inclusive.
+        Zip archived CSV files.  Batches are available up to 2 days
+        prior to the current date, inclusive.
 
         This endpoint responds with an HTTP redirect to the desired
         archive file.  Because of this, you must take care to ensure that
@@ -2251,7 +2250,6 @@ paths:
           in: query
           description: |
             The date for which to export a batch.  Must be a date
-            starting at most 8 days prior to the current date and
             ending at most 2 days prior to the current date.
           schema:
             type: string
