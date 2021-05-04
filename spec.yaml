@@ -1322,9 +1322,25 @@ paths:
           description: |
             Status by which to filter markets. All markets are shown
             by default, regardless of status.
+
+            * `active` includes all the mapped markets that have had
+              activity within the past 24 hours.
+
+            * `inactive` includes all the mapped markets that have had
+              activity within the past year, but not the past 24
+              hours.
+
+            * `dead` includes all the mapped markets that have had no
+              activity in the past year.
+
+            * `mapped` includes all the markets whose base and quote
+              currency are known.
+
+            * `unmapped` includes all the markets whose base and quote
+              currency are unknown.
           schema:
             type: string
-            enum: [mapped, unmapped]
+            enum: [active, inactive, dead, mapped, unmapped]
         - search:
           name: search
           in: query
