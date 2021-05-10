@@ -262,9 +262,11 @@ paths:
           name: sort
           in: query
           description: |
-            How to sort the returned currencies.  `rank` sorts by rank
-            ascending and `first_priced_at` sorts by when each
-            currency was first priced by Nomics descending.
+            How to sort the returned currencies. `rank` sorts by rank
+            ascending and `first_priced_at` sorts by when each currency
+            was first priced by Nomics descending. Only currencies
+            priced after 2020-10-08 have a `first_priced_at` value so
+            all other currencies have the same weight within the sort.
           schema:
             type: string
             enum: [rank, first_priced_at]
