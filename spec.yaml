@@ -321,6 +321,9 @@ paths:
                     market_cap:
                       type: string
                       description: Current market cap
+                    market_cap_dominance:
+                      type: string
+                      description: Current market cap as a percentage of global market cap. Only available for `active` currencies.
                     transparent_market_cap:
                       type: string
                       description: Current transparent market cap
@@ -407,6 +410,7 @@ paths:
                     name: "Bitcoin"
                     logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/btc.svg"
                     market_cap: "150083247116.70"
+                    market_cap_dominance: "0.4080"
                     transparent_market_cap: "150003247116.70"
                     num_exchanges: "357"
                     num_pairs: "42118"
