@@ -1157,6 +1157,9 @@ paths:
                     decentralized:
                       type: boolean
                       description: Whether or not the exchange is decentralized
+                    replaced_by:
+                      type: string
+                      description: The id of the exchange that replaces this exchange, if applicable
                   example:
                     id: binance
                     capability_markets": true
