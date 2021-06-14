@@ -1430,6 +1430,14 @@ paths:
                     last_updated:
                       type: string
                       description: Timestamp of when the market was last updated
+                    status:
+                      type: string
+                      description: The status of the market
+                      enum:
+                        - active
+                        - inactive
+                        - dead
+                        - unmapped
                     interval:
                       type: object
                       description: |
@@ -1475,6 +1483,7 @@ paths:
                     price_quote: "7231.48000000"
                     volume_usd: "455152159.26"
                     last_updated: "2019-11-22T18:57:00Z"
+                    status: "active"
                     1d:
                       volume: "811359239.06"
                       volume_base: "111495.36"
