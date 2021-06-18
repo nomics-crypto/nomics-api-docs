@@ -1447,6 +1447,9 @@ paths:
                     first_order_book:
                       type: string
                       description: Date of the first order book available, if applicable
+                    total_trades:
+                      type: string
+                      description: Total trades, if applicable
                     interval:
                       type: object
                       description: |
@@ -1496,6 +1499,7 @@ paths:
                     first_trade: "2017-08-17T00:00:00Z"
                     first_candle: "2017-08-17T00:00:00Z"
                     first_order_book: "2018-08-29T00:00:00Z"
+                    total_trades: "813006943"
                     1d:
                       volume: "811359239.06"
                       volume_base: "111495.36"
