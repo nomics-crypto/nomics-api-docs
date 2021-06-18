@@ -1438,6 +1438,18 @@ paths:
                         - inactive
                         - dead
                         - unmapped
+                    first_trade:
+                      type: string
+                      description: Date of the first trade available, if applicable
+                    first_candle:
+                      type: string
+                      description: Date of the first candle available, if applicable
+                    first_order_book:
+                      type: string
+                      description: Date of the first order book available, if applicable
+                    total_trades:
+                      type: string
+                      description: Total trades, if applicable
                     interval:
                       type: object
                       description: |
@@ -1484,6 +1496,10 @@ paths:
                     volume_usd: "455152159.26"
                     last_updated: "2019-11-22T18:57:00Z"
                     status: "active"
+                    first_trade: "2017-08-17T00:00:00Z"
+                    first_candle: "2017-08-17T00:00:00Z"
+                    first_order_book: "2018-08-29T00:00:00Z"
+                    total_trades: "813006943"
                     1d:
                       volume: "811359239.06"
                       volume_base: "111495.36"
