@@ -569,6 +569,111 @@ paths:
               example: "BTC"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /currencies/highlights:
+    get:
+      tags:
+        - Currencies*
+      summary: Currency Highlights
+      operationId: getCurrencyHighlights
+      x-code-samples:
+        $ref: './samples/getCurrencyHighlights.json'
+      description: |
+        The currency highlights endpoint returns various aggregate
+        statistics for a currency over some interval.
+      parameters:
+        - $ref: '#/components/parameters/currency'
+        - $ref: '#/components/parameters/convert'
+        - $ref: '#/components/parameters/single-interval'
+      responses:
+        '200':
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_volume:
+                    type: string
+                    example: "44992515443.99"
+                    description: Total volume over the selected interval.
+                  fiat_volume:
+                    type: string
+                    example: "11260653854.63"
+                    description: Total fiat volume over the selected interval.
+                  fiat_volume_change:
+                    type: string
+                    example: "-1729134612.39"
+                    description: Fiat volume change over the interval.
+                  fiat_volume_change_pct:
+                    type: string
+                    example: "-0.1331"
+                    description: Fiat volume change over the interval as a percentage.
+                  num_exchanges:
+                    type: string
+                    example: "234"
+                    description: Total exchanges with volume over the selected interval.
+                  top_currencies:
+                    description: Top 5 currencies paired with the selected currency by volume over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        currency:
+                          type: string
+                          example: "USDT"
+                        name:
+                          type: string
+                          example: "Tether"
+                        volume:
+                          type: string
+                          example: "19977518229.94"
+                        volume_change:
+                          type: string
+                          example: "-1701126882.23"
+                        volume_change_pct:
+                          type: string
+                          example: "-0.0785"
+                  top_fiat_currencies:
+                    description: Top 5 fiat currencies paired with the selected currency by volume over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        currency:
+                          type: string
+                          example: "USD"
+                        name:
+                          type: string
+                          example: "United States Dollar"
+                        volume:
+                          type: string
+                          example: "8949685546.44"
+                        volume_change:
+                          type: string
+                          example: "-1649839584.88"
+                        volume_change_pct:
+                          type: string
+                          example: "-0.1557"
+                  top_exchanges:
+                    description: Top 5 exchanges by volume for the selected currency over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        exchange:
+                          type: string
+                          example: "binance"
+                        volume:
+                          type: string
+                          example: "5035804498.42"
+                        volume_change:
+                          type: string
+                          example: "-805394804.84"
+                        volume_change_pct:
+                          type: string
+                          example: "-0.1379"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /currencies/sparkline:
     get:
       tags:
@@ -796,6 +901,194 @@ paths:
               example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /exchanges/highlights:
+    get:
+      tags:
+        - Exchanges*
+      summary: Exchange Highlights
+      operationId: getExchangeHighlights
+      x-code-samples:
+        $ref: './samples/getExchangeHighlights.json'
+      description: |
+        The exchange highlights endpoint returns various aggregate
+        statistics for an exchange over some interval.
+      parameters:
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/convert'
+        - $ref: '#/components/parameters/single-interval'
+      responses:
+        '200':
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_volume:
+                    type: string
+                    example: "57747416191.11"
+                    description: Total volume over the selected interval.
+                  num_trades:
+                    type: string
+                    example: "62947560"
+                    description: Total number of trades over the interval.
+                  num_markets:
+                    type: string
+                    example: "1315"
+                    description: Total number of markets with volume over the interval.
+                  num_crypto_markets:
+                    type: string
+                    example: "1174"
+                    description: Total number of markets where both sides are crypto currencies with volume over the interval.
+                  num_fiat_markets:
+                    type: string
+                    example: "141"
+                    description: Total number of markets where one of the sides is a fiat currency with volume over the interval.
+                  num_crypto_currencies:
+                    type: string
+                    example: "374"
+                    description: Total number of distinct crypto currencies with volume over the interval.
+                  num_fiat_currencies:
+                    type: string
+                    example: "8"
+                    description: Total number of distinct fiat currencies with volume over the interval.
+                  top_quote_dominance:
+                    description: Top 5 quote currencies by volume dominance over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        symbol:
+                          type: string
+                          example: "USDT"
+                        name:
+                          type: string
+                          example: "Tether"
+                        dominance_pct:
+                          type: string
+                          example: "0.8765"
+                  top_crypto_quote_dominance:
+                    description: Top 5 crypto quote currencies by volume dominance over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        symbol:
+                          type: string
+                          example: "USDT"
+                        name:
+                          type: string
+                          example: "Tether"
+                        dominance_pct:
+                          type: string
+                          example: "0.8928"
+                  top_fiat_quote_dominance:
+                    description: Top 5 fiat quote currencies by volume dominance over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        symbol:
+                          type: string
+                          example: "TRY"
+                        name:
+                          type: string
+                          example: "Turkish Lira"
+                        dominance_pct:
+                          type: string
+                          example: "0.4875"
+                  top_markets:
+                    description: Top 5 markets by volume over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        market:
+                          type: string
+                          example: "fu_ETHUSDT"
+                        base:
+                          type: string
+                          example: "ETH"
+                        base_name:
+                          type: string
+                          example: "Ethereum"
+                        quote:
+                          type: string
+                          example: "USDT"
+                        quote_name:
+                          type: string
+                          example: "Tether"
+                        volume:
+                          type: string
+                          example: "8115553209.27"
+                        volume_change:
+                          type: string
+                          example: "-2578550465.99"
+                        volume_change_pct:
+                          type: string
+                          example: "-0.2411"
+                  top_volume_gainers:
+                    description: Top 5 markets by volume over the interval sorted by largest volume gain first.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        market:
+                          type: string
+                          example: "fu_ADAUSDT"
+                        base:
+                          type: string
+                          example: "ADA"
+                        base_name:
+                          type: string
+                          example: "Cardano"
+                        quote:
+                          type: string
+                          example: "USDT"
+                        quote_name:
+                          type: string
+                          example: "Tether"
+                        volume:
+                          type: string
+                          example: "2531122210.64"
+                        volume_change:
+                          type: string
+                          example: "481773365.76"
+                        volume_change_pct:
+                          type: string
+                          example: "0.2351"
+                  top_volume_deltas:
+                    description: Top 5 markets by volume over the interval sorted by largest volume percent change first.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        market:
+                          type: string
+                          example: "DOCKBUSD"
+                        base:
+                          type: string
+                          example: "DOCK"
+                        base_name:
+                          type: string
+                          example: "Dock"
+                        quote:
+                          type: string
+                          example: "BUSC"
+                        quote_name:
+                          type: string
+                          example: "Binance USD"
+                        volume:
+                          type: string
+                          example: "3422853.34"
+                        volume_change:
+                          type: string
+                          example: "3181019.02"
+                        volume_change_pct:
+                          type: string
+                          example: "13.1537"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /exchanges/ticker:
     get:
       tags:
@@ -1254,6 +1547,75 @@ paths:
               schema:
                 type: string
               example: "bitfinex,avtbtc,AVT,BTC"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /exchange-markets/highlights:
+    get:
+      tags:
+        - Markets*
+      summary: Market Highlights
+      operationId: getMarketHighlights
+      x-code-samples:
+        $ref: './samples/getMarketHighlights.json'
+      description: |
+        The market highlights endpoint returns various aggregate
+        statistics for a pair over some interval.
+      parameters:
+        - name: base
+          in: query
+          required: true
+          description: A Nomics Currency ID.
+          schema:
+            type: string
+        - name: quote
+          in: query
+          required: true
+          description: A Nomics Currency ID.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/convert'
+        - $ref: '#/components/parameters/single-interval'
+      responses:
+        '200':
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_volume:
+                    type: string
+                    example: "20483770618.66"
+                    description: Total volume over the selected interval.
+                  num_exchanges:
+                    type: string
+                    example: "149"
+                    description: Total exchanges with volume for the pair over the selected interval.
+                  num_trades:
+                    type: string
+                    example: 	"1662675"
+                    description: Total trades over the selected interval for the pair.
+                  top_exchanges:
+                    description: Top 5 exchanges by volume over the interval for the selected pair.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        exchange:
+                          type: string
+                          example: "binance"
+                        num_trades:
+                          type: string
+                          example: "1110546"
+                        volume:
+                          type: string
+                          example: "2301132067.70"
+                        volume_change:
+                          type: string
+                          example: "-361183040.87"
+                        volume_change_pct:
+                          type: string
+                          example: "-0.1357"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /exchange-markets/ticker:
@@ -3507,6 +3869,20 @@ components:
         type: integer
         min: 1
       example: 1
+    single-interval:
+      name: interval
+      in: query
+      description: Time interval.  Defaults to `1d`.
+      required: false
+      schema:
+        type: string
+        enum:
+          - 1h
+          - 1d
+          - 7d
+          - 30d
+          - 365d
+          - ytd
   responses:
     UnauthorizedError:
       description: Authentication information is missing or invalid
