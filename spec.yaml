@@ -1152,6 +1152,19 @@ paths:
         - $ref: "#/components/parameters/exchange-decentralized"
         - $ref: "#/components/parameters/per-page"
         - $ref: "#/components/parameters/page"
+        - sort:
+          name: sort
+          in: query
+          description: |
+            Controls how the result set is sorted.  By default
+            (`volume`), exchanges are sorted by descending USD volume
+            over the first requested interval.  When sorting by
+            `weight`, the exchanges are sorted according to how much
+            impact each exchange has on the prices of its assets over
+            the first requested interval.
+          schema:
+            type: string
+            enum: [volume, weight]
       responses:
         "200":
           description: Metadata and interval data for exchanges
@@ -1174,6 +1187,9 @@ paths:
                     rank:
                       type: string
                       description: Rank of the exchange relative to other exchanges after the `status` and `type` filters are applied
+                    weight:
+                      type: string
+                      description: A measure of the relative impact the exchange has on the prices of its assets
                     transparency_grade:
                       type: string
                       description: Transparency grade of the exchange
@@ -1267,6 +1283,7 @@ paths:
                     last_updated: "2021-02-09T17:41:49.274Z"
                     fiat_currencies: ["AUD", "BRL", "EUR", "GBP", "NGN", "RUB", "TRY", "UAH", "ZAR"]
                     rank: "1"
+                    weight: "1.0000"
                     centralized: true
                     decentralized: false
                     1d:
@@ -1723,6 +1740,18 @@ paths:
             type: string
         - $ref: "#/components/parameters/per-page"
         - $ref: "#/components/parameters/page"
+        - sort:
+          name: sort
+          in: query
+          description: |
+            Controls how the result set is sorted.  By default
+            (`volume`), markets are sorted by descending USD volume
+            over the first requested interval.  When sorting by
+            `weight`, they are sorted according to how much impact
+            each market has on its assets.
+          schema:
+            type: string
+            enum: [volume, weight]
       responses:
         "200":
           description: Metadata and interval data for individual markets on exchanges
@@ -1800,6 +1829,9 @@ paths:
                         - inactive
                         - dead
                         - unmapped
+                    weight:
+                      type: string
+                      description: How much the market contributes to pricing its assets, as a percentage of the total impact across all similar markets
                     first_trade:
                       type: string
                       description: Date of the first trade available, if applicable
@@ -1858,6 +1890,7 @@ paths:
                     volume_usd: "455152159.26"
                     last_updated: "2019-11-22T18:57:00Z"
                     status: "active"
+                    weight: "0.2316"
                     first_trade: "2017-08-17T00:00:00Z"
                     first_candle: "2017-08-17T00:00:00Z"
                     first_order_book: "2018-08-29T00:00:00Z"
