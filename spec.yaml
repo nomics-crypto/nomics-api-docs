@@ -676,8 +676,9 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /currencies/sparkline:
     get:
+      deprecated: true
       tags:
-          - Currencies
+          - Deprecated
       summary: Currencies Sparkline
       operationId: getCurrenciesSparkline
       x-code-samples:
