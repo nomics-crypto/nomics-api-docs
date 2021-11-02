@@ -676,8 +676,9 @@ paths:
            $ref: '#/components/responses/UnauthorizedError'
   /currencies/sparkline:
     get:
+      deprecated: true
       tags:
-          - Currencies
+          - Deprecated
       summary: Currencies Sparkline
       operationId: getCurrenciesSparkline
       x-code-samples:
@@ -2246,7 +2247,7 @@ paths:
         * `1d`: Available from inception with no range limit
         * `1h`: Available from inception. Time range limits:
           * Past 30 days: accessible in a single request
-          * Older than 30 days: 7 days at a time
+          * Older than 30 days: 1 day at a time
 
         CSV format is: `timestamp,open,high,low,close,volume,empty,transparent_open,transparent_high,transparent_low,transparent_close,transparent_volume`
       parameters:
@@ -2272,7 +2273,7 @@ paths:
             provided, the current time is used except for when hourly
             candles with a `start` time older than 30 days are
             requested.  In that case, the `end` time defaults to the
-            `start` time plus 7 days.
+            `start` time plus 1 day.
           required: false
           schema:
             type: string
@@ -3891,12 +3892,13 @@ components:
         type: integer
         min: 1
         max: 100
+        default: 100
       example: 100
     page:
       name: page
       in: query
       description: |
-        Which page of items to get.  Only applicable when `per-page` is also supplied.
+        Which page of items to get.
       required: false
       schema:
         type: integer
