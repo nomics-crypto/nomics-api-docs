@@ -250,7 +250,7 @@ paths:
           schema:
             type: string
             enum: [active, inactive, dead]
-        - status:
+        - filter:
           name: filter
           in: query
           description: |
@@ -258,6 +258,14 @@ paths:
           schema:
             type: string
             enum: [any, new]
+        - platform-currency:
+          name: platform-currency
+          in: query
+          description: |
+            Filter the results by parent platform.
+          schema:
+            type: string
+          example: ETH
         - sort:
           name: sort
           in: query
@@ -306,6 +314,9 @@ paths:
                     symbol:
                       type: string
                       description: Display symbol of the currency (may be duplicated)
+                    platform_currency:
+                      type: string
+                      description: Nomics ID of the parent platform currency
                     circulating_supply:
                       type: string
                       description: Current circulating supply
