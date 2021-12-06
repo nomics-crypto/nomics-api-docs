@@ -62,16 +62,6 @@ info:
     Patch version changes indicate we fixed a bug or security vulnerability. Patch versions
     don't add new functionality.
 
-    ## Cross Origin Resource Sharing (CORS)
-
-    This API supports Cross Origin Resource Sharing, which allows you to make API requests directly
-    from your user's browser.
-
-    To use CORS, you must provide Nomics with the domains on which your application will run so that
-    we can whitelist them for CORS access.
-
-    Requests from `localhost`, `127.0.0.1`, and `0.0.0.0` will always succeed to aid in development.
-
     ## Demo Application
 
     A demo application using the Nomics API, CORS, and React is available on Glitch.com. This can help
