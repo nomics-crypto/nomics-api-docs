@@ -192,6 +192,9 @@ x-tagGroups:
       - Trades*
       - Orders*
       - Predictions*
+  - name: Meta
+    tags:
+      - Usage
   - name: Other
     tags:
       - Deprecated
@@ -3112,6 +3115,55 @@ paths:
                       timestamp_start: "2011-08-30T00:00:00Z"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /meta/usage:
+    get:
+      tags:
+        - Usage
+      summary: API Key Usage
+      operationId: getAPIKeyUsage
+      x-code-samples:
+        $ref: './samples/getAPIKeyUsage.json'
+      description: |
+        This endpoint returns historical API usage data for metered API keys.
+      parameters:
+        - name: start
+          in: query
+          description: Start time in IS8601 format.
+          schema:
+            type: string
+        - name: end
+          in: query
+          description: End time in IS8601 format.  Must be at most 30 days past `start`.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of api key usage data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    price_change_pct:
+                      type: string
+                      description: Predicted price change percent
+              example:
+                - timestamp: '2021-05-29T00:00:00Z'
+                  endpoint: '/v1/candles'
+                  requests: 100
+                - timestamp: '2021-05-29T00:00:00Z'
+                  endpoint: '/v1/currencies/ticker'
+                  requests: 500
+                - timestamp: '2021-05-29T01:00:00Z'
+                  endpoint: '/v1/candles'
+                  requests: 200
+                - timestamp: '2021-05-29T01:00:00Z'
+                  endpoint: '/v1/currencies/ticker'
+                  requests: 800
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
   /prices:
     get:
       deprecated: true
