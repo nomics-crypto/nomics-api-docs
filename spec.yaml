@@ -3470,7 +3470,7 @@ components:
 
         https://api.nomics.com/v1/markets?key=your-key-here
 
-        [Get your free Nomics API key here](https://p.nomics.com/cryptocurrency-bitcoin-api/)
+        [Get your Nomics API key here](https://p.nomics.com/cryptocurrency-bitcoin-api/)
   schemas:
     MarketInterval:
       type: object
