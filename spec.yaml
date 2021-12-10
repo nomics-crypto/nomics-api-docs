@@ -462,6 +462,19 @@ paths:
         - $ref: "#/components/parameters/currency-ids"
         - $ref: "#/components/parameters/currency-attributes"
         - $ref: "#/components/parameters/format"
+        - name: platform-currency
+          in: query
+          description: |
+            Filter the results by parent platform.
+          schema:
+            type: string
+          example: ETH
+        - name: platform-contract
+          in: query
+          description: |
+            Filter the results by platform contract address.
+          schema:
+            type: string
       responses:
         '200':
           description: A list of Nomics Currencies
