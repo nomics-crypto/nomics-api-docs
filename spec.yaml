@@ -3130,7 +3130,8 @@ paths:
       x-code-samples:
         $ref: './samples/getAPIKeyUsage.json'
       description: |
-        This endpoint returns historical API usage data for metered API keys.
+        This endpoint returns historical API usage data for metered API keys. Making requests to this endpoint
+        does not count towards your usage.
       parameters:
         - name: start
           in: query
