@@ -2696,10 +2696,9 @@ paths:
         **On usage based plans, this endpoint counts for one request per order book returned in the batch.** Fo example: if a batch returns 247 order
         books in a single file, this will count as 247 requests to our API.
 
-        This endpoint returns daily batches of order book snapshots as
-        Zip archived CSV files.  Batches are available up to 2 days
-        prior to the current date, inclusive.
-
+        This endpoint covers batches from the earliest point in available history, up to 2 days prior to the current day.
+        If you need more short term data, you can use the Order Book Snapshot endpoint.
+        
         This endpoint responds with an HTTP redirect to the desired
         archive file.  Because of this, you must take care to ensure that
         your API client properly follows redirects.
