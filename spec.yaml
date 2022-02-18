@@ -2267,11 +2267,17 @@ paths:
           * Past 30 days: accessible in a single request
           * Older than 30 days: 1 day at a time
 
-        Currency conversion to values other than USD can be done by fetching the candles for another cryptocurrency
-        and dividing them, or for fiat currencies please use the [Fiat Exchange Rates](#operation/getExchangeRates)
-        endpoint.
+        ### Currency Conversion
 
-        CSV format is: `timestamp,open,high,low,close,volume,empty,transparent_open,transparent_high,transparent_low,transparent_close,transparent_volume`
+        * If you want to quote candle prices in an asset other than USD, please fetch the candles for another
+        cryptocurrency and divide the values for each field at the matching timestamp.
+        * If you want to quote candle prices in a fiat currency, please fetch the values from
+        [Fiat Exchange Rates](#operation/getExchangeRates) and divide the candle values by the fiat values at
+        the matching timestamp.
+
+        ### CSV Format
+
+        `timestamp,open,high,low,close,volume,empty,transparent_open,transparent_high,transparent_low,transparent_close,transparent_volume`
       parameters:
         - $ref: '#/components/parameters/candle-interval'
         - $ref: '#/components/parameters/currency'
