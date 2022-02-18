@@ -2249,7 +2249,8 @@ paths:
       x-code-samples:
         $ref: './samples/getCandles.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### !! This API endpoint is only available to customers of our paid API plans.
+        Please [go here](https://p.nomics.com/pricing/) to learn more.
 
         The candles endpoint returns aggregated open, high, low, close, and volume information for Nomics currencies.
         When asking for candles, a currency is provided as a parameter. Nomics aggregates all markets where the given
@@ -2265,6 +2266,10 @@ paths:
         * `1h`: Available from inception. Time range limits:
           * Past 30 days: accessible in a single request
           * Older than 30 days: 1 day at a time
+
+        Currency conversion to values other than USD can be done by fetching the candles for another cryptocurrency
+        and dividing them, or for fiat currencies please use the [Fiat Exchange Rates](#operation/getExchangeRates)
+        endpoint.
 
         CSV format is: `timestamp,open,high,low,close,volume,empty,transparent_open,transparent_high,transparent_low,transparent_close,transparent_volume`
       parameters:
