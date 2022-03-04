@@ -195,7 +195,7 @@ paths:
     get:
       tags:
         - Currencies
-      summary: Currencies Ticker
+      summary: Currencies Ticker (FREE)
       operationId: getCurrenciesTicker
       x-code-samples:
         $ref: "./samples/getCurrenciesTicker.json"
