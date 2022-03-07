@@ -2707,7 +2707,7 @@ paths:
       description: |
         ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
 
-        **On usage based plans, this endpoint counts for one request per order book returned in the batch.** Fo example: if a batch returns 247 order
+        **On usage based plans, this endpoint counts for one request per order book returned in the batch.** For example: if a batch returns 247 order
         books in a single file, this will count as 247 requests to our API.
 
         This endpoint covers batches from the earliest point in available history, up to 2 days prior to the current day.
