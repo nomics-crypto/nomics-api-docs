@@ -72,26 +72,12 @@ info:
       <iframe src="https://glitch.com/embed/#!/embed/nomics-api-demo?path=README.md" alt="nomics-api-demo on glitch" style="height: 100%; width: 100%; border: 0;"></iframe>
     </div>
 
-    ## Demo Spreadsheet
-
-    Here is a demo of using the Nomics API with Google Sheets.
-
-    <iframe width="100%" height="400px" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vShn2iWjvqQ0ueBa9l9g1UBYVM92OZSgZ4nmp0rWuykvHPrvyMyMeSN4r0Orj0ACEIIKdCz6cc5abCw/pubhtml?widget=true&amp;headers=false"></iframe>
-
-    ### Formulas
-
-    * A2: `=IMPORTDATA("https://api.nomics.com/v1/prices?key=your-key-here&format=csv")`
-    * Column F: `=LOOKUP(D2,A:A,B:B)` finds D2 (BTC) in column A and pulls the price from column B
-    * Column G: `=E2*F2`
-    * Column H: `=G2/I$2`
-    * Column I: `=SUM(G:G)`
-
     # SDKs and Libraries
 
     ## By Nomics
     - [Nomics JavaScript Client](https://github.com/nomics-crypto/nomics-javascript)
 
-    ## Community Submissions
+    ## Community Submissions (Not supported by Nomics)
     - [Nomics.com Swift SDK](https://forums.nomics.com/t/swift-sdk-supporting-ios-macos-tvos-and-watchos/) by Nick DiZazzo
     - [Nomics Node.js Library](https://forums.nomics.com/t/i-made-a-library-for-node-js/) by mikunimaru
     - [Nomics Python Wrapper](https://forums.nomics.com/t/python-package-for-nomics-api/119) by Taylor Facen
