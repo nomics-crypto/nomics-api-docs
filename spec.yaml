@@ -2698,7 +2698,7 @@ paths:
 
         This endpoint covers batches from the earliest point in available history, up to 2 days prior to the current day.
         If you need more short term data, you can use the Order Book Snapshot endpoint.
-        
+
         This endpoint responds with an HTTP redirect to the desired
         archive file.  Because of this, you must take care to ensure that
         your API client properly follows redirects.
@@ -3168,6 +3168,59 @@ paths:
                 - timestamp: '2021-05-29T01:00:00Z'
                   endpoint: '/v1/currencies/ticker'
                   requests: 800
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
+  /meta/overage:
+    get:
+      tags:
+        - Usage
+      summary: Billing Overages
+      operationId: getAPIKeyOverage
+      x-code-samples:
+        $ref: './samples/getAPIKeyOverage.json'
+      description: |
+        This endpoint returns a summary of the API calls made during the current billing period.
+      responses:
+        '200':
+          description: A summary of usage data for the current billing period.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  period_start:
+                    type: string
+                    description: The start of the billing period
+                  period_end:
+                    type: string
+                    description: The end of the billing period
+                  total_calls:
+                    type: number
+                    description: The number of calls made so far during the billing period
+                  included_calls:
+                    type: number
+                    description: The number of calls included in the billing period
+                  overage_calls:
+                    type: number
+                    description: The number of calls that exceeded the included calls
+                  projected_calls:
+                    type: number
+                    description: The projected number of calls that will be made by the end of the billing period at the current rate
+                  amount_due_usd:
+                    type: number
+                    description: An estimate of the amount due for overages accrued during the billing period
+                  projected_amount_usd:
+                    type: number
+                    description: A projected estimate of the amount due at the end of the billing period at the current rate
+              example:
+                "period_start": "2022-03-01T00:00:00Z"
+                "period_end": "2022-04-01T00:00:00Z"
+                "total_calls": 1000000
+                "included_calls": 1500000
+                "overage_calls": 0
+                "projected_calls": 2000000
+                "amount_due_usd": 0
+                "projected_amount_usd": 375.00
         '401':
             $ref: '#/components/responses/UnauthorizedError'
   /prices:
