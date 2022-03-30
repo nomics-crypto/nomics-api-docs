@@ -2,7 +2,7 @@ const Swagger = require('swagger-client')
 const jsYaml = require('js-yaml')
 const fs = require('fs')
 
-const spec = jsYaml.safeLoad(fs.readFileSync("./spec.yaml"))
+const spec = jsYaml.load(fs.readFileSync("./spec.yaml"))
 
 // Get a free key here:
 // https://p.nomics.com/cryptocurrency-bitcoin-api/

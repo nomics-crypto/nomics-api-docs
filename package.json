@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "private": true,
   "engines": {
-    "node": "12.x"
+    "node": "16.x"
   },
   "scripts": {
     "dev": "redoc-cli serve spec.yaml --template=template.hbs --watch --port=3000",
@@ -15,11 +15,11 @@
     "start": "redoc-cli serve spec.yaml --template=template.hbs --port=$PORT --ssr"
   },
   "dependencies": {
-    "redoc-cli": "^0.9.2"
+    "redoc-cli": "^0.13.10"
   },
   "devDependencies": {
-    "js-yaml": "^3.13.1",
-    "netlify-cli": "^2.65.7",
-    "swagger-client": "^3.9.4"
+    "js-yaml": "^4.1.0",
+    "netlify-cli": "^9.15.0",
+    "swagger-client": "^3.18.4"
   }
 }
