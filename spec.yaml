@@ -25,7 +25,7 @@ info:
     rate limits determined by their plan and/or contract.
 
     Rate limits are computed on one second intervals. If you exceed your rate limit during the interval
-    you will receive and HTTP 429 error.
+    you will receive an HTTP 429 error.
 
 servers:
   - url: https://api.nomics.com/v1
@@ -87,7 +87,7 @@ tags:
       4. An Aggregate Candle must be built. After an Exchange Candle is built (which represents a single market on a
       single exchange) we must build an Aggregated Candle (which represents an asset across all markets and exchanges)
 
-      Every step in this pipeline takes time to compute, which means that it may be seconds, or even minutes before
+      Every step in this pipeline takes time to compute, which means that it will take a few minutes before
       a trade is fully represented by all candle types in our data set.
 
       For more information about update frequencies, see the descriptions of our candle types below.
@@ -125,7 +125,10 @@ paths:
       x-code-samples:
         $ref: "./samples/getCurrenciesTicker.json"
       description: |
-        Price, volume, market cap, and rank for all currencies across 1 hour, 1 day, 7 day, 30 day, 365 day, and year to date intervals. Current prices are updated every 10 seconds.
+        Price, volume, market cap, rank, and more for all currencies across 1 hour, 1 day, 7 day, 30 day, 365 day, and
+        year to date intervals.
+        
+        Update Frequency: 30 seconds
       parameters:
         - $ref: "#/components/parameters/currency-ids"
         - interval:
@@ -382,13 +385,15 @@ paths:
       x-code-samples:
         $ref: './samples/getGlobalTicker.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         Globally-aggregated market cap and volume data over various
         intervals across all currencies.
 
         The total `volume` fields are computed by summing the
         `spot_volume` and `derivative_volume` fields at each interval.
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/convert'
       responses:
@@ -448,10 +453,14 @@ paths:
       x-code-samples:
         $ref: './samples/getVolumeHistory.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         Volume History is the total volume for all cryptoassets in USD
         at intervals between the requested time period.  For each
         entry, the `volume` field represents the sum of the
         `spot_volume` and `derivative_volume` fields.
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - start:
           name: start
@@ -532,7 +541,11 @@ paths:
       x-code-samples:
         $ref: './samples/getMarketCapHistory.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+        
         MarketCap History is the total market cap for all cryptoassets at intervals between the requested time period.
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
@@ -576,7 +589,11 @@ paths:
       x-code-samples:
         $ref: './samples/getCurrencies.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+        
         The currencies endpoint returns all the currencies and their metadata that Nomics supports.
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: "#/components/parameters/currency-ids"
         - $ref: "#/components/parameters/currency-attributes"
@@ -714,8 +731,12 @@ paths:
       x-code-samples:
         $ref: './samples/getCurrencyHighlights.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The currency highlights endpoint returns various aggregate
         statistics for a currency over some interval.
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/convert'
@@ -819,9 +840,11 @@ paths:
       x-code-samples:
         $ref: './samples/getSupplyHistory.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         Supply history per currency for every day in a time range.
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/interval-start'
@@ -865,11 +888,15 @@ paths:
       x-code-samples:
         $ref: './samples/getExchangeRates.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The Fiat Exchange Rates endpoint returns fiat currencies as well as a few "core" cryptocurrencies such as BTC
         and ETH which are used by Nomics's "first round" of pricing. This endpoint helps normalize
         data across markets as well as to provide localization for users.
 
         For cryptocurrency prices please use the [Currencies Ticker](#operation/getCurrenciesTicker).
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: "#/components/parameters/format"
       responses:
@@ -897,6 +924,8 @@ paths:
       x-code-samples:
         $ref: './samples/getExchangeRatesHistory.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         Fiat Exchange Rates for every point in a time range. This endpoint can be used with other history endpoints
         to convert values into a desired fiat quote currency.
 
@@ -905,6 +934,8 @@ paths:
         [Fiat Exchange Rates](#operation/getExchangeRates) endpoint for all current rates.
 
         For historical cryptocurrency data please use [Aggregated OHLCV Candles](#operation/getCandles).
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/interval-start'
@@ -944,7 +975,11 @@ paths:
       x-code-samples:
         $ref: './samples/getExchanges.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The exchanges endpoint returns all the exchanges and their metadata that Nomics supports.
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: "#/components/parameters/exchange-ids"
         - $ref: "#/components/parameters/exchange-attributes"
@@ -1080,9 +1115,13 @@ paths:
       x-code-samples:
         $ref: "./samples/getExchangesTicker.json"
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The Exchanges Ticker provides high level information about the exchanges integrated with Nomics.
         It provides a limited amount of metadata, the type of integration, the time range of available data, pairs,
         and interval information about the volume and, where applicable, the number of trades.
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - name: ids
           in: query
@@ -1292,8 +1331,12 @@ paths:
       x-code-samples:
         $ref: './samples/getExchangeHighlights.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The exchange highlights endpoint returns various aggregate
         statistics for an exchange over some interval.
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/exchange'
         - $ref: '#/components/parameters/convert'
@@ -1480,11 +1523,15 @@ paths:
       x-code-samples:
         $ref: './samples/getExchangeVolumeHistory.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         Exchange Volume History is the total volume for all
         cryptoassets of an exchange in USD at intervals between the
         requested time period.  For each entry, the `volume` field
         represents the sum of the `spot_volume` and
         `derivative_volume` fields.
+
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: "#/components/parameters/exchange"
         - $ref: "#/components/parameters/interval-start"
@@ -1545,8 +1592,12 @@ paths:
       x-code-samples:
         $ref: './samples/getMarkets.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The markets endpoint returns information on the exchanges and markets that Nomics supports,
         in addition to the Nomics currency identifiers for the base and quote currency.
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - name: exchange
           in: query
@@ -1609,11 +1660,13 @@ paths:
       x-code-samples:
         $ref: './samples/getExchangeMarketsTicker.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         The Exchange Markets Ticker provides high level information about individual markets on exchanges integrated
         with Nomics. It provides metadata, the type of market, aggregation information, current financial data, and
         financial data over preset intervals.
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - name: interval
           in: query
@@ -1880,8 +1933,12 @@ paths:
       x-code-samples:
         $ref: './samples/getMarketHighlights.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The market highlights endpoint returns various aggregate
         statistics for a pair over some interval.
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - name: base
           in: query
@@ -1949,8 +2006,7 @@ paths:
       x-code-samples:
         $ref: './samples/getCandles.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.
-        Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         The candles endpoint returns aggregated open, high, low, close, and volume information for Nomics currencies.
         When asking for candles, a currency is provided as a parameter. Nomics aggregates all markets where the given
@@ -1966,6 +2022,8 @@ paths:
         * `1h`: Available from inception. Time range limits:
           * Past 30 days: accessible in a single request
           * Older than 30 days: 1 day at a time
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
 
         ### Currency Conversion
 
@@ -2096,7 +2154,7 @@ paths:
       x-code-samples:
         $ref: './samples/getExchangeCandles.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         The exchange candles endpoint returns raw open, close, high, low, and volume information for Nomics Markets.
         The data is not aggregated, therefore prices are in the quote currency of the market and volume is in the base
@@ -2118,6 +2176,8 @@ paths:
         If the difference between your `end` and `start` parameters
         for the `interval` you're requesting exceeds the limit, then
         you'll receive an error.
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/exchange-candle-interval'
         - $ref: '#/components/parameters/exchange'
@@ -2200,7 +2260,7 @@ paths:
       x-code-samples:
         $ref: './samples/getMarketCandles.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         The Aggregated Pair Candles endpoint returns aggregated open, close, high, low, and volume information for an
         Aggregated Pair of base and quote currencies. Open and Close are volume weighted averages across markets, while
@@ -2229,6 +2289,8 @@ paths:
         If the difference between your `end` and `start` parameters
         for the `interval` you're requesting exceeds the limit, then
         you'll receive an error.
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/exchange-candle-interval'
         - name: base
@@ -2323,10 +2385,12 @@ paths:
       x-code-samples:
         $ref: './samples/getTrades.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         The trades endpoint returns individual trades in a normalized format for an individual
         exchange market.
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
 
         ### Getting the most recent trades
 
@@ -2408,13 +2472,15 @@ paths:
       x-code-samples:
         $ref: './samples/getOrderBookSnapshot.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         The most recent order book snapshot for the given exchange and
         market.  An empty result is returned if no snapshot is found
         within 24 hours prior to the provided timestamp.
 
         CSV format is: `timestamp,bidPrice,bidAmount,askPrice,askAmount`
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/exchange'
         - $ref: '#/components/parameters/market'
@@ -2469,7 +2535,7 @@ paths:
       x-code-samples:
         $ref: './samples/getOrderBookBatches.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         **On usage based plans, this endpoint counts for one request per order book returned in the batch.** For example: if a batch returns 247 order
         books in a single file, this will count as 247 requests to our API.
@@ -2485,6 +2551,8 @@ paths:
         containing the order book snapshots for each day.
 
         CSV format is: `time of day,kind (bid or ask),amount,price`
+        
+        Update Frequency: UPDATE_FREQUENCY_NEEDED
       parameters:
         - $ref: '#/components/parameters/exchange'
         - $ref: '#/components/parameters/market'
@@ -2524,10 +2592,12 @@ paths:
       x-code-samples:
         $ref: './samples/getCurrenciesPredictionsTicker.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         The Currencies Predictions Ticker endpoint returns the current price prediction for all currencies.
         [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
+        
+        Update Frequency: Daily
       parameters:
         - name: ids
           in: query
@@ -2603,10 +2673,12 @@ paths:
       x-code-samples:
         $ref: './samples/getCurrenciesPredictionsHistory.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         The Currencies Predictions History endpoint returns historical price prediction for one currency.
         [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
+        
+        Update Frequency: Daily
       parameters:
         - name: id
           in: query
@@ -2680,8 +2752,9 @@ paths:
       x-code-samples:
         $ref: './samples/getAPIKeyUsage.json'
       description: |
-        This endpoint returns historical API usage data for metered API keys. Making requests to this endpoint
-        does not count towards your usage.
+        This endpoint returns historical API usage data for metered API keys.
+        
+        Making requests to this endpoint does not count towards your usage.
       parameters:
         - name: start
           in: query
@@ -2731,6 +2804,8 @@ paths:
         $ref: './samples/getAPIKeyOverage.json'
       description: |
         This endpoint returns a summary of the API calls made during the current billing period.
+        
+        Making requests to this endpoint does not count towards your usage.
       responses:
         '200':
           description: A summary of usage data for the current billing period.
