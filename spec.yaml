@@ -1763,10 +1763,11 @@ paths:
           in: query
           description: |
             Controls how the result set is sorted.  By default
-            (`volume`), markets are sorted by descending USD volume
-            over the first requested interval.  When sorting by
-            `weight`, they are sorted according to how much impact
-            each market has on its assets.
+            (`volume`), markets are sorted by ascending transparency
+            grade followed by descending USD volume over the first
+            requested interval.  When sorting by `weight`, they
+            are sorted according to how much impact each market
+            has on its assets.
           schema:
             type: string
             enum: [volume, weight]
