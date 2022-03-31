@@ -22,10 +22,10 @@ info:
     # Rate Limits
 
     By default free keys have a rate limit of one request per second (1rps). Commercial keys have their
-    rate limits determined by their plan and/or contract.
-
-    Rate limits are computed on one second intervals. If you exceed your rate limit during the interval
-    you will receive an HTTP 429 error.
+    rate limits determined by their plan and/or contract. Rate limits are computed on one second intervals.
+    
+    **If you exceed your rate limit during the interval you will receive an HTTP 429 error and your API key
+    will be timed out for a short period of time.**
 
 servers:
   - url: https://api.nomics.com/v1
