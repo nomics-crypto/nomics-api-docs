@@ -12,86 +12,27 @@ info:
     we've done on [nomics.com](https://nomics.com) you can do with our API. There are
     no internal API endpoints.
 
-    If you need support, reach out to use at our [forums](https://forums.nomics.com/).
+    If you need support, reach out to us at our [forums](https://forums.nomics.com/).
 
-    # General
-
-    ## API Server URL
+    # API Server URL
 
     The Nomics API runs at `https://api.nomics.com/v1`. All requests should be prefixed
     by the server URL.
 
-    ## JSON and CSV Support
+    # Rate Limits
 
-    By default, all endpoints serve data as JSON. However, by passing `format=csv` in the URL,
-    some endpoints will return CSV data. This can be used in Google Sheets via the `IMPORTDATA`
-    function.
+    By default free keys have a rate limit of one request per second (1rps). Commercial keys have their
+    rate limits determined by their plan and/or contract. Rate limits are computed on one second intervals.
 
-    CSV responses will not contain a header row, this is so that data can be easily concatenated
-    from multiple requests. The fields will be rendered in the same order as the JSON fields. See
-    the endpoint's documentation for an example.
-
-    Not all endpoints support CSV. Endpoints that support CSV will have the `format` parameter in
-    the parameters section.
-
-    ## Errors
-
-    The Nomics API uses standard HTTP status codes to indicate success or failure. 200
-    represents success, 4xx represents a user error (such as a problem with your key),
-    and 5xx represents a problem with our API.
-
-    ## Versioning
-
-    We follow Semantic Versioning. That means our API is versioned as Major.Minor.Patch.
-    For example, Version 1.2.3 has major version 1, minor version 2, and patch version 3.
-
-    Major version changes indicate that we have altered
-    the API significantly and it is no longer compatible with a previous version. Major
-    versions are also used as the API URL prefix.
-
-    When we update the major version, we will not remove the previous version without notice
-    to API customers and a deprecation period to allow everyone to smoothly update to the new
-    version.
-
-    Minor version changes indicate that we have added new functionality without breaking
-    any existing functionality. An API client is compatible with future minor versions. Note
-    that a minor version update may add a new field to an existing API endpoint's response. Your
-    API client must ignore fields it does not understand in order to be compatible with future
-    minor versions.
-
-    Patch version changes indicate we fixed a bug or security vulnerability. Patch versions
-    don't add new functionality.
-
-    ## Demo Application
-
-    A demo application using the Nomics API, CORS, and React is available on Glitch.com. This can help
-    you get started using the Nomics API. Keep in mind it uses the demo key, which is rotated frequently.
-    You should get your own API key before deploying an app to production. Check it out:
-
-    <div class="glitch-embed-wrap" style="height: 420px; width: 100%;">
-      <iframe src="https://glitch.com/embed/#!/embed/nomics-api-demo?path=README.md" alt="nomics-api-demo on glitch" style="height: 100%; width: 100%; border: 0;"></iframe>
-    </div>
-
-    # SDKs and Libraries
-
-    ## By Nomics
-    - [Nomics JavaScript Client](https://github.com/nomics-crypto/nomics-javascript)
-
-    ## Community Submissions (Not supported by Nomics)
-    - [Nomics.com Swift SDK](https://forums.nomics.com/t/swift-sdk-supporting-ios-macos-tvos-and-watchos/) by Nick DiZazzo
-    - [Nomics Node.js Library](https://forums.nomics.com/t/i-made-a-library-for-node-js/) by mikunimaru
-    - [Nomics Python Wrapper](https://forums.nomics.com/t/python-package-for-nomics-api/119) by Taylor Facen
-    - [Python Wrapper for Nomics](https://github.com/AviFelman/py-nomics) by Avi Felman
-
-    We love watching developers explore new use-cases with our API. Whether you're tinkering on a small side project or building an open-source resource, please share what you're up to in our [forums](https://forums.nomics.com/).
-
+    **If you exceed your rate limit during the interval you will receive an HTTP 429 error and your API key
+    will be timed out for a short period of time.**
 
 servers:
   - url: https://api.nomics.com/v1
     description: API Server
 
 tags:
-  - name: Candles*
+  - name: Candles
     description: |
       ### What are OHLCV Candles?
 
@@ -146,29 +87,27 @@ tags:
       4. An Aggregate Candle must be built. After an Exchange Candle is built (which represents a single market on a
       single exchange) we must build an Aggregated Candle (which represents an asset across all markets and exchanges)
 
-      Every step in this pipeline takes time to compute, which means that it may be seconds, or even minutes before
+      Every step in this pipeline takes time to compute, which means that it will take a few minutes before
       a trade is fully represented by all candle types in our data set.
 
       For more information about update frequencies, see the descriptions of our candle types below.
 
 x-tagGroups:
-  - name: Standard
+  - name: Free API Endpoints
     tags:
+      - Currencies Ticker
+  - name: Commercial API Endpoints
+    tags:
+      - Global
       - Currencies
-      - Markets
-      - Volume
       - Fiat Exchange Rates
-  - name: Enhanced*
-    tags:
-      - Global*
-      - Currencies*
-      - Exchanges*
-      - Markets*
-      - Candles*
-      - Trades*
-      - Orders*
-      - Predictions*
-  - name: Meta
+      - Exchanges
+      - Markets
+      - Candles
+      - Trades
+      - Orders
+      - Predictions
+  - name: Account
     tags:
       - Usage
   - name: Other
@@ -180,13 +119,16 @@ paths:
   /currencies/ticker:
     get:
       tags:
-        - Currencies
-      summary: Currencies Ticker (FREE)
+        - Currencies Ticker
+      summary: Currencies Ticker
       operationId: getCurrenciesTicker
       x-code-samples:
         $ref: "./samples/getCurrenciesTicker.json"
       description: |
-        Price, volume, market cap, and rank for all currencies across 1 hour, 1 day, 7 day, 30 day, 365 day, and year to date intervals. Current prices are updated every 10 seconds.
+        Price, volume, market cap, rank, and more for all currencies across 1 hour, 1 day, 7 day, 30 day, 365 day, and
+        year to date intervals.
+
+        Update Frequency: 30 seconds
       parameters:
         - $ref: "#/components/parameters/currency-ids"
         - interval:
@@ -434,16 +376,224 @@ paths:
                           volume_change_pct: "-0.30"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+  /global-ticker:
+    get:
+      tags:
+        - Global
+      summary: Global Ticker
+      operationId: getGlobalTicker
+      x-code-samples:
+        $ref: './samples/getGlobalTicker.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        Globally-aggregated market cap and volume data over various
+        intervals across all currencies.
+
+        The total `volume` fields are computed by summing the
+        `spot_volume` and `derivative_volume` fields at each interval.
+
+        Update Frequency: 5 minutes
+      parameters:
+        - $ref: '#/components/parameters/convert'
+      responses:
+        '200':
+          description: The global ticker
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  num_currencies:
+                    type: string
+                    description: The total number of currencies
+                    example: "12801"
+                  num_currencies_active:
+                    type: string
+                    description: The total number of active currencies
+                    example: "5277"
+                  num_currencies_inative:
+                    type: string
+                    description: The total number of inactive currencies
+                    example: "6337"
+                  num_currencies_dead:
+                    type: string
+                    description: The total number of dead currencies
+                    example: "1187"
+                  num_currencies_new:
+                    type: string
+                    description: The total number of new currencies
+                    example: "312"
+                  market_cap:
+                    type: string
+                    description: Current global market cap
+                    example: "1799044056712"
+                  transparent_market_cap:
+                    type: string
+                    description: Current global transparent market cap
+                    example: "1759092897670"
+                  1d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  7d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  30d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  365d:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+                  ytd:
+                    $ref: "#/components/schemas/GlobalTickerInterval"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+  /volume/history:
+    get:
+      tags:
+        - Global
+      summary: Global Volume History
+      operationId: getVolumeHistory
+      x-code-samples:
+        $ref: './samples/getVolumeHistory.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        Volume History is the total volume for all cryptoassets in USD
+        at intervals between the requested time period.  For each
+        entry, the `volume` field represents the sum of the
+        `spot_volume` and `derivative_volume` fields.
+
+        Update Frequency: 10 minutes
+      parameters:
+        - start:
+          name: start
+          in: query
+          description: Start time of the interval in RFC3339 (URI escaped)
+          schema:
+            type: string
+          example: "2018-04-14T00%3A00%3A00Z"
+        - end:
+          name: end
+          in: query
+          description: |
+            End time of the interval in RFC3339 (URI escaped). If not provided,
+            the current time is used.
+          schema:
+            type: string
+          example: "2018-05-14T00%3A00%3A00Z"
+        - convert:
+          name: convert
+          in: query
+          description: Currency to quote volume values. May be a Fiat Currency or Cryptocurrency. Default is `USD`.
+          required: false
+          schema:
+            type: string
+          example: EUR
+        - $ref: "#/components/parameters/format"
+        - $ref: "#/components/parameters/include-transparency"
+      responses:
+        '200':
+          description: Volume over time for all currencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: RFC3339 timestamp
+                      example: "2018-04-14T00:00:00Z"
+                    volume:
+                      type: string
+                      description: Total volume (spot volume + derivative volume) in the target currency (`USD` by default)
+                      example: "10177952765"
+                    spot_volume:
+                      type: string
+                      description: Total spot market volume in the target currency (`USD` by default)
+                      example: "7706914494"
+                    derivative_volume:
+                      type: string
+                      description: Total derivative market volume in the target currency (`USD` by default)
+                      example: "2471038271"
+                    transparent_volume:
+                      type: string
+                      description: Total transparent volume in the target currency (`USD` by default)
+                      example: "6608950947"
+                    transparent_spot_volume:
+                      type: string
+                      description: Total transparent spot market volume in the target currency (`USD` by default)
+                      example: "4137912676"
+                    transparent_derivative_volume:
+                      type: string
+                      description: Total transparent derivative market volume in the target currency (`USD` by default)
+                      example: "2471038271"
+            test/csv:
+              schema:
+                type: string
+              example: "04/14/2018 00:00:00,5209035491"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /market-cap/history:
+    get:
+      tags:
+        - Global
+      summary: Global Market Cap History
+      operationId: getMarketCapHistory
+      x-code-samples:
+        $ref: './samples/getMarketCapHistory.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        MarketCap History is the total market cap for all cryptoassets at intervals between the requested time period.
+
+        Update Frequency: 10 minutes
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+        - $ref: '#/components/parameters/convert'
+        - $ref: "#/components/parameters/format"
+        - $ref: "#/components/parameters/include-transparency"
+      responses:
+        '200':
+          description: Performance over time for the entire market.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: RFC3339 timestamp
+                      example: "2018-07-05T15:00:00Z"
+                    market_cap:
+                      type: string
+                      description: Total market cap in the target currency (`USD` by default)
+                      example: "269222501959"
+                    transparent_market_cap:
+                      type: string
+                      description: Total transparent market cap in the target currency (`USD` by default)
+                      example: "270122591259"
+            test/csv:
+              schema:
+                type: string
+              example: "07/05/2018 15:00:00,269222501959"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /currencies:
     get:
       tags:
         - Currencies
-      summary: Currencies Metadata
+      summary: Currency Metadata
       operationId: getCurrencies
       x-code-samples:
         $ref: './samples/getCurrencies.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The currencies endpoint returns all the currencies and their metadata that Nomics supports.
+
+        Update Frequency: 1 minute
       parameters:
         - $ref: "#/components/parameters/currency-ids"
         - $ref: "#/components/parameters/currency-attributes"
@@ -575,14 +725,18 @@ paths:
   /currencies/highlights:
     get:
       tags:
-        - Currencies*
+        - Currencies
       summary: Currency Highlights
       operationId: getCurrencyHighlights
       x-code-samples:
         $ref: './samples/getCurrencyHighlights.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The currency highlights endpoint returns various aggregate
         statistics for a currency over some interval.
+
+        Update Frequency: 5 minutes
       parameters:
         - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/convert'
@@ -677,138 +831,20 @@ paths:
                           example: "-0.1379"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
-  /currencies/sparkline:
-    get:
-      deprecated: true
-      tags:
-          - Deprecated
-      summary: Currencies Sparkline
-      operationId: getCurrenciesSparkline
-      x-code-samples:
-        $ref: './samples/getCurrenciesSparkline.json'
-      description: |
-        The currencies sparkline endpoint returns prices for all currencies within a customizable time interval
-        suitable for sparkline charts.
-
-        **Note** the timestamps and prices are built off of OHLCV candles using the close price. This means that the timestamp
-        represents the start of the candle, and the price is the close price of that candle. This means the response's final timestamp
-        and price value are always as current as possible, but also that the price is effectively "off" by one candle. This endpoint
-        is designed to serve as a convenient way to render sparklines, if you need exactly aligned times and prices you can use the
-        [Aggregated OHLCV Candles endpoint](#operation/getCandles).
-      parameters:
-        - $ref: '#/components/parameters/currency-ids'
-        - $ref: '#/components/parameters/interval-start'
-        - $ref: '#/components/parameters/interval-end'
-        - $ref: '#/components/parameters/convert'
-      responses:
-        '200':
-          description: Currency performance over time for all currencies over the requested time period.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    currency:
-                      type: string
-                      description: Currency ID
-                      example: BTC
-                    timestamps:
-                      type: array
-                      description: Time values matching the price value of the same index
-                      items:
-                        type: string
-                        description: Timestamp of the start of the candle in RFC3339
-                        example: "2018-04-03T16:00:00Z"
-                    prices:
-                      type: array
-                      description: Price in USD corresponding to timestamp value of the same index
-                      items:
-                        type: string
-                        description: Price in USD
-                        example: "7436.82313"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /global-ticker:
-    get:
-      tags:
-        - Global*
-      summary: Global Ticker
-      operationId: getGlobalTicker
-      x-code-samples:
-        $ref: './samples/getGlobalTicker.json'
-      description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
-
-        Globally-aggregated market cap and volume data over various
-        intervals across all currencies.
-
-        The total `volume` fields are computed by summing the
-        `spot_volume` and `derivative_volume` fields at each interval.
-      parameters:
-        - $ref: '#/components/parameters/convert'
-      responses:
-        '200':
-          description: The global ticker
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  num_currencies:
-                    type: string
-                    description: The total number of currencies
-                    example: "12801"
-                  num_currencies_active:
-                    type: string
-                    description: The total number of active currencies
-                    example: "5277"
-                  num_currencies_inative:
-                    type: string
-                    description: The total number of inactive currencies
-                    example: "6337"
-                  num_currencies_dead:
-                    type: string
-                    description: The total number of dead currencies
-                    example: "1187"
-                  num_currencies_new:
-                    type: string
-                    description: The total number of new currencies
-                    example: "312"
-                  market_cap:
-                    type: string
-                    description: Current global market cap
-                    example: "1799044056712"
-                  transparent_market_cap:
-                    type: string
-                    description: Current global transparent market cap
-                    example: "1759092897670"
-                  1d:
-                    $ref: "#/components/schemas/GlobalTickerInterval"
-                  7d:
-                    $ref: "#/components/schemas/GlobalTickerInterval"
-                  30d:
-                    $ref: "#/components/schemas/GlobalTickerInterval"
-                  365d:
-                    $ref: "#/components/schemas/GlobalTickerInterval"
-                  ytd:
-                    $ref: "#/components/schemas/GlobalTickerInterval"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
-
   /supplies/history:
     get:
       tags:
-        - Currencies*
-      summary: Supply History
+        - Currencies
+      summary: Currency Supply History
       operationId: getSupplyHistory
       x-code-samples:
         $ref: './samples/getSupplyHistory.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         Supply history per currency for every day in a time range.
+
+        Update Frequency: 30 minutes
       parameters:
         - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/interval-start'
@@ -843,26 +879,71 @@ paths:
               example: "05/14/2018 00:04:31,17052037.0,21000000.0"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-  /supplies/interval:
+  /exchange-rates:
     get:
-      deprecated: true
       tags:
-        - Deprecated
-      summary: Supplies Interval
-      operationId: getSuppliesInterval
+        - Fiat Exchange Rates
+      summary: Fiat Exchange Rates
+      operationId: getExchangeRates
       x-code-samples:
-        $ref: './samples/getSuppliesInterval.json'
+        $ref: './samples/getExchangeRates.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
-        Open and close supply information for all currencies between a customizable time interval.
+        The Fiat Exchange Rates endpoint returns fiat currencies as well as a few "core" cryptocurrencies such as BTC
+        and ETH which are used by Nomics's "first round" of pricing. This endpoint helps normalize
+        data across markets as well as to provide localization for users.
+
+        For cryptocurrency prices please use the [Currencies Ticker](#operation/getCurrenciesTicker).
+
+        Update Frequency: 1 day for fiat currencies, 1 hour for crypto currencies.
       parameters:
+        - $ref: "#/components/parameters/format"
+      responses:
+        '200':
+          description: List of fiat exchange rates into USD
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExchangeRate"
+            text/csv:
+              schema:
+                type: string
+              example: "AUD,0.76953,2018-04-04T00:00:00Z"
+
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /exchange-rates/history:
+    get:
+      tags:
+        - Fiat Exchange Rates
+      summary: Fiat Exchange Rates History
+      operationId: getExchangeRatesHistory
+      x-code-samples:
+        $ref: './samples/getExchangeRatesHistory.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        Fiat Exchange Rates for every point in a time range. This endpoint can be used with other history endpoints
+        to convert values into a desired fiat quote currency.
+
+        The currency parameter must be a fiat currency or one of Nomics's "core" cryptocurrencies used in "first round"
+        pricing such as BTC or ETH. To get all Nomics Quote Currencies, use the
+        [Fiat Exchange Rates](#operation/getExchangeRates) endpoint for all current rates.
+
+        For historical cryptocurrency data please use [Aggregated OHLCV Candles](#operation/getCandles).
+
+        Update Frequency: every hour.
+      parameters:
+        - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
         - $ref: "#/components/parameters/format"
       responses:
         '200':
-          description: Open and close supply information
+          description: Fiat Exchange rates for every point in a time range
           content:
             application/json:
               schema:
@@ -870,241 +951,177 @@ paths:
                 items:
                   type: object
                   properties:
-                    currency:
+                    timestamp:
                       type: string
-                      description: Nomics ID of the currency
-                    open_available:
+                      description: RFC3999 timestamp of the rate
+                    rate:
                       type: string
-                      description: Open available supply
-                    open_max:
-                      type: string
-                      description: Open max supply
-                    open_timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the open supply information
-                    close_available:
-                      type: string
-                      description: Close available supply
-                    close_max:
-                      type: string
-                      description: Close max supply
-                    close_timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the close supply information
+                      description: Rate of exchange to USD
                   example:
-                    currency: "BTC"
-                    open_available: "17032187.0"
-                    open_max: "21000000.0"
-                    open_timestamp: "2018-05-14T00:04:31Z"
-                    close_available: "17052037.0"
-                    close_max: "21000000.0"
-                    close_timestamp: "2018-05-24T14:19:34Z"
+                    timestamp: "2018-05-01T00:00:00Z"
+                    rate: "1.2079045272261680"
             text/csv:
               schema:
                 type: string
-              example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
+              example: "05/01/2018 00:00:00,1.2079045272261680"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-  /exchanges/highlights:
+  /exchanges:
     get:
       tags:
-        - Exchanges*
-      summary: Exchange Highlights
-      operationId: getExchangeHighlights
+        - Exchanges
+      summary: Exchange Metadata
+      operationId: getExchanges
       x-code-samples:
-        $ref: './samples/getExchangeHighlights.json'
+        $ref: './samples/getExchanges.json'
       description: |
-        The exchange highlights endpoint returns various aggregate
-        statistics for an exchange over some interval.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The exchanges endpoint returns all the exchanges and their metadata that Nomics supports.
+
+        Update Frequency: 1 minute
       parameters:
-        - $ref: '#/components/parameters/exchange'
-        - $ref: '#/components/parameters/convert'
-        - $ref: '#/components/parameters/single-interval'
+        - $ref: "#/components/parameters/exchange-ids"
+        - $ref: "#/components/parameters/exchange-attributes"
+        - $ref: "#/components/parameters/exchange-centralized"
+        - $ref: "#/components/parameters/exchange-decentralized"
+        - $ref: "#/components/parameters/format"
       responses:
         '200':
-          description:
+          description: A list of Nomics Exchanges
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  total_volume:
-                    type: string
-                    example: "57747416191.11"
-                    description: Total volume over the selected interval.
-                  num_trades:
-                    type: string
-                    example: "62947560"
-                    description: Total number of trades over the interval.
-                  num_markets:
-                    type: string
-                    example: "1315"
-                    description: Total number of markets with volume over the interval.
-                  num_crypto_markets:
-                    type: string
-                    example: "1174"
-                    description: Total number of markets where both sides are crypto currencies with volume over the interval.
-                  num_fiat_markets:
-                    type: string
-                    example: "141"
-                    description: Total number of markets where one of the sides is a fiat currency with volume over the interval.
-                  num_crypto_currencies:
-                    type: string
-                    example: "374"
-                    description: Total number of distinct crypto currencies with volume over the interval.
-                  num_fiat_currencies:
-                    type: string
-                    example: "8"
-                    description: Total number of distinct fiat currencies with volume over the interval.
-                  top_quote_dominance:
-                    description: Top 5 quote currencies by volume dominance over the interval.
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        symbol:
-                          type: string
-                          example: "USDT"
-                        name:
-                          type: string
-                          example: "Tether"
-                        dominance_pct:
-                          type: string
-                          example: "0.8765"
-                  top_crypto_quote_dominance:
-                    description: Top 5 crypto quote currencies by volume dominance over the interval.
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        symbol:
-                          type: string
-                          example: "USDT"
-                        name:
-                          type: string
-                          example: "Tether"
-                        dominance_pct:
-                          type: string
-                          example: "0.8928"
-                  top_fiat_quote_dominance:
-                    description: Top 5 fiat quote currencies by volume dominance over the interval.
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        symbol:
-                          type: string
-                          example: "TRY"
-                        name:
-                          type: string
-                          example: "Turkish Lira"
-                        dominance_pct:
-                          type: string
-                          example: "0.4875"
-                  top_markets:
-                    description: Top 5 markets by volume over the interval.
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        market:
-                          type: string
-                          example: "fu_ETHUSDT"
-                        base:
-                          type: string
-                          example: "ETH"
-                        base_name:
-                          type: string
-                          example: "Ethereum"
-                        quote:
-                          type: string
-                          example: "USDT"
-                        quote_name:
-                          type: string
-                          example: "Tether"
-                        volume:
-                          type: string
-                          example: "8115553209.27"
-                        volume_change:
-                          type: string
-                          example: "-2578550465.99"
-                        volume_change_pct:
-                          type: string
-                          example: "-0.2411"
-                  top_volume_gainers:
-                    description: Top 5 markets by volume over the interval sorted by largest volume gain first.
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        market:
-                          type: string
-                          example: "fu_ADAUSDT"
-                        base:
-                          type: string
-                          example: "ADA"
-                        base_name:
-                          type: string
-                          example: "Cardano"
-                        quote:
-                          type: string
-                          example: "USDT"
-                        quote_name:
-                          type: string
-                          example: "Tether"
-                        volume:
-                          type: string
-                          example: "2531122210.64"
-                        volume_change:
-                          type: string
-                          example: "481773365.76"
-                        volume_change_pct:
-                          type: string
-                          example: "0.2351"
-                  top_volume_deltas:
-                    description: Top 5 markets by volume over the interval sorted by largest volume percent change first.
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        market:
-                          type: string
-                          example: "DOCKBUSD"
-                        base:
-                          type: string
-                          example: "DOCK"
-                        base_name:
-                          type: string
-                          example: "Dock"
-                        quote:
-                          type: string
-                          example: "BUSC"
-                        quote_name:
-                          type: string
-                          example: "Binance USD"
-                        volume:
-                          type: string
-                          example: "3422853.34"
-                        volume_change:
-                          type: string
-                          example: "3181019.02"
-                        volume_change_pct:
-                          type: string
-                          example: "13.1537"
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Nomics Exchange ID
+                    capability_markets:
+                      type: boolean
+                      description: Flag that determines if the exchange provides markets data
+                    capability_trades:
+                      type: boolean
+                      description: Flag that determines if the exchange provides trades data
+                    capability_trades_by_timestamp:
+                      type: boolean
+                      description: Flag that determines if the exchange provides trades by timestamp data
+                    capability_trades_snapshot:
+                      type: boolean
+                      description: Flag that determines if the exchange provides recent-only trades data
+                    capability_orders_snapshot:
+                      type: boolean
+                      description: Flag that determines if the exchange provides orderbook snapshot data
+                    capability_candles:
+                      type: boolean
+                      description: Flag that determines if the exchange provides OHLCV candle data
+                    capability_ticker:
+                      type: boolean
+                      description: Flag that determines if the exchange provides 24h ticker data
+                    integrated:
+                      type: boolean
+                      description: Flag that determines if the exchange has completed a [Nomics Deep Data Integration](https://nomicsintegration.com)
+                    name:
+                      type: string
+                      description: Exchange Name
+                    description:
+                      type: string
+                      description: Exchange description
+                    location:
+                      type: string
+                      description: Primary exchange location country
+                    logo_url:
+                      type: string
+                      description: Exchange logo URL
+                    website_url:
+                      type: string
+                      description: Exchange website URL
+                    fees_url:
+                      type: string
+                      description: Exchange fees URL
+                    twitter_url:
+                      type: string
+                      description: Exchange Twitter URL
+                    facebook_url:
+                      type: string
+                      description: Exchange Facebook URL
+                    reddit_url:
+                      type: string
+                      description: Exchange Reddit URL
+                    chat_url:
+                      type: string
+                      description: Exchange chat URL
+                    blog_url:
+                      type: string
+                      description: Exchange blog URL
+                    year:
+                      type: string
+                      description: Year exchange became active
+                    transparency_grade:
+                      type: string
+                      description: The [Nomics Transparency Rating](https://blog.nomics.com/essays/transparency-ratings/) for the exchange
+                    order_books_interval:
+                      type: number
+                      description: The maximum frequency (in milliseconds) at which order book snapshots are taken for this exchange
+                    centralized:
+                      type: boolean
+                      description: Whether or not the exchange is centralized
+                    decentralized:
+                      type: boolean
+                      description: Whether or not the exchange is decentralized
+                    replaced_by:
+                      type: string
+                      description: The id of the exchange that replaces this exchange, if applicable
+                  example:
+                    id: binance
+                    capability_markets": true
+                    capability_trades": true
+                    capability_trades_by_timestamp": false
+                    capability_trades_snapshot": false
+                    capability_orders_snapshot": true
+                    capability_candles": false
+                    capability_ticker": false
+                    integrated": false
+                    name: Binance
+                    description: The company was created under the tutelage of Changpeng 'CZ' Zhao and his co-founder Yi He.
+                    location: Malta
+                    logo_url: https://s3.us-east-2.amazonaws.com/nomics-api/static/images/exchanges/binance.svg
+                    website_url: https://www.binance.com/
+                    fees_url: https://www.binance.com/en/fee/schedule
+                    twitter_url: https://twitter.com/binance
+                    facebook_url: https://www.facebook.com/binance
+                    reddit_url: https://www.reddit.com/r/binance/
+                    chat_url: https://t.me/binanceexchange
+                    blog_url: https://www.binance.com/en/blog
+                    year: 2017
+                    transparency_grade: A
+                    order_books_interval: 60000
+                    centralized: true
+                    decentralized: false
+            text/csv:
+              schema:
+                type: string
+              example: "Binance"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
   /exchanges/ticker:
     get:
       tags:
-        - Exchanges*
-      summary: Exchanges Ticker
+        - Exchanges
+      summary: Exchange Ticker
       operationId: getExchangesTicker
       x-code-samples:
         $ref: "./samples/getExchangesTicker.json"
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The Exchanges Ticker provides high level information about the exchanges integrated with Nomics.
         It provides a limited amount of metadata, the type of integration, the time range of available data, pairs,
         and interval information about the volume and, where applicable, the number of trades.
+
+        Update Frequency: 5 minutes
       parameters:
         - name: ids
           in: query
@@ -1305,20 +1322,218 @@ paths:
                       derivative_volume_change_pct: "0.1338"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+  /exchanges/highlights:
+    get:
+      tags:
+        - Exchanges
+      summary: Exchange Highlights
+      operationId: getExchangeHighlights
+      x-code-samples:
+        $ref: './samples/getExchangeHighlights.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The exchange highlights endpoint returns various aggregate
+        statistics for an exchange over some interval.
+
+        Update Frequency: 1 minute
+      parameters:
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/convert'
+        - $ref: '#/components/parameters/single-interval'
+      responses:
+        '200':
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_volume:
+                    type: string
+                    example: "57747416191.11"
+                    description: Total volume over the selected interval.
+                  num_trades:
+                    type: string
+                    example: "62947560"
+                    description: Total number of trades over the interval.
+                  num_markets:
+                    type: string
+                    example: "1315"
+                    description: Total number of markets with volume over the interval.
+                  num_crypto_markets:
+                    type: string
+                    example: "1174"
+                    description: Total number of markets where both sides are crypto currencies with volume over the interval.
+                  num_fiat_markets:
+                    type: string
+                    example: "141"
+                    description: Total number of markets where one of the sides is a fiat currency with volume over the interval.
+                  num_crypto_currencies:
+                    type: string
+                    example: "374"
+                    description: Total number of distinct crypto currencies with volume over the interval.
+                  num_fiat_currencies:
+                    type: string
+                    example: "8"
+                    description: Total number of distinct fiat currencies with volume over the interval.
+                  top_quote_dominance:
+                    description: Top 5 quote currencies by volume dominance over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        symbol:
+                          type: string
+                          example: "USDT"
+                        name:
+                          type: string
+                          example: "Tether"
+                        dominance_pct:
+                          type: string
+                          example: "0.8765"
+                  top_crypto_quote_dominance:
+                    description: Top 5 crypto quote currencies by volume dominance over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        symbol:
+                          type: string
+                          example: "USDT"
+                        name:
+                          type: string
+                          example: "Tether"
+                        dominance_pct:
+                          type: string
+                          example: "0.8928"
+                  top_fiat_quote_dominance:
+                    description: Top 5 fiat quote currencies by volume dominance over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        symbol:
+                          type: string
+                          example: "TRY"
+                        name:
+                          type: string
+                          example: "Turkish Lira"
+                        dominance_pct:
+                          type: string
+                          example: "0.4875"
+                  top_markets:
+                    description: Top 5 markets by volume over the interval.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        market:
+                          type: string
+                          example: "fu_ETHUSDT"
+                        base:
+                          type: string
+                          example: "ETH"
+                        base_name:
+                          type: string
+                          example: "Ethereum"
+                        quote:
+                          type: string
+                          example: "USDT"
+                        quote_name:
+                          type: string
+                          example: "Tether"
+                        volume:
+                          type: string
+                          example: "8115553209.27"
+                        volume_change:
+                          type: string
+                          example: "-2578550465.99"
+                        volume_change_pct:
+                          type: string
+                          example: "-0.2411"
+                  top_volume_gainers:
+                    description: Top 5 markets by volume over the interval sorted by largest volume gain first.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        market:
+                          type: string
+                          example: "fu_ADAUSDT"
+                        base:
+                          type: string
+                          example: "ADA"
+                        base_name:
+                          type: string
+                          example: "Cardano"
+                        quote:
+                          type: string
+                          example: "USDT"
+                        quote_name:
+                          type: string
+                          example: "Tether"
+                        volume:
+                          type: string
+                          example: "2531122210.64"
+                        volume_change:
+                          type: string
+                          example: "481773365.76"
+                        volume_change_pct:
+                          type: string
+                          example: "0.2351"
+                  top_volume_deltas:
+                    description: Top 5 markets by volume over the interval sorted by largest volume percent change first.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        market:
+                          type: string
+                          example: "DOCKBUSD"
+                        base:
+                          type: string
+                          example: "DOCK"
+                        base_name:
+                          type: string
+                          example: "Dock"
+                        quote:
+                          type: string
+                          example: "BUSC"
+                        quote_name:
+                          type: string
+                          example: "Binance USD"
+                        volume:
+                          type: string
+                          example: "3422853.34"
+                        volume_change:
+                          type: string
+                          example: "3181019.02"
+                        volume_change_pct:
+                          type: string
+                          example: "13.1537"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
   /exchanges/volume/history:
     get:
       tags:
-        - Exchanges*
-      summary: Exchanges Volume History
+        - Exchanges
+      summary: Exchange Volume History
       operationId: getExchangeVolumeHistory
       x-code-samples:
         $ref: './samples/getExchangeVolumeHistory.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         Exchange Volume History is the total volume for all
         cryptoassets of an exchange in USD at intervals between the
         requested time period.  For each entry, the `volume` field
         represents the sum of the `spot_volume` and
         `derivative_volume` fields.
+
+        Update Frequency: every five minutes for the `1m` interval,
+        every ten minutes for the `1h` interval, and every hour for
+        the rest.
       parameters:
         - $ref: "#/components/parameters/exchange"
         - $ref: "#/components/parameters/interval-start"
@@ -1370,153 +1585,21 @@ paths:
               example: "04/14/2018 00:00:00,5209035491"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
-  /exchanges:
-    get:
-      tags:
-        - Exchanges*
-      summary: Exchanges Metadata
-      operationId: getExchanges
-      x-code-samples:
-        $ref: './samples/getExchanges.json'
-      description: |
-        The exchanges endpoint returns all the exchanges and their metadata that Nomics supports.
-      parameters:
-        - $ref: "#/components/parameters/exchange-ids"
-        - $ref: "#/components/parameters/exchange-attributes"
-        - $ref: "#/components/parameters/exchange-centralized"
-        - $ref: "#/components/parameters/exchange-decentralized"
-        - $ref: "#/components/parameters/format"
-      responses:
-        '200':
-          description: A list of Nomics Exchanges
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      description: Nomics Exchange ID
-                    capability_markets:
-                      type: boolean
-                      description: Flag that determines if the exchange provides markets data
-                    capability_trades:
-                      type: boolean
-                      description: Flag that determines if the exchange provides trades data
-                    capability_trades_by_timestamp:
-                      type: boolean
-                      description: Flag that determines if the exchange provides trades by timestamp data
-                    capability_trades_snapshot:
-                      type: boolean
-                      description: Flag that determines if the exchange provides recent-only trades data
-                    capability_orders_snapshot:
-                      type: boolean
-                      description: Flag that determines if the exchange provides orderbook snapshot data
-                    capability_candles:
-                      type: boolean
-                      description: Flag that determines if the exchange provides OHLCV candle data
-                    capability_ticker:
-                      type: boolean
-                      description: Flag that determines if the exchange provides 24h ticker data
-                    integrated:
-                      type: boolean
-                      description: Flag that determines if the exchange has completed a [Nomics Deep Data Integration](https://nomicsintegration.com)
-                    name:
-                      type: string
-                      description: Exchange Name
-                    description:
-                      type: string
-                      description: Exchange description
-                    location:
-                      type: string
-                      description: Primary exchange location country
-                    logo_url:
-                      type: string
-                      description: Exchange logo URL
-                    website_url:
-                      type: string
-                      description: Exchange website URL
-                    fees_url:
-                      type: string
-                      description: Exchange fees URL
-                    twitter_url:
-                      type: string
-                      description: Exchange Twitter URL
-                    facebook_url:
-                      type: string
-                      description: Exchange Facebook URL
-                    reddit_url:
-                      type: string
-                      description: Exchange Reddit URL
-                    chat_url:
-                      type: string
-                      description: Exchange chat URL
-                    blog_url:
-                      type: string
-                      description: Exchange blog URL
-                    year:
-                      type: string
-                      description: Year exchange became active
-                    transparency_grade:
-                      type: string
-                      description: The [Nomics Transparency Rating](https://blog.nomics.com/essays/transparency-ratings/) for the exchange
-                    order_books_interval:
-                      type: number
-                      description: The maximum frequency (in milliseconds) at which order book snapshots are taken for this exchange
-                    centralized:
-                      type: boolean
-                      description: Whether or not the exchange is centralized
-                    decentralized:
-                      type: boolean
-                      description: Whether or not the exchange is decentralized
-                    replaced_by:
-                      type: string
-                      description: The id of the exchange that replaces this exchange, if applicable
-                  example:
-                    id: binance
-                    capability_markets": true
-                    capability_trades": true
-                    capability_trades_by_timestamp": false
-                    capability_trades_snapshot": false
-                    capability_orders_snapshot": true
-                    capability_candles": false
-                    capability_ticker": false
-                    integrated": false
-                    name: Binance
-                    description: The company was created under the tutelage of Changpeng 'CZ' Zhao and his co-founder Yi He.
-                    location: Malta
-                    logo_url: https://s3.us-east-2.amazonaws.com/nomics-api/static/images/exchanges/binance.svg
-                    website_url: https://www.binance.com/
-                    fees_url: https://www.binance.com/en/fee/schedule
-                    twitter_url: https://twitter.com/binance
-                    facebook_url: https://www.facebook.com/binance
-                    reddit_url: https://www.reddit.com/r/binance/
-                    chat_url: https://t.me/binanceexchange
-                    blog_url: https://www.binance.com/en/blog
-                    year: 2017
-                    transparency_grade: A
-                    order_books_interval: 60000
-                    centralized: true
-                    decentralized: false
-            text/csv:
-              schema:
-                type: string
-              example: "Binance"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
   /markets:
     get:
       tags:
         - Markets
-      summary: Markets
+      summary: Market List
       operationId: getMarkets
       x-code-samples:
         $ref: './samples/getMarkets.json'
       description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
         The markets endpoint returns information on the exchanges and markets that Nomics supports,
         in addition to the Nomics currency identifiers for the base and quote currency.
+
+        Update Frequency: 5 minutes
       parameters:
         - name: exchange
           in: query
@@ -1570,89 +1653,22 @@ paths:
               example: "bitfinex,avtbtc,AVT,BTC"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
-  /exchange-markets/highlights:
-    get:
-      tags:
-        - Markets*
-      summary: Market Highlights
-      operationId: getMarketHighlights
-      x-code-samples:
-        $ref: './samples/getMarketHighlights.json'
-      description: |
-        The market highlights endpoint returns various aggregate
-        statistics for a pair over some interval.
-      parameters:
-        - name: base
-          in: query
-          required: true
-          description: A Nomics Currency ID.
-          schema:
-            type: string
-        - name: quote
-          in: query
-          required: true
-          description: A Nomics Currency ID.
-          schema:
-            type: string
-        - $ref: '#/components/parameters/convert'
-        - $ref: '#/components/parameters/single-interval'
-      responses:
-        '200':
-          description:
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  total_volume:
-                    type: string
-                    example: "20483770618.66"
-                    description: Total volume over the selected interval.
-                  num_exchanges:
-                    type: string
-                    example: "149"
-                    description: Total exchanges with volume for the pair over the selected interval.
-                  num_trades:
-                    type: string
-                    example: 	"1662675"
-                    description: Total trades over the selected interval for the pair.
-                  top_exchanges:
-                    description: Top 5 exchanges by volume over the interval for the selected pair.
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        exchange:
-                          type: string
-                          example: "binance"
-                        num_trades:
-                          type: string
-                          example: "1110546"
-                        volume:
-                          type: string
-                          example: "2301132067.70"
-                        volume_change:
-                          type: string
-                          example: "-361183040.87"
-                        volume_change_pct:
-                          type: string
-                          example: "-0.1357"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
   /exchange-markets/ticker:
     get:
       tags:
-        - Markets*
-      summary: Exchange Markets Ticker
+        - Markets
+      summary: Market Ticker
       operationId: getExchangeMarketsTicker
       x-code-samples:
         $ref: './samples/getExchangeMarketsTicker.json'
       description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
 
         The Exchange Markets Ticker provides high level information about individual markets on exchanges integrated
         with Nomics. It provides metadata, the type of market, aggregation information, current financial data, and
         financial data over preset intervals.
+
+        Update Frequency: 5 minutes
       parameters:
         - name: interval
           in: query
@@ -1749,10 +1765,11 @@ paths:
           in: query
           description: |
             Controls how the result set is sorted.  By default
-            (`volume`), markets are sorted by descending USD volume
-            over the first requested interval.  When sorting by
-            `weight`, they are sorted according to how much impact
-            each market has on its assets.
+            (`volume`), markets are sorted by ascending transparency
+            grade followed by descending USD volume over the first
+            requested interval.  When sorting by `weight`, they
+            are sorted according to how much impact each market
+            has on its assets.
           schema:
             type: string
             enum: [volume, weight]
@@ -1910,6 +1927,934 @@ paths:
                       price_quote_change: "0.00000000"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
+  /exchange-markets/highlights:
+    get:
+      tags:
+        - Markets
+      summary: Market Highlights
+      operationId: getMarketHighlights
+      x-code-samples:
+        $ref: './samples/getMarketHighlights.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The market highlights endpoint returns various aggregate
+        statistics for a pair over some interval.
+
+        Update Frequency: 1 minute
+      parameters:
+        - name: base
+          in: query
+          required: true
+          description: A Nomics Currency ID.
+          schema:
+            type: string
+        - name: quote
+          in: query
+          required: true
+          description: A Nomics Currency ID.
+          schema:
+            type: string
+        - $ref: '#/components/parameters/convert'
+        - $ref: '#/components/parameters/single-interval'
+      responses:
+        '200':
+          description:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_volume:
+                    type: string
+                    example: "20483770618.66"
+                    description: Total volume over the selected interval.
+                  num_exchanges:
+                    type: string
+                    example: "149"
+                    description: Total exchanges with volume for the pair over the selected interval.
+                  num_trades:
+                    type: string
+                    example: 	"1662675"
+                    description: Total trades over the selected interval for the pair.
+                  top_exchanges:
+                    description: Top 5 exchanges by volume over the interval for the selected pair.
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        exchange:
+                          type: string
+                          example: "binance"
+                        num_trades:
+                          type: string
+                          example: "1110546"
+                        volume:
+                          type: string
+                          example: "2301132067.70"
+                        volume_change:
+                          type: string
+                          example: "-361183040.87"
+                        volume_change_pct:
+                          type: string
+                          example: "-0.1357"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /candles:
+    get:
+      tags:
+        - Candles
+      summary: Aggregated OHLCV Candles
+      operationId: getCandles
+      x-code-samples:
+        $ref: './samples/getCandles.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The candles endpoint returns aggregated open, high, low, close, and volume information for Nomics currencies.
+        When asking for candles, a currency is provided as a parameter. Nomics aggregates all markets where the given
+        currency is the base currency and the quote currency is a fiat currency, BTC, or ETH and returns all values in
+        USD.
+
+        Candles are aggregated across all markets for the base currencies, which necessitates converting to a common
+        quote currency. Nomics converts all markets into USD in order to aggregated candles.
+
+        Candles have the following time range limits based on interval and time:
+
+        * `1d`: Available from inception with no range limit
+        * `1h`: Available from inception. Time range limits:
+          * Past 30 days: accessible in a single request
+          * Older than 30 days: 1 day at a time
+
+        Update Frequency: every ten minutes for the `1h` interval, and
+        every hour for the `1d` interval.
+
+        ### Currency Conversion
+
+        * If you want to quote candle prices in an asset other than USD, please fetch the candles for another
+        cryptocurrency and divide the values for each field at the matching timestamp.
+        * If you want to quote candle prices in a fiat currency, please fetch the values from
+        [Fiat Exchange Rates](#operation/getExchangeRates) and divide the candle values by the fiat values at
+        the matching timestamp.
+
+        ### CSV Format
+
+        `timestamp,open,high,low,close,volume,empty,transparent_open,transparent_high,transparent_low,transparent_close,transparent_volume`
+      parameters:
+        - $ref: '#/components/parameters/candle-interval'
+        - $ref: '#/components/parameters/currency'
+        - interval-start:
+          name: start
+          in: query
+          description: |
+            Start time of the interval in RFC3339 (URI escaped). If
+            not provided, starts from the first candle for daily
+            candles and from the current time minus 30 days for hourly
+            candles.
+          required: false
+          schema:
+            type: string
+          example: "2018-04-14T00%3A00%3A00Z"
+        - interval-end:
+          name: end
+          in: query
+          description: |
+            End time of the interval in RFC3339 (URI escaped). If not
+            provided, the current time is used except for when hourly
+            candles with a `start` time older than 30 days are
+            requested.  In that case, the `end` time defaults to the
+            `start` time plus 1 day.
+          required: false
+          schema:
+            type: string
+          example: "2018-05-14T00%3A00%3A00Z"
+        - $ref: "#/components/parameters/format"
+      responses:
+        '200':
+          description: A list of candles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: Start time of the candle in RFC3339
+                    open:
+                      type: string
+                      description: First trade price in USD
+                    high:
+                      type: string
+                      description: Highest price in USD
+                    low:
+                      type: string
+                      description: Lowest price in USD
+                    close:
+                      type: string
+                      description: Last trade price in USD
+                    volume:
+                      type: string
+                      description: Volume in USD
+                    transparent_open:
+                      type: string
+                      description: First transparent trade price in USD
+                    transparent_high:
+                      type: string
+                      description: Highest transparent price in USD
+                    transparent_low:
+                      type: string
+                      description: Lowest transparent price in USD
+                    transparent_close:
+                      type: string
+                      description: Last transparent trade price in USD
+                    transparent_volume:
+                      type: string
+                      description: Transparent volume in USD
+                    volume_transparency:
+                      type: object
+                      properties:
+                        ?:
+                          type: string
+                        A:
+                          type: string
+                        B:
+                          type: string
+                        C:
+                          type: string
+                        D:
+                          type: string
+                  example:
+                    timestamp: "2020-03-30T15:00:00Z"
+                    open: "6362.19740968"
+                    high: "6440.12784982"
+                    low: "6362.13190948"
+                    close: "6372.30963698"
+                    volume: "2063249447"
+                    transparent_open: "6361.48718894"
+                    transparent_high: "6479.69105111"
+                    transparent_low: "6351.20910437"
+                    transparent_close: "6372.80226823"
+                    transparent_volume: "192668445"
+                    volume_transparency:
+                      ?: "141033501"
+                      A: "192668444"
+                      B: "1881706"
+                      C: "1324902748"
+                      D: "402763045"
+            text/csv:
+              schema:
+                type: string
+              example: "2018-03-19T10:00:00Z,7024.32225,8276.19407,8281.17307,8566.43000,59624801"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /exchange_candles:
+    get:
+      tags:
+        - Candles
+      summary: Exchange OHLCV Candles
+      operationId: getExchangeCandles
+      x-code-samples:
+        $ref: './samples/getExchangeCandles.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The exchange candles endpoint returns raw open, close, high, low, and volume information for Nomics Markets.
+        The data is not aggregated, therefore prices are in the quote currency of the market and volume is in the base
+        currency of the market.
+
+        History is available for all candle sizes from inception, but
+        there are limits on the length of the date range you can
+        request at a time:
+
+        | interval | limit per request |
+        |----------|-------------------|
+        | `1d`     | no limit          |
+        | `4h`     | 120 days          |
+        | `1h`     | 30 days           |
+        | `30m`    | 14 days           |
+        | `5m`     | 3 days            |
+        | `1m`     | 1 day             |
+
+        If the difference between your `end` and `start` parameters
+        for the `interval` you're requesting exceeds the limit, then
+        you'll receive an error.
+
+        Update Frequency: immediately after ingestion.
+      parameters:
+        - $ref: '#/components/parameters/exchange-candle-interval'
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/market'
+        - interval-start:
+          name: start
+          in: query
+          description: |
+            Start time of the interval in RFC3339 (URI escaped).  If
+            not provided, then candles will be returned starting from
+            the current time minus the date range limit for the
+            requested interval.  For example, if you request hourly
+            candles without specifying a start time, then candles
+            spanning the last 30 days will be returned.
+          required: false
+          schema:
+            type: string
+          example: "2018-04-14T00%3A00%3A00Z"
+        - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
+      responses:
+        '200':
+          description: A list of candles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: Start time of the candle in RFC3339
+                    low:
+                      type: string
+                      description: Lowest price in quote currency
+                    open:
+                      type: string
+                      description: First trade price in quote currency
+                    close:
+                      type: string
+                      description: Last trade price in quote currency
+                    high:
+                      type: string
+                      description: Highest price in quote currency
+                    volume:
+                      type: string
+                      description: Volume in base currency
+                    num_trades:
+                      type: string
+                      description: Number of trades
+                    price_outlier:
+                      type: boolean
+                      description: True when the candle is a price outlier.  May be null if outlier detection has not been applied to the candle.
+                    volume_outlier:
+                      type: boolean
+                      description: True when the candle is a volume outlier.  May be null if outlier detection has not been applied to the candle.
+                  example:
+                    timestamp: "2018-04-14T00:00:00Z"
+                    low: "7810.00000000"
+                    open: "7877.48000000"
+                    close: "7999.01000000"
+                    high: "8186.00000000"
+                    volume: "31621.28635700"
+                    num_trades: "168756"
+                    price_outlier: null
+                    volume_outlier: null
+            text/csv:
+              schema:
+                type: string
+              example: "04/14/2018 00:00:00,7810.00000000,7877.48000000,7999.01000000,8186.00000000,31621.28635700,168756"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /markets/candles:
+    get:
+      tags:
+        - Candles
+      summary: Aggregated Pair OHLCV Candles
+      operationId: getMarketCandles
+      x-code-samples:
+        $ref: './samples/getMarketCandles.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The Aggregated Pair Candles endpoint returns aggregated open, close, high, low, and volume information for an
+        Aggregated Pair of base and quote currencies. Open and Close are volume weighted averages across markets, while
+        High and Low are the max and min prices across markets. Volume is the total volume.
+
+        This is equivalent to getting Exchange Market OHLCV Candles across all exchanges with the given base and quote
+        and merging them together. This is different from Aggregated OHLCV Candles because those convert to USD and
+        merge candles across the base currency only.
+
+        The data is aggregated but not converted to USD, so OHLC values are in the quote currency unit and Volume
+        is in the base currency unit.
+
+        History is available for all candle sizes from inception, but
+        there are limits on the length of the date range you can
+        request at a time:
+
+        | interval | limit    |
+        |----------|----------|
+        | `1d`     | no limit |
+        | `4h`     | 120 days |
+        | `1h`     | 30 days  |
+        | `30m`    | 14 days  |
+        | `5m`     | 3 days   |
+        | `1m`     | 1 day    |
+
+        If the difference between your `end` and `start` parameters
+        for the `interval` you're requesting exceeds the limit, then
+        you'll receive an error.
+
+        Update Frequency: every two minutes for the `1m`, `5m` and
+        `30m` intervals, every ten minutes for the `1h` interval, and
+        every hour for the `1d` interval.
+      parameters:
+        - $ref: '#/components/parameters/exchange-candle-interval'
+        - name: base
+          in: query
+          required: true
+          description: Base currency of the pair
+          schema:
+            type: string
+          example: ETH
+        - name: quote
+          in: query
+          required: true
+          description: Quote currency of the pair
+          schema:
+            type: string
+          example: BTC
+        - interval-start:
+          name: start
+          in: query
+          description: |
+            Start time of the interval in RFC3339 (URI escaped).  If
+            not provided, then candles will be returned starting from
+            the current time minus the date range limit for the
+            requested interval.  For example, if you request hourly
+            candles without specifying a start time, then candles
+            spanning the last 30 days will be returned.
+          required: false
+          schema:
+            type: string
+          example: "2018-04-14T00%3A00%3A00Z"
+        - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
+      responses:
+        '200':
+          description: A list of candles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    timestamp:
+                      type: string
+                      description: Start time of the candle in RFC3339
+                    low:
+                      type: string
+                      description: Lowest price in quote currency
+                    open:
+                      type: string
+                      description: Volume weighted average of first trade prices in quote currency
+                    close:
+                      type: string
+                      description: Volume weighted average of last trade prices in quote currency
+                    high:
+                      type: string
+                      description: Highest price in quote currency
+                    volume:
+                      type: string
+                      description: Volume in base currency
+                    num_trades:
+                      type: string
+                      description: Total number of trades across all markets
+                    price_outlier:
+                      type: boolean
+                      description: True when the candle is a price outlier.  May be null if outlier detection has not been applied to the candle.
+                    volume_outlier:
+                      type: boolean
+                      description: True when the candle is a volume outlier.  May be null if outlier detection has not been applied to the candle.
+                  example:
+                    timestamp: "2018-04-14T00:00:00Z"
+                    low: "0.06101"
+                    open: "0.06267940"
+                    close: "0.06282333"
+                    high: "0.066667"
+                    volume: "193325.66033455"
+                    num_trades: "185948"
+                    price_outlier: null
+                    volume_outlier: null
+            text/csv:
+              schema:
+                type: string
+              example: "04/14/2018 00:00:00,0.06101,0.06267940,0.06282333,0.066667,193325.66033455,185948"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /trades:
+    get:
+      tags:
+        - Trades
+      summary: Trades
+      operationId: getTrades
+      x-code-samples:
+        $ref: './samples/getTrades.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The trades endpoint returns individual trades in a normalized format for an individual
+        exchange market.
+
+        Update Frequency: immediately after ingestion.
+
+        ### Getting the most recent trades
+
+        By default, the trades endpoint returns the 100 most recent trades in descending order.
+        You only need to provide the required parameters.
+
+        ### Sequential ingestion
+
+        If you want to page through trades sequentially for ingestion, follow these steps:
+
+        1. Get the first page of trades `order=asc`
+        2. Get the timestamp of the last trade in the page, let's call it `last`
+        3. Get the next page of trades `order=asc&from=<last>`
+        4. Repeat 2 and 3
+
+        To reverse chronologically ingest, make a request for the most recent trades, and
+        proceed as above but with `order=desc`.
+
+        ### Building your own candles
+
+        If you want to build your own candles, follow the steps for sequential ingestion, but start
+        with `from=<start>` in step 1, where `start` is the start of your candle.
+
+        Then, stop when you see a trade past your candle's `end` timestamp, discard trades past
+        `end` and perform your aggregation.
+      parameters:
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/market'
+        - name: limit
+          in: query
+          description: Maximum number of trades returned
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2500
+            default: 100
+          example: 100
+        - name: order
+          in: query
+          description: >
+            Defines the sort order of returned trades and the direction from `from`.
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: desc
+          example: asc
+        - name: from
+          in: query
+          description: >
+            Timestamp from which results should start in RFC3339. Please ensure you URI encode the timestamp.
+            From is inclusive.
+          schema:
+            type: string
+          example: "1970-01-01T00%3A00%3A00Z"
+        - $ref: "#/components/parameters/format"
+      responses:
+        '200':
+          description: List of trades
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Trade"
+            text/csv:
+              schema:
+                type: string
+              example: "1,12/01/2014 05:33:56,300.00000000,0.01000000"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /orders/snapshot:
+    get:
+      tags:
+        - Orders
+      summary: Order Book Snapshot
+      operationId: getOrderBookSnapshot
+      x-code-samples:
+        $ref: './samples/getOrderBookSnapshot.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The most recent order book snapshot for the given exchange and
+        market.  An empty result is returned if no snapshot is found
+        within 24 hours prior to the provided timestamp.
+
+        CSV format is: `timestamp,bidPrice,bidAmount,askPrice,askAmount`
+
+        Update Frequency: immediately after ingestion.
+      parameters:
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/market'
+        - at:
+          name: at
+          in: query
+          description: The newest order book *before* this timestamp will be returned. Timestamp should be in RFC3339 (URI escaped).
+          schema:
+            type: string
+          example: "2019-04-01T12%3A00%3A00Z"
+        - $ref: "#/components/parameters/format"
+      responses:
+        '200':
+          description: Order book snapshot
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timestamp:
+                    type: string
+                    description: RFC3339 timestamp of the order book snapshot
+                    example: "2018-05-14T00:04:31Z"
+                  bids:
+                    description: Tuples of bids in descending order (first entry is best bid). First entry is price in the quote currency. Second entry is volume of the base currency.
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: double
+                    example: [[7017.98,0.18376],[7017.97,0.094285],[7017.95,2],[7017.87,0.214651],[7017.38,2]]
+                  asks:
+                    description: Tuples of asks in ascending order (first entry is best ask). First entry is price in the quote currency. Second entry is volume of the base currency.
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: double
+                    example: [[7020,4.77738],[7020.03,0.864663],[7020.26,2.856361],[7020.27,0.031258],[7021,3.076297]]
+            text/csv:
+              schema:
+                type: string
+              example: "08/29/2018 20:14:04,7014.31,0.178164,7015.99,0.000044"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /orders/batches:
+    get:
+      tags:
+        - Orders
+      summary: Order Book Batches
+      operationId: getOrderBookBatches
+      x-code-samples:
+        $ref: './samples/getOrderBookBatches.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        **On usage based plans, this endpoint counts for one request per order book returned in the batch.** For example: if a batch returns 247 order
+        books in a single file, this will count as 247 requests to our API.
+
+        This endpoint covers batches from the earliest point in available history, up to 2 days prior to the current day.
+        If you need more short term data, you can use the Order Book Snapshot endpoint.
+
+        This endpoint responds with an HTTP redirect to the desired
+        archive file.  Because of this, you must take care to ensure that
+        your API client properly follows redirects.
+
+        The Zip file contains a single CSV file, named `books.csv`,
+        containing the order book snapshots for each day.
+
+        CSV format is: `time of day,kind (bid or ask),amount,price`
+
+        Update Frequency: every day.
+      parameters:
+        - $ref: '#/components/parameters/exchange'
+        - $ref: '#/components/parameters/market'
+        - date:
+          name: date
+          in: query
+          description: |
+            The date for which to export a batch.  Must be a date
+            ending at most 2 days prior to the current date.
+          schema:
+            type: string
+          example: "2021-03-15"
+      responses:
+        '200':
+          description: Order book batch
+          content:
+            text/csv:
+              schema:
+                type: string
+              example: |
+                00:00:00.129,bid,57794.270000,1.424075
+                00:00:00.129,bid,57794.260000,0.024794
+                00:00:00.129,bid,57794.250000,1.565000
+                00:00:00.129,bid,57789.690000,0.009109
+                00:00:00.129,ask,57794.280000,0.035800
+                00:00:00.129,ask,57794.990000,0.012111
+                00:00:00.129,ask,57798.930000,0.003371
+                00:00:00.129,ask,57798.940000,0.001379
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /currencies/predictions/ticker:
+    get:
+      tags:
+        - Predictions
+      summary: Currency Predictions Ticker
+      operationId: getCurrenciesPredictionsTicker
+      x-code-samples:
+        $ref: './samples/getCurrenciesPredictionsTicker.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The Currencies Predictions Ticker endpoint returns the current price prediction for all currencies.
+        [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
+
+        Update Frequency: Daily
+      parameters:
+        - name: ids
+          in: query
+          description: Comma separated list of Nomics currency IDs
+          schema:
+            type: string
+          example: BTC,ETH
+      responses:
+        '200':
+          description: A list of currency prediction tickers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      description: Currency ID
+                    predictions:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          avg_error_pct:
+                            type: string
+                            description: Historical mean error percentage
+                          avg_error_pct_30d:
+                            type: string
+                            description: 30 day mean error percentage
+                          avg_error_pct_7d:
+                            type: string
+                            description: 7 day mean error percentage
+                          interval:
+                            type: string
+                            description: Prediction size as Nomics interval
+                          price_change_pct:
+                            type: string
+                            description: Predicted price change percent
+                          price_end:
+                            type: string
+                            description: Predicted price at the end of the interval (USD)
+                          price_start:
+                            type: string
+                            description: Price when the prediction was made (USD)
+                          timestamp_end:
+                            type: string
+                            description: Timestamp at the end of the interval
+                          timestamp_start:
+                            type: string
+                            description: Timestamp when the prediction was made
+                example:
+                  - id: "BTC"
+                    predictions:
+                      - avg_error_pct: "0.0287"
+                        avg_error_pct_30d: "0.0768"
+                        avg_error_pct_7d: "0.0720"
+                        interval: "7d"
+                        price_change_pct: "-0.028"
+                        price_end: "6940.17363192"
+                        price_start: "7139.92807691"
+                        timestamp_end: "2020-04-29T00:00:00Z"
+                        timestamp_start: "2020-04-23T00:00:00Z"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /currencies/predictions/history:
+    get:
+      tags:
+        - Predictions
+      summary: Currency Predictions History
+      operationId: getCurrenciesPredictionsHistory
+      x-code-samples:
+        $ref: './samples/getCurrenciesPredictionsHistory.json'
+      description: |
+        ### Only available to paid API plans. [Learn more](https://p.nomics.com/pricing/).
+
+        The Currencies Predictions History endpoint returns historical price prediction for one currency.
+        [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
+
+        Update Frequency: Daily
+      parameters:
+        - name: id
+          in: query
+          description: Nomics currency ID
+          schema:
+            type: string
+          example: BTC
+        - name: interval
+          in: query
+          description: Prediction interval
+          schema:
+            type: string
+            enum:
+              - 7d
+          example: 7d
+      responses:
+        '200':
+          description: A list of currency predictions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: Currency ID
+                  interval:
+                    type: string
+                    description: Prediction interval
+                  predictions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        price_change_pct:
+                          type: string
+                          description: Predicted price change percent
+                        price_end:
+                          type: string
+                          description: Predicted price at the end of the interval (USD)
+                        actual_price_end:
+                          type: string
+                          description: Actual price at the end of the interval (USD)
+                        price_start:
+                          type: string
+                          description: Price when the prediction was made (USD)
+                        timestamp_end:
+                          type: string
+                          description: Timestamp at the end of the interval
+                        timestamp_start:
+                          type: string
+                          description: Timestamp when the prediction was made
+                example:
+                  id: BTC
+                  interval: 7d
+                  predictions:
+                    - actual_price_end: "7.40000000"
+                      price_change_pct: "-0.1954"
+                      price_end: "8.04649976"
+                      price_start: "10.00000000"
+                      timestamp_end: "2011-09-05T00:00:00Z"
+                      timestamp_start: "2011-08-30T00:00:00Z"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /meta/usage:
+    get:
+      tags:
+        - Usage
+      summary: API Key Usage
+      operationId: getAPIKeyUsage
+      x-code-samples:
+        $ref: './samples/getAPIKeyUsage.json'
+      description: |
+        This endpoint returns historical API usage data for metered API keys.
+
+        Making requests to this endpoint does not count towards your usage.
+      parameters:
+        - name: start
+          in: query
+          description: Start time in IS8601 format.
+          schema:
+            type: string
+        - name: end
+          in: query
+          description: End time in IS8601 format.  Must be at most 30 days past `start`.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of api key usage data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    price_change_pct:
+                      type: string
+                      description: Predicted price change percent
+              example:
+                - timestamp: '2021-05-29T00:00:00Z'
+                  endpoint: '/v1/candles'
+                  requests: 100
+                - timestamp: '2021-05-29T00:00:00Z'
+                  endpoint: '/v1/currencies/ticker'
+                  requests: 500
+                - timestamp: '2021-05-29T01:00:00Z'
+                  endpoint: '/v1/candles'
+                  requests: 200
+                - timestamp: '2021-05-29T01:00:00Z'
+                  endpoint: '/v1/currencies/ticker'
+                  requests: 800
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
+  /meta/overage:
+    get:
+      tags:
+        - Usage
+      summary: Billing Overages
+      operationId: getAPIKeyOverage
+      x-code-samples:
+        $ref: './samples/getAPIKeyOverage.json'
+      description: |
+        This endpoint returns a summary of the API calls made during the current billing period.
+
+        Making requests to this endpoint does not count towards your usage.
+      responses:
+        '200':
+          description: A summary of usage data for the current billing period.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  period_start:
+                    type: string
+                    description: The start of the billing period
+                  period_end:
+                    type: string
+                    description: The end of the billing period
+                  total_calls:
+                    type: number
+                    description: The number of calls made so far during the billing period
+                  included_calls:
+                    type: number
+                    description: The number of calls included in the billing period
+                  overage_calls:
+                    type: number
+                    description: The number of calls that exceeded the included calls
+                  projected_calls:
+                    type: number
+                    description: The projected number of calls that will be made by the end of the billing period at the current rate
+                  amount_due_usd:
+                    type: number
+                    description: An estimate of the amount due for overages accrued during the billing period
+                  projected_amount_usd:
+                    type: number
+                    description: A projected estimate of the amount due at the end of the billing period at the current rate
+              example:
+                "period_start": "2022-03-01T00:00:00Z"
+                "period_end": "2022-04-01T00:00:00Z"
+                "total_calls": 1000000
+                "included_calls": 1500000
+                "overage_calls": 0
+                "projected_calls": 2000000
+                "amount_due_usd": 0
+                "projected_amount_usd": 375.00
+        '401':
+            $ref: '#/components/responses/UnauthorizedError'
 
   /markets/prices:
     get:
@@ -2182,1047 +3127,6 @@ paths:
               example: "binance,ADA,BTC,4974200617.00000,1496075991.61416,0.00002547,04/14/2018 00:00:00,0.00003071,05/14/2018 00:00:00,2456653"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
-  /market-cap/history:
-    get:
-      tags:
-        - Markets
-      summary: Market Cap History
-      operationId: getMarketCapHistory
-      x-code-samples:
-        $ref: './samples/getMarketCapHistory.json'
-      description: |
-        MarketCap History is the total market cap for all cryptoassets at intervals between the requested time period.
-      parameters:
-        - $ref: '#/components/parameters/interval-start'
-        - $ref: '#/components/parameters/interval-end'
-        - $ref: '#/components/parameters/convert'
-        - $ref: "#/components/parameters/format"
-        - $ref: "#/components/parameters/include-transparency"
-      responses:
-        '200':
-          description: Performance over time for the entire market.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    timestamp:
-                      type: string
-                      description: RFC3339 timestamp
-                      example: "2018-07-05T15:00:00Z"
-                    market_cap:
-                      type: string
-                      description: Total market cap in the target currency (`USD` by default)
-                      example: "269222501959"
-                    transparent_market_cap:
-                      type: string
-                      description: Total transparent market cap in the target currency (`USD` by default)
-                      example: "270122591259"
-            test/csv:
-              schema:
-                type: string
-              example: "07/05/2018 15:00:00,269222501959"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /candles:
-    get:
-      tags:
-        - Candles*
-      summary: Aggregated OHLCV Candles
-      operationId: getCandles
-      x-code-samples:
-        $ref: './samples/getCandles.json'
-      description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.
-        Please [go here](https://p.nomics.com/pricing/) to learn more.
-
-        The candles endpoint returns aggregated open, high, low, close, and volume information for Nomics currencies.
-        When asking for candles, a currency is provided as a parameter. Nomics aggregates all markets where the given
-        currency is the base currency and the quote currency is a fiat currency, BTC, or ETH and returns all values in
-        USD.
-
-        Candles are aggregated across all markets for the base currencies, which necessitates converting to a common
-        quote currency. Nomics converts all markets into USD in order to aggregated candles.
-
-        Candles have the following time range limits based on interval and time:
-
-        * `1d`: Available from inception with no range limit
-        * `1h`: Available from inception. Time range limits:
-          * Past 30 days: accessible in a single request
-          * Older than 30 days: 1 day at a time
-
-        ### Currency Conversion
-
-        * If you want to quote candle prices in an asset other than USD, please fetch the candles for another
-        cryptocurrency and divide the values for each field at the matching timestamp.
-        * If you want to quote candle prices in a fiat currency, please fetch the values from
-        [Fiat Exchange Rates](#operation/getExchangeRates) and divide the candle values by the fiat values at
-        the matching timestamp.
-
-        ### CSV Format
-
-        `timestamp,open,high,low,close,volume,empty,transparent_open,transparent_high,transparent_low,transparent_close,transparent_volume`
-      parameters:
-        - $ref: '#/components/parameters/candle-interval'
-        - $ref: '#/components/parameters/currency'
-        - interval-start:
-          name: start
-          in: query
-          description: |
-            Start time of the interval in RFC3339 (URI escaped). If
-            not provided, starts from the first candle for daily
-            candles and from the current time minus 30 days for hourly
-            candles.
-          required: false
-          schema:
-            type: string
-          example: "2018-04-14T00%3A00%3A00Z"
-        - interval-end:
-          name: end
-          in: query
-          description: |
-            End time of the interval in RFC3339 (URI escaped). If not
-            provided, the current time is used except for when hourly
-            candles with a `start` time older than 30 days are
-            requested.  In that case, the `end` time defaults to the
-            `start` time plus 1 day.
-          required: false
-          schema:
-            type: string
-          example: "2018-05-14T00%3A00%3A00Z"
-        - $ref: "#/components/parameters/format"
-      responses:
-        '200':
-          description: A list of candles
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    timestamp:
-                      type: string
-                      description: Start time of the candle in RFC3339
-                    open:
-                      type: string
-                      description: First trade price in USD
-                    high:
-                      type: string
-                      description: Highest price in USD
-                    low:
-                      type: string
-                      description: Lowest price in USD
-                    close:
-                      type: string
-                      description: Last trade price in USD
-                    volume:
-                      type: string
-                      description: Volume in USD
-                    transparent_open:
-                      type: string
-                      description: First transparent trade price in USD
-                    transparent_high:
-                      type: string
-                      description: Highest transparent price in USD
-                    transparent_low:
-                      type: string
-                      description: Lowest transparent price in USD
-                    transparent_close:
-                      type: string
-                      description: Last transparent trade price in USD
-                    transparent_volume:
-                      type: string
-                      description: Transparent volume in USD
-                    volume_transparency:
-                      type: object
-                      properties:
-                        ?:
-                          type: string
-                        A:
-                          type: string
-                        B:
-                          type: string
-                        C:
-                          type: string
-                        D:
-                          type: string
-                  example:
-                    timestamp: "2020-03-30T15:00:00Z"
-                    open: "6362.19740968"
-                    high: "6440.12784982"
-                    low: "6362.13190948"
-                    close: "6372.30963698"
-                    volume: "2063249447"
-                    transparent_open: "6361.48718894"
-                    transparent_high: "6479.69105111"
-                    transparent_low: "6351.20910437"
-                    transparent_close: "6372.80226823"
-                    transparent_volume: "192668445"
-                    volume_transparency:
-                      ?: "141033501"
-                      A: "192668444"
-                      B: "1881706"
-                      C: "1324902748"
-                      D: "402763045"
-            text/csv:
-              schema:
-                type: string
-              example: "2018-03-19T10:00:00Z,7024.32225,8276.19407,8281.17307,8566.43000,59624801"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /volume/history:
-    get:
-      tags:
-        - Volume
-      summary: Global Volume History
-      operationId: getVolumeHistory
-      x-code-samples:
-        $ref: './samples/getVolumeHistory.json'
-      description: |
-        Volume History is the total volume for all cryptoassets in USD
-        at intervals between the requested time period.  For each
-        entry, the `volume` field represents the sum of the
-        `spot_volume` and `derivative_volume` fields.
-      parameters:
-        - start:
-          name: start
-          in: query
-          description: Start time of the interval in RFC3339 (URI escaped)
-          schema:
-            type: string
-          example: "2018-04-14T00%3A00%3A00Z"
-        - end:
-          name: end
-          in: query
-          description: |
-            End time of the interval in RFC3339 (URI escaped). If not provided,
-            the current time is used.
-          schema:
-            type: string
-          example: "2018-05-14T00%3A00%3A00Z"
-        - convert:
-          name: convert
-          in: query
-          description: Currency to quote volume values. May be a Fiat Currency or Cryptocurrency. Default is `USD`.
-          required: false
-          schema:
-            type: string
-          example: EUR
-        - $ref: "#/components/parameters/format"
-        - $ref: "#/components/parameters/include-transparency"
-      responses:
-        '200':
-          description: Volume over time for all currencies
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    timestamp:
-                      type: string
-                      description: RFC3339 timestamp
-                      example: "2018-04-14T00:00:00Z"
-                    volume:
-                      type: string
-                      description: Total volume (spot volume + derivative volume) in the target currency (`USD` by default)
-                      example: "10177952765"
-                    spot_volume:
-                      type: string
-                      description: Total spot market volume in the target currency (`USD` by default)
-                      example: "7706914494"
-                    derivative_volume:
-                      type: string
-                      description: Total derivative market volume in the target currency (`USD` by default)
-                      example: "2471038271"
-                    transparent_volume:
-                      type: string
-                      description: Total transparent volume in the target currency (`USD` by default)
-                      example: "6608950947"
-                    transparent_spot_volume:
-                      type: string
-                      description: Total transparent spot market volume in the target currency (`USD` by default)
-                      example: "4137912676"
-                    transparent_derivative_volume:
-                      type: string
-                      description: Total transparent derivative market volume in the target currency (`USD` by default)
-                      example: "2471038271"
-            test/csv:
-              schema:
-                type: string
-              example: "04/14/2018 00:00:00,5209035491"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /exchange-rates:
-    get:
-      tags:
-        - Fiat Exchange Rates
-      summary: Fiat Exchange Rates
-      operationId: getExchangeRates
-      x-code-samples:
-        $ref: './samples/getExchangeRates.json'
-      description: |
-        The Fiat Exchange Rates endpoint returns fiat currencies as well as a few "core" cryptocurrencies such as BTC
-        and ETH which are used by Nomics's "first round" of pricing. This endpoint helps normalize
-        data across markets as well as to provide localization for users.
-
-        For cryptocurrency prices please use the [Currencies Ticker](#operation/getCurrenciesTicker).
-      parameters:
-        - $ref: "#/components/parameters/format"
-      responses:
-        '200':
-          description: List of fiat exchange rates into USD
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ExchangeRate"
-            text/csv:
-              schema:
-                type: string
-              example: "AUD,0.76953,2018-04-04T00:00:00Z"
-
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /exchange-rates/history:
-    get:
-      tags:
-        - Fiat Exchange Rates
-      summary: Fiat Exchange Rates History
-      operationId: getExchangeRatesHistory
-      x-code-samples:
-        $ref: './samples/getExchangeRatesHistory.json'
-      description: |
-        Fiat Exchange Rates for every point in a time range. This endpoint can be used with other history endpoints
-        to convert values into a desired fiat quote currency.
-
-        The currency parameter must be a fiat currency or one of Nomics's "core" cryptocurrencies used in "first round"
-        pricing such as BTC or ETH. To get all Nomics Quote Currencies, use the
-        [Fiat Exchange Rates](#operation/getExchangeRates) endpoint for all current rates.
-
-        For historical cryptocurrency data please use [Aggregated OHLCV Candles](#operation/getCandles).
-      parameters:
-        - $ref: '#/components/parameters/currency'
-        - $ref: '#/components/parameters/interval-start'
-        - $ref: '#/components/parameters/interval-end'
-        - $ref: "#/components/parameters/format"
-      responses:
-        '200':
-          description: Fiat Exchange rates for every point in a time range
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the rate
-                    rate:
-                      type: string
-                      description: Rate of exchange to USD
-                  example:
-                    timestamp: "2018-05-01T00:00:00Z"
-                    rate: "1.2079045272261680"
-            text/csv:
-              schema:
-                type: string
-              example: "05/01/2018 00:00:00,1.2079045272261680"
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-  /trades:
-    get:
-      tags:
-        - Trades*
-      summary: Trades
-      operationId: getTrades
-      x-code-samples:
-        $ref: './samples/getTrades.json'
-      description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
-
-        The trades endpoint returns individual trades in a normalized format for an individual
-        exchange market.
-
-        ### Getting the most recent trades
-
-        By default, the trades endpoint returns the 100 most recent trades in descending order.
-        You only need to provide the required parameters.
-
-        ### Sequential ingestion
-
-        If you want to page through trades sequentially for ingestion, follow these steps:
-
-        1. Get the first page of trades `order=asc`
-        2. Get the timestamp of the last trade in the page, let's call it `last`
-        3. Get the next page of trades `order=asc&from=<last>`
-        4. Repeat 2 and 3
-
-        To reverse chronologically ingest, make a request for the most recent trades, and
-        proceed as above but with `order=desc`.
-
-        ### Building your own candles
-
-        If you want to build your own candles, follow the steps for sequential ingestion, but start
-        with `from=<start>` in step 1, where `start` is the start of your candle.
-
-        Then, stop when you see a trade past your candle's `end` timestamp, discard trades past
-        `end` and perform your aggregation.
-      parameters:
-        - $ref: '#/components/parameters/exchange'
-        - $ref: '#/components/parameters/market'
-        - name: limit
-          in: query
-          description: Maximum number of trades returned
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 2500
-            default: 100
-          example: 100
-        - name: order
-          in: query
-          description: >
-            Defines the sort order of returned trades and the direction from `from`.
-          schema:
-            type: string
-            enum:
-              - asc
-              - desc
-            default: desc
-          example: asc
-        - name: from
-          in: query
-          description: >
-            Timestamp from which results should start in RFC3339. Please ensure you URI encode the timestamp.
-            From is inclusive.
-          schema:
-            type: string
-          example: "1970-01-01T00%3A00%3A00Z"
-        - $ref: "#/components/parameters/format"
-      responses:
-        '200':
-          description: List of trades
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Trade"
-            text/csv:
-              schema:
-                type: string
-              example: "1,12/01/2014 05:33:56,300.00000000,0.01000000"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /orders/snapshot:
-    get:
-      tags:
-        - Orders*
-      summary: Order Book Snapshot
-      operationId: getOrderBookSnapshot
-      x-code-samples:
-        $ref: './samples/getOrderBookSnapshot.json'
-      description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
-
-        The most recent order book snapshot for the given exchange and
-        market.  An empty result is returned if no snapshot is found
-        within 24 hours prior to the provided timestamp.
-
-        CSV format is: `timestamp,bidPrice,bidAmount,askPrice,askAmount`
-      parameters:
-        - $ref: '#/components/parameters/exchange'
-        - $ref: '#/components/parameters/market'
-        - at:
-          name: at
-          in: query
-          description: The newest order book *before* this timestamp will be returned. Timestamp should be in RFC3339 (URI escaped).
-          schema:
-            type: string
-          example: "2019-04-01T12%3A00%3A00Z"
-        - $ref: "#/components/parameters/format"
-      responses:
-        '200':
-          description: Order book snapshot
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  timestamp:
-                    type: string
-                    description: RFC3339 timestamp of the order book snapshot
-                    example: "2018-05-14T00:04:31Z"
-                  bids:
-                    description: Tuples of bids in descending order (first entry is best bid). First entry is price in the quote currency. Second entry is volume of the base currency.
-                    type: array
-                    items:
-                      type: array
-                      items:
-                        type: double
-                    example: [[7017.98,0.18376],[7017.97,0.094285],[7017.95,2],[7017.87,0.214651],[7017.38,2]]
-                  asks:
-                    description: Tuples of asks in ascending order (first entry is best ask). First entry is price in the quote currency. Second entry is volume of the base currency.
-                    type: array
-                    items:
-                      type: array
-                      items:
-                        type: double
-                    example: [[7020,4.77738],[7020.03,0.864663],[7020.26,2.856361],[7020.27,0.031258],[7021,3.076297]]
-            text/csv:
-              schema:
-                type: string
-              example: "08/29/2018 20:14:04,7014.31,0.178164,7015.99,0.000044"
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-  /orders/batches:
-    get:
-      tags:
-        - Orders*
-      summary: Order Book Batches
-      operationId: getOrderBookBatches
-      x-code-samples:
-        $ref: './samples/getOrderBookBatches.json'
-      description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
-
-        **On usage based plans, this endpoint counts for one request per order book returned in the batch.** For example: if a batch returns 247 order
-        books in a single file, this will count as 247 requests to our API.
-
-        This endpoint covers batches from the earliest point in available history, up to 2 days prior to the current day.
-        If you need more short term data, you can use the Order Book Snapshot endpoint.
-
-        This endpoint responds with an HTTP redirect to the desired
-        archive file.  Because of this, you must take care to ensure that
-        your API client properly follows redirects.
-
-        The Zip file contains a single CSV file, named `books.csv`,
-        containing the order book snapshots for each day.
-
-        CSV format is: `time of day,kind (bid or ask),amount,price`
-      parameters:
-        - $ref: '#/components/parameters/exchange'
-        - $ref: '#/components/parameters/market'
-        - date:
-          name: date
-          in: query
-          description: |
-            The date for which to export a batch.  Must be a date
-            ending at most 2 days prior to the current date.
-          schema:
-            type: string
-          example: "2021-03-15"
-      responses:
-        '200':
-          description: Order book batch
-          content:
-            text/csv:
-              schema:
-                type: string
-              example: |
-                00:00:00.129,bid,57794.270000,1.424075
-                00:00:00.129,bid,57794.260000,0.024794
-                00:00:00.129,bid,57794.250000,1.565000
-                00:00:00.129,bid,57789.690000,0.009109
-                00:00:00.129,ask,57794.280000,0.035800
-                00:00:00.129,ask,57794.990000,0.012111
-                00:00:00.129,ask,57798.930000,0.003371
-                00:00:00.129,ask,57798.940000,0.001379
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-  /exchange_candles:
-    get:
-      tags:
-        - Candles*
-      summary: Exchange OHLCV Candles
-      operationId: getExchangeCandles
-      x-code-samples:
-        $ref: './samples/getExchangeCandles.json'
-      description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
-
-        The exchange candles endpoint returns raw open, close, high, low, and volume information for Nomics Markets.
-        The data is not aggregated, therefore prices are in the quote currency of the market and volume is in the base
-        currency of the market.
-
-        History is available for all candle sizes from inception, but
-        there are limits on the length of the date range you can
-        request at a time:
-
-        | interval | limit per request |
-        |----------|-------------------|
-        | `1d`     | no limit          |
-        | `4h`     | 120 days          |
-        | `1h`     | 30 days           |
-        | `30m`    | 14 days           |
-        | `5m`     | 3 days            |
-        | `1m`     | 1 day             |
-
-        If the difference between your `end` and `start` parameters
-        for the `interval` you're requesting exceeds the limit, then
-        you'll receive an error.
-      parameters:
-        - $ref: '#/components/parameters/exchange-candle-interval'
-        - $ref: '#/components/parameters/exchange'
-        - $ref: '#/components/parameters/market'
-        - interval-start:
-          name: start
-          in: query
-          description: |
-            Start time of the interval in RFC3339 (URI escaped).  If
-            not provided, then candles will be returned starting from
-            the current time minus the date range limit for the
-            requested interval.  For example, if you request hourly
-            candles without specifying a start time, then candles
-            spanning the last 30 days will be returned.
-          required: false
-          schema:
-            type: string
-          example: "2018-04-14T00%3A00%3A00Z"
-        - $ref: '#/components/parameters/interval-end'
-        - $ref: "#/components/parameters/format"
-      responses:
-        '200':
-          description: A list of candles
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    timestamp:
-                      type: string
-                      description: Start time of the candle in RFC3339
-                    low:
-                      type: string
-                      description: Lowest price in quote currency
-                    open:
-                      type: string
-                      description: First trade price in quote currency
-                    close:
-                      type: string
-                      description: Last trade price in quote currency
-                    high:
-                      type: string
-                      description: Highest price in quote currency
-                    volume:
-                      type: string
-                      description: Volume in base currency
-                    num_trades:
-                      type: string
-                      description: Number of trades
-                    price_outlier:
-                      type: boolean
-                      description: True when the candle is a price outlier.  May be null if outlier detection has not been applied to the candle.
-                    volume_outlier:
-                      type: boolean
-                      description: True when the candle is a volume outlier.  May be null if outlier detection has not been applied to the candle.
-                  example:
-                    timestamp: "2018-04-14T00:00:00Z"
-                    low: "7810.00000000"
-                    open: "7877.48000000"
-                    close: "7999.01000000"
-                    high: "8186.00000000"
-                    volume: "31621.28635700"
-                    num_trades: "168756"
-                    price_outlier: null
-                    volume_outlier: null
-            text/csv:
-              schema:
-                type: string
-              example: "04/14/2018 00:00:00,7810.00000000,7877.48000000,7999.01000000,8186.00000000,31621.28635700,168756"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /markets/candles:
-    get:
-      tags:
-        - Candles*
-      summary: Aggregated Pair OHLCV Candles
-      operationId: getMarketCandles
-      x-code-samples:
-        $ref: './samples/getMarketCandles.json'
-      description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
-
-        The Aggregated Pair Candles endpoint returns aggregated open, close, high, low, and volume information for an
-        Aggregated Pair of base and quote currencies. Open and Close are volume weighted averages across markets, while
-        High and Low are the max and min prices across markets. Volume is the total volume.
-
-        This is equivalent to getting Exchange Market OHLCV Candles across all exchanges with the given base and quote
-        and merging them together. This is different from Aggregated OHLCV Candles because those convert to USD and
-        merge candles across the base currency only.
-
-        The data is aggregated but not converted to USD, so OHLC values are in the quote currency unit and Volume
-        is in the base currency unit.
-
-        History is available for all candle sizes from inception, but
-        there are limits on the length of the date range you can
-        request at a time:
-
-        | interval | limit    |
-        |----------|----------|
-        | `1d`     | no limit |
-        | `4h`     | 120 days |
-        | `1h`     | 30 days  |
-        | `30m`    | 14 days  |
-        | `5m`     | 3 days   |
-        | `1m`     | 1 day    |
-
-        If the difference between your `end` and `start` parameters
-        for the `interval` you're requesting exceeds the limit, then
-        you'll receive an error.
-      parameters:
-        - $ref: '#/components/parameters/exchange-candle-interval'
-        - name: base
-          in: query
-          required: true
-          description: Base currency of the pair
-          schema:
-            type: string
-          example: ETH
-        - name: quote
-          in: query
-          required: true
-          description: Quote currency of the pair
-          schema:
-            type: string
-          example: BTC
-        - interval-start:
-          name: start
-          in: query
-          description: |
-            Start time of the interval in RFC3339 (URI escaped).  If
-            not provided, then candles will be returned starting from
-            the current time minus the date range limit for the
-            requested interval.  For example, if you request hourly
-            candles without specifying a start time, then candles
-            spanning the last 30 days will be returned.
-          required: false
-          schema:
-            type: string
-          example: "2018-04-14T00%3A00%3A00Z"
-        - $ref: '#/components/parameters/interval-end'
-        - $ref: "#/components/parameters/format"
-      responses:
-        '200':
-          description: A list of candles
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    timestamp:
-                      type: string
-                      description: Start time of the candle in RFC3339
-                    low:
-                      type: string
-                      description: Lowest price in quote currency
-                    open:
-                      type: string
-                      description: Volume weighted average of first trade prices in quote currency
-                    close:
-                      type: string
-                      description: Volume weighted average of last trade prices in quote currency
-                    high:
-                      type: string
-                      description: Highest price in quote currency
-                    volume:
-                      type: string
-                      description: Volume in base currency
-                    num_trades:
-                      type: string
-                      description: Total number of trades across all markets
-                    price_outlier:
-                      type: boolean
-                      description: True when the candle is a price outlier.  May be null if outlier detection has not been applied to the candle.
-                    volume_outlier:
-                      type: boolean
-                      description: True when the candle is a volume outlier.  May be null if outlier detection has not been applied to the candle.
-                  example:
-                    timestamp: "2018-04-14T00:00:00Z"
-                    low: "0.06101"
-                    open: "0.06267940"
-                    close: "0.06282333"
-                    high: "0.066667"
-                    volume: "193325.66033455"
-                    num_trades: "185948"
-                    price_outlier: null
-                    volume_outlier: null
-            text/csv:
-              schema:
-                type: string
-              example: "04/14/2018 00:00:00,0.06101,0.06267940,0.06282333,0.066667,193325.66033455,185948"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /currencies/predictions/ticker:
-    get:
-      tags:
-        - Predictions*
-      summary: Currency Predictions Ticker
-      operationId: getCurrenciesPredictionsTicker
-      x-code-samples:
-        $ref: './samples/getCurrenciesPredictionsTicker.json'
-      description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
-
-        The Currencies Predictions Ticker endpoint returns the current price prediction for all currencies.
-        [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
-      parameters:
-        - name: ids
-          in: query
-          description: Comma separated list of Nomics currency IDs
-          schema:
-            type: string
-          example: BTC,ETH
-      responses:
-        '200':
-          description: A list of currency prediction tickers
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      description: Currency ID
-                    predictions:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          avg_error_pct:
-                            type: string
-                            description: Historical mean error percentage
-                          avg_error_pct_30d:
-                            type: string
-                            description: 30 day mean error percentage
-                          avg_error_pct_7d:
-                            type: string
-                            description: 7 day mean error percentage
-                          interval:
-                            type: string
-                            description: Prediction size as Nomics interval
-                          price_change_pct:
-                            type: string
-                            description: Predicted price change percent
-                          price_end:
-                            type: string
-                            description: Predicted price at the end of the interval (USD)
-                          price_start:
-                            type: string
-                            description: Price when the prediction was made (USD)
-                          timestamp_end:
-                            type: string
-                            description: Timestamp at the end of the interval
-                          timestamp_start:
-                            type: string
-                            description: Timestamp when the prediction was made
-                example:
-                  - id: "BTC"
-                    predictions:
-                      - avg_error_pct: "0.0287"
-                        avg_error_pct_30d: "0.0768"
-                        avg_error_pct_7d: "0.0720"
-                        interval: "7d"
-                        price_change_pct: "-0.028"
-                        price_end: "6940.17363192"
-                        price_start: "7139.92807691"
-                        timestamp_end: "2020-04-29T00:00:00Z"
-                        timestamp_start: "2020-04-23T00:00:00Z"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /currencies/predictions/history:
-    get:
-      tags:
-        - Predictions*
-      summary: Currency Predictions History
-      operationId: getCurrenciesPredictionsHistory
-      x-code-samples:
-        $ref: './samples/getCurrenciesPredictionsHistory.json'
-      description: |
-        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
-
-        The Currencies Predictions History endpoint returns historical price prediction for one currency.
-        [Read more about Nomics Price Predictions](https://blog.nomics.com/announcements/crypto-bitcoin-price-prediction/).
-      parameters:
-        - name: id
-          in: query
-          description: Nomics currency ID
-          schema:
-            type: string
-          example: BTC
-        - name: interval
-          in: query
-          description: Prediction interval
-          schema:
-            type: string
-            enum:
-              - 7d
-          example: 7d
-      responses:
-        '200':
-          description: A list of currency predictions
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: string
-                    description: Currency ID
-                  interval:
-                    type: string
-                    description: Prediction interval
-                  predictions:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        price_change_pct:
-                          type: string
-                          description: Predicted price change percent
-                        price_end:
-                          type: string
-                          description: Predicted price at the end of the interval (USD)
-                        actual_price_end:
-                          type: string
-                          description: Actual price at the end of the interval (USD)
-                        price_start:
-                          type: string
-                          description: Price when the prediction was made (USD)
-                        timestamp_end:
-                          type: string
-                          description: Timestamp at the end of the interval
-                        timestamp_start:
-                          type: string
-                          description: Timestamp when the prediction was made
-                example:
-                  id: BTC
-                  interval: 7d
-                  predictions:
-                    - actual_price_end: "7.40000000"
-                      price_change_pct: "-0.1954"
-                      price_end: "8.04649976"
-                      price_start: "10.00000000"
-                      timestamp_end: "2011-09-05T00:00:00Z"
-                      timestamp_start: "2011-08-30T00:00:00Z"
-        '401':
-           $ref: '#/components/responses/UnauthorizedError'
-  /meta/usage:
-    get:
-      tags:
-        - Usage
-      summary: API Key Usage
-      operationId: getAPIKeyUsage
-      x-code-samples:
-        $ref: './samples/getAPIKeyUsage.json'
-      description: |
-        This endpoint returns historical API usage data for metered API keys. Making requests to this endpoint
-        does not count towards your usage.
-      parameters:
-        - name: start
-          in: query
-          description: Start time in IS8601 format.
-          schema:
-            type: string
-        - name: end
-          in: query
-          description: End time in IS8601 format.  Must be at most 30 days past `start`.
-          schema:
-            type: string
-      responses:
-        '200':
-          description: A list of api key usage data
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    price_change_pct:
-                      type: string
-                      description: Predicted price change percent
-              example:
-                - timestamp: '2021-05-29T00:00:00Z'
-                  endpoint: '/v1/candles'
-                  requests: 100
-                - timestamp: '2021-05-29T00:00:00Z'
-                  endpoint: '/v1/currencies/ticker'
-                  requests: 500
-                - timestamp: '2021-05-29T01:00:00Z'
-                  endpoint: '/v1/candles'
-                  requests: 200
-                - timestamp: '2021-05-29T01:00:00Z'
-                  endpoint: '/v1/currencies/ticker'
-                  requests: 800
-        '401':
-            $ref: '#/components/responses/UnauthorizedError'
-  /meta/overage:
-    get:
-      tags:
-        - Usage
-      summary: Billing Overages
-      operationId: getAPIKeyOverage
-      x-code-samples:
-        $ref: './samples/getAPIKeyOverage.json'
-      description: |
-        This endpoint returns a summary of the API calls made during the current billing period.
-      responses:
-        '200':
-          description: A summary of usage data for the current billing period.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  period_start:
-                    type: string
-                    description: The start of the billing period
-                  period_end:
-                    type: string
-                    description: The end of the billing period
-                  total_calls:
-                    type: number
-                    description: The number of calls made so far during the billing period
-                  included_calls:
-                    type: number
-                    description: The number of calls included in the billing period
-                  overage_calls:
-                    type: number
-                    description: The number of calls that exceeded the included calls
-                  projected_calls:
-                    type: number
-                    description: The projected number of calls that will be made by the end of the billing period at the current rate
-                  amount_due_usd:
-                    type: number
-                    description: An estimate of the amount due for overages accrued during the billing period
-                  projected_amount_usd:
-                    type: number
-                    description: A projected estimate of the amount due at the end of the billing period at the current rate
-              example:
-                "period_start": "2022-03-01T00:00:00Z"
-                "period_end": "2022-04-01T00:00:00Z"
-                "total_calls": 1000000
-                "included_calls": 1500000
-                "overage_calls": 0
-                "projected_calls": 2000000
-                "amount_due_usd": 0
-                "projected_amount_usd": 375.00
-        '401':
-            $ref: '#/components/responses/UnauthorizedError'
   /prices:
     get:
       deprecated: true
@@ -3525,6 +3429,122 @@ paths:
               example: "EUR,1.1934028689404969,05/14/2018 00:00:00,1.1707956727391936,05/24/2018 00:00:00"
         '401':
           $ref: '#/components/responses/UnauthorizedError'
+  /currencies/sparkline:
+    get:
+      deprecated: true
+      tags:
+          - Deprecated
+      summary: Currencies Sparkline
+      operationId: getCurrenciesSparkline
+      x-code-samples:
+        $ref: './samples/getCurrenciesSparkline.json'
+      description: |
+        The currencies sparkline endpoint returns prices for all currencies within a customizable time interval
+        suitable for sparkline charts.
+
+        **Note** the timestamps and prices are built off of OHLCV candles using the close price. This means that the timestamp
+        represents the start of the candle, and the price is the close price of that candle. This means the response's final timestamp
+        and price value are always as current as possible, but also that the price is effectively "off" by one candle. This endpoint
+        is designed to serve as a convenient way to render sparklines, if you need exactly aligned times and prices you can use the
+        [Aggregated OHLCV Candles endpoint](#operation/getCandles).
+      parameters:
+        - $ref: '#/components/parameters/currency-ids'
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+        - $ref: '#/components/parameters/convert'
+      responses:
+        '200':
+          description: Currency performance over time for all currencies over the requested time period.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Currency ID
+                      example: BTC
+                    timestamps:
+                      type: array
+                      description: Time values matching the price value of the same index
+                      items:
+                        type: string
+                        description: Timestamp of the start of the candle in RFC3339
+                        example: "2018-04-03T16:00:00Z"
+                    prices:
+                      type: array
+                      description: Price in USD corresponding to timestamp value of the same index
+                      items:
+                        type: string
+                        description: Price in USD
+                        example: "7436.82313"
+        '401':
+           $ref: '#/components/responses/UnauthorizedError'
+  /supplies/interval:
+    get:
+      deprecated: true
+      tags:
+        - Deprecated
+      summary: Supplies Interval
+      operationId: getSuppliesInterval
+      x-code-samples:
+        $ref: './samples/getSuppliesInterval.json'
+      description: |
+        ### !! This API endpoint is only available to customers of our paid API plans.  Please [go here](https://p.nomics.com/pricing/) to learn more.
+
+        Open and close supply information for all currencies between a customizable time interval.
+      parameters:
+        - $ref: '#/components/parameters/interval-start'
+        - $ref: '#/components/parameters/interval-end'
+        - $ref: "#/components/parameters/format"
+      responses:
+        '200':
+          description: Open and close supply information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      description: Nomics ID of the currency
+                    open_available:
+                      type: string
+                      description: Open available supply
+                    open_max:
+                      type: string
+                      description: Open max supply
+                    open_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the open supply information
+                    close_available:
+                      type: string
+                      description: Close available supply
+                    close_max:
+                      type: string
+                      description: Close max supply
+                    close_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the close supply information
+                  example:
+                    currency: "BTC"
+                    open_available: "17032187.0"
+                    open_max: "21000000.0"
+                    open_timestamp: "2018-05-14T00:04:31Z"
+                    close_available: "17052037.0"
+                    close_max: "21000000.0"
+                    close_timestamp: "2018-05-24T14:19:34Z"
+            text/csv:
+              schema:
+                type: string
+              example: "BTC,17032187.0,21000000.0,05/14/2018 00:04:31,17052037.0,21000000.0,05/24/2018 14:19:34"
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
 
 components:
   securitySchemes:
