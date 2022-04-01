@@ -393,7 +393,7 @@ paths:
         The total `volume` fields are computed by summing the
         `spot_volume` and `derivative_volume` fields at each interval.
 
-        Update Frequency: every five minutes.
+        Update Frequency: 5 minutes
       parameters:
         - $ref: '#/components/parameters/convert'
       responses:
@@ -460,7 +460,7 @@ paths:
         entry, the `volume` field represents the sum of the
         `spot_volume` and `derivative_volume` fields.
 
-        Update Frequency: every ten minutes.
+        Update Frequency: 10 minutes
       parameters:
         - start:
           name: start
@@ -545,7 +545,7 @@ paths:
 
         MarketCap History is the total market cap for all cryptoassets at intervals between the requested time period.
 
-        Update Frequency: every ten minutes.
+        Update Frequency: 10 minutes
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
@@ -593,7 +593,7 @@ paths:
 
         The currencies endpoint returns all the currencies and their metadata that Nomics supports.
 
-        Update Frequency: every minute.
+        Update Frequency: 1 minute
       parameters:
         - $ref: "#/components/parameters/currency-ids"
         - $ref: "#/components/parameters/currency-attributes"
@@ -736,7 +736,7 @@ paths:
         The currency highlights endpoint returns various aggregate
         statistics for a currency over some interval.
 
-        Update Frequency: every five minutes.
+        Update Frequency: 5 minutes
       parameters:
         - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/convert'
@@ -844,7 +844,7 @@ paths:
 
         Supply history per currency for every day in a time range.
 
-        Update Frequency: every thirty minutes.
+        Update Frequency: 30 minutes
       parameters:
         - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/interval-start'
@@ -896,7 +896,7 @@ paths:
 
         For cryptocurrency prices please use the [Currencies Ticker](#operation/getCurrenciesTicker).
 
-        Update Frequency: daily for fiat currencies, hourly for crypto currencies.
+        Update Frequency: 1 day for fiat currencies, 1 hour for crypto currencies.
       parameters:
         - $ref: "#/components/parameters/format"
       responses:
@@ -979,7 +979,7 @@ paths:
 
         The exchanges endpoint returns all the exchanges and their metadata that Nomics supports.
 
-        Update Frequency: every minute.
+        Update Frequency: 1 minute
       parameters:
         - $ref: "#/components/parameters/exchange-ids"
         - $ref: "#/components/parameters/exchange-attributes"
@@ -1121,7 +1121,7 @@ paths:
         It provides a limited amount of metadata, the type of integration, the time range of available data, pairs,
         and interval information about the volume and, where applicable, the number of trades.
 
-        Update Frequency: every five minutes.
+        Update Frequency: 5 minutes
       parameters:
         - name: ids
           in: query
@@ -1336,7 +1336,7 @@ paths:
         The exchange highlights endpoint returns various aggregate
         statistics for an exchange over some interval.
 
-        Update Frequency: every minute.
+        Update Frequency: 1 minute
       parameters:
         - $ref: '#/components/parameters/exchange'
         - $ref: '#/components/parameters/convert'
@@ -1599,7 +1599,7 @@ paths:
         The markets endpoint returns information on the exchanges and markets that Nomics supports,
         in addition to the Nomics currency identifiers for the base and quote currency.
 
-        Update Frequency: every five minutes.
+        Update Frequency: 5 minutes
       parameters:
         - name: exchange
           in: query
@@ -1668,7 +1668,7 @@ paths:
         with Nomics. It provides metadata, the type of market, aggregation information, current financial data, and
         financial data over preset intervals.
 
-        Update Frequency: every five minutes.
+        Update Frequency: 5 minutes
       parameters:
         - name: interval
           in: query
@@ -1941,7 +1941,7 @@ paths:
         The market highlights endpoint returns various aggregate
         statistics for a pair over some interval.
 
-        Update Frequency: every minute.
+        Update Frequency: 1 minute
       parameters:
         - name: base
           in: query
