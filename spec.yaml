@@ -460,7 +460,7 @@ paths:
         entry, the `volume` field represents the sum of the
         `spot_volume` and `derivative_volume` fields.
 
-        Update Frequency: 10 minutes
+        Update Frequency: 1 hour
       parameters:
         - start:
           name: start
@@ -545,7 +545,7 @@ paths:
 
         MarketCap History is the total market cap for all cryptoassets at intervals between the requested time period.
 
-        Update Frequency: 10 minutes
+        Update Frequency: 1 hour
       parameters:
         - $ref: '#/components/parameters/interval-start'
         - $ref: '#/components/parameters/interval-end'
@@ -935,7 +935,7 @@ paths:
 
         For historical cryptocurrency data please use [Aggregated OHLCV Candles](#operation/getCandles).
 
-        Update Frequency: every hour.
+        Update Frequency: 1 hour
       parameters:
         - $ref: '#/components/parameters/currency'
         - $ref: '#/components/parameters/interval-start'
