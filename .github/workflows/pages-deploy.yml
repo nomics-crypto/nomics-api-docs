@@ -16,7 +16,9 @@ jobs:
         node-version: "16.x"
 
     - name: Build docs
-      run: yarn bundle
+      run: |
+        yarn
+        yarn bundle
     
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
