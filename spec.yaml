@@ -93,7 +93,7 @@ tags:
       For more information about update frequencies, see the descriptions of our candle types below.
 
 x-tagGroups:
-  - name: Free API Endpoints
+  - name: Free Plan API Endpoints
     tags:
       - Currencies Ticker
   - name: Commercial API Endpoints
@@ -127,6 +127,8 @@ paths:
       description: |
         Price, volume, market cap, rank, and more for all currencies across 1 hour, 1 day, 7 day, 30 day, 365 day, and
         year to date intervals.
+        
+        Usage on this endpoint **is counted** towards commercial plan API requests.
 
         Update Frequency: 30 seconds
       parameters:
