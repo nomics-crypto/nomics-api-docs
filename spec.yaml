@@ -2558,7 +2558,7 @@ paths:
         The Zip file contains a single CSV file, named `books.csv`,
         containing the order book snapshots for each day.
 
-        CSV format is: `time of day,kind (bid or ask),amount,price`
+        CSV format is: `time of day,kind (bid or ask),price,amount`
 
         Update Frequency: every day.
       parameters:
