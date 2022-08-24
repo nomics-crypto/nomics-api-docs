@@ -2613,6 +2613,8 @@ paths:
           schema:
             type: string
           example: BTC,ETH
+        - $ref: "#/components/parameters/per-page"
+        - $ref: "#/components/parameters/page"
       responses:
         '200':
           description: A list of currency prediction tickers
