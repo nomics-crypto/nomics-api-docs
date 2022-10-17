@@ -21,8 +21,8 @@ info:
 
     # Rate Limits
 
-    By default free keys have a rate limit of one request per second (1rps). Commercial keys have their
-    rate limits determined by their plan and/or contract. Rate limits are computed on one second intervals.
+    Commercial keys have their rate limits determined by their plan and/or contract. Rate limits are computed
+    on one second intervals.
 
     **If you exceed your rate limit during the interval you will receive an HTTP 429 error and your API key
     will be timed out for a short period of time.**
@@ -93,9 +93,6 @@ tags:
       For more information about update frequencies, see the descriptions of our candle types below.
 
 x-tagGroups:
-  - name: Free Plan API Endpoints
-    tags:
-      - Currencies Ticker
   - name: Commercial API Endpoints
     tags:
       - Global
@@ -116,268 +113,6 @@ x-tagGroups:
 
 
 paths:
-  /currencies/ticker:
-    get:
-      tags:
-        - Currencies Ticker
-      summary: Currencies Ticker
-      operationId: getCurrenciesTicker
-      x-code-samples:
-        $ref: "./samples/getCurrenciesTicker.json"
-      description: |
-        Price, volume, market cap, rank, and more for all currencies across 1 hour, 1 day, 7 day, 30 day, 365 day, and
-        year to date intervals.
-        
-        Usage on this endpoint **is counted** towards commercial plan API requests.
-
-        Update Frequency: 30 seconds
-      parameters:
-        - $ref: "#/components/parameters/currency-ids"
-        - interval:
-          name: interval
-          in: query
-          description: Comma separated time interval of the ticker(s). Default is `1d,7d,30d,365d,ytd`.
-          required: false
-          schema:
-            type: string
-            enum:
-              - 1h
-              - 1d
-              - 7d
-              - 30d
-              - 365d
-              - ytd
-          example: 1d,30d
-        - quote-currency:
-          deprecated: true
-          name: quote-currency
-          in: query
-          description: Currency to quote ticker price, market cap, and volume values. Must be a valid currency from [Fiat Exchange Rates](#operation/getExchangeRates). Default is `USD`.
-          required: false
-          schema:
-            type: string
-          example: EUR
-        - convert:
-          name: convert
-          in: query
-          description: Currency to quote ticker price, market cap, and volume values. May be a Fiat Currency or Cryptocurrency. Default is `USD`.
-          required: false
-          schema:
-            type: string
-          example: EUR
-        - status:
-          name: status
-          in: query
-          description: |
-            Status by which to filter currencies. If not provided, all currencies are shown.
-          schema:
-            type: string
-            enum: [active, inactive, dead]
-        - filter:
-          name: filter
-          in: query
-          description: |
-            Further filter the set of currencies.  The `new` filter returns currencies that have recently been priced by Nomics and `any` returns currencies regardless of their state.  The `any` filer may be used to retrieve new-but-stale currencies that are listed under `new`, but are no longer active.
-          schema:
-            type: string
-            enum: [any, new]
-        - platform-currency:
-          name: platform-currency
-          in: query
-          description: |
-            Filter the results by parent platform.
-          schema:
-            type: string
-          example: ETH
-        - sort:
-          name: sort
-          in: query
-          description: |
-            How to sort the returned currencies. `rank` sorts by rank
-            ascending and `first_priced_at` sorts by when each currency
-            was first priced by Nomics descending. Only currencies
-            priced after 2020-10-08 have a `first_priced_at` value so
-            all other currencies have the same weight within the sort.
-          schema:
-            type: string
-            enum: [rank, first_priced_at]
-        - $ref: "#/components/parameters/include-transparency"
-        - $ref: "#/components/parameters/per-page"
-        - $ref: "#/components/parameters/page"
-      responses:
-        "200":
-          description: Price, volume, market cap, and rank for all currencies
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    currency:
-                      type: string
-                      deprecated: true
-                      description: Nomics ID of the currency
-                    id:
-                      type: string
-                      description: Unique Nomics ID of the currency
-                    status:
-                      type: string
-                      enum: [active, inactive, dead]
-                      description: Current status
-                    price:
-                      type: string
-                      description: Current price
-                    price_date:
-                      type: string
-                      description: Date of the price
-                    price_timestamp:
-                      type: string
-                      description: Timestamp of the price
-                    symbol:
-                      type: string
-                      description: Display symbol of the currency (may be duplicated)
-                    platform_currency:
-                      type: string
-                      description: Nomics ID of the parent platform currency
-                    circulating_supply:
-                      type: string
-                      description: Current circulating supply
-                    max_supply:
-                      type: string
-                      description: Current maximum supply
-                    name:
-                      type: string
-                      description: Name of the currency
-                    logo_url:
-                      type: string
-                      description: URL to logo of the currency
-                    market_cap:
-                      type: string
-                      description: Current market cap
-                    market_cap_dominance:
-                      type: string
-                      description: Current market cap as a percentage of global market cap. Only available for `active` currencies.
-                    transparent_market_cap:
-                      type: string
-                      description: Current transparent market cap
-                    num_exchanges:
-                      type: string
-                      description: The number of exchanges on which this asset is traded
-                    num_pairs:
-                      type: string
-                      description: Number of currency pairs (markets) this asset is a part of, where both assets are known
-                    num_pairs_unmapped:
-                      type: string
-                      description: Number of currency pairs (markets) this asset is a part of, but where the other asset is unknown
-                    first_candle:
-                      type: string
-                      description: RFC3999 timestamp of the first `1d` candle available via the Nomics API
-                    first_trade:
-                      type: string
-                      description: RFC3999 timestamp of the first trade available via the Nomics API
-                    first_order_book:
-                      type: string
-                      description: RFC3999 timestamp of the first order book snapshot available via the Nomics API
-                    first_priced_at:
-                      type: string
-                      description: RFC3999 timestamp representing the currency was first priced by Nomics
-                    rank:
-                      type: string
-                      description: Rank of the currency by market cap
-                    rank_delta:
-                      type: string
-                      description: Relative rank change based on the first specified `interval` other than `1h`.  This field is only present on `active` currencies.
-                    high:
-                      type: string
-                      description: All time high price
-                    high_timestamp:
-                      type: string
-                      description: RFC3999 timestamp of the all time high
-                    interval:
-                      type: object
-                      description: "Interval-specific ticker attributes. The key will be the name of the interval (IE: `1d` or `365d`) and will occur for every requested interval."
-                      properties:
-                        price_change:
-                          type: string
-                          description: Amount of price change for the given interval in USD
-                        price_change_pct:
-                          type: string
-                          description: Percent change of price for the given interval
-                        volume:
-                          type: string
-                          description: Total volume for the given interval in USD
-                        volume_change:
-                          type: string
-                          description: Amount of volume change for the given interval in USD
-                        volume_change_pct:
-                          type: string
-                          description: Percent change of volume for the given interval
-                        market_cap_change:
-                          type: string
-                          description: Amount of market cap change for the given interval in USD
-                        market_cap_change_pct:
-                          type: string
-                          description: Percent change of market cap for the given interval
-                        transparent_market_cap_change:
-                          type: string
-                          description: Amount of transparent market cap change for the given interval in USD
-                        transparent_market_cap_change_pct:
-                          type: string
-                          description: Percent change of transparent market cap for the given interval
-                        volume_transparency:
-                          type: array
-                          description: An array of `volume`, `volume_change` and `volume_change_pct` by exchange grade
-                        volume_transparency_grade":
-                          type: string
-                          description: The quartile grade assigned to this currency
-                  example:
-                    currency: "BTC"
-                    id: "BTC"
-                    status: "active"
-                    price: "8451.36516421"
-                    price_date: "2019-06-14T00:00:00Z"
-                    price_timestamp: "2019-06-14T12:35:00Z"
-                    symbol: "BTC"
-                    circulating_supply: "17758462"
-                    max_supply: "21000000"
-                    name: "Bitcoin"
-                    logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/btc.svg"
-                    market_cap: "150083247116.70"
-                    market_cap_dominance: "0.4080"
-                    transparent_market_cap: "150003247116.70"
-                    num_exchanges: "357"
-                    num_pairs: "42118"
-                    num_pairs_unmapped: "4591"
-                    first_candle: "2011-08-18T00:00:00Z"
-                    first_trade: "2011-08-18T00:00:00Z"
-                    first_order_book: "2017-01-06T00:00:00Z"
-                    first_priced_at: "2017-08-18T18:22:19Z"
-                    rank: "1"
-                    rank_delta: "0"
-                    high: "19404.81116899"
-                    high_timestamp: "2017-12-16"
-                    1d:
-                      price_change: "269.75208019"
-                      price_change_pct: "0.03297053"
-                      volume: "1110989572.04"
-                      volume_change: "-24130098.49"
-                      volume_change_pct: "-0.02"
-                      market_cap_change: "4805518049.63"
-                      market_cap_change_pct: "0.03"
-                      transparent_market_cap_change: "4800518049.00"
-                      transparent_market_cap_change_pct: "0.0430"
-                      volume_transparency:
-                        - grade: "A"
-                          volume: "2144455081.37"
-                          volume_change: "-235524941.08"
-                          volume_change_pct: "-0.10"
-                        - grade: "B"
-                          volume: "15856762.85"
-                          volume_change: "-6854329.88"
-                          volume_change_pct: "-0.30"
-        "401":
-          $ref: "#/components/responses/UnauthorizedError"
   /global-ticker:
     get:
       tags:
@@ -724,6 +459,268 @@ paths:
               example: "BTC"
         '401':
            $ref: '#/components/responses/UnauthorizedError'
+  /currencies/ticker:
+    get:
+      tags:
+        - Currencies
+      summary: Currency Ticker
+      operationId: getCurrenciesTicker
+      x-code-samples:
+        $ref: "./samples/getCurrenciesTicker.json"
+      description: |
+        Price, volume, market cap, rank, and more for all currencies across 1 hour, 1 day, 7 day, 30 day, 365 day, and
+        year to date intervals.
+        
+        Usage on this endpoint **is counted** towards commercial plan API requests.
+
+        Update Frequency: 30 seconds
+      parameters:
+        - $ref: "#/components/parameters/currency-ids"
+        - interval:
+          name: interval
+          in: query
+          description: Comma separated time interval of the ticker(s). Default is `1d,7d,30d,365d,ytd`.
+          required: false
+          schema:
+            type: string
+            enum:
+              - 1h
+              - 1d
+              - 7d
+              - 30d
+              - 365d
+              - ytd
+          example: 1d,30d
+        - quote-currency:
+          deprecated: true
+          name: quote-currency
+          in: query
+          description: Currency to quote ticker price, market cap, and volume values. Must be a valid currency from [Fiat Exchange Rates](#operation/getExchangeRates). Default is `USD`.
+          required: false
+          schema:
+            type: string
+          example: EUR
+        - convert:
+          name: convert
+          in: query
+          description: Currency to quote ticker price, market cap, and volume values. May be a Fiat Currency or Cryptocurrency. Default is `USD`.
+          required: false
+          schema:
+            type: string
+          example: EUR
+        - status:
+          name: status
+          in: query
+          description: |
+            Status by which to filter currencies. If not provided, all currencies are shown.
+          schema:
+            type: string
+            enum: [active, inactive, dead]
+        - filter:
+          name: filter
+          in: query
+          description: |
+            Further filter the set of currencies.  The `new` filter returns currencies that have recently been priced by Nomics and `any` returns currencies regardless of their state.  The `any` filer may be used to retrieve new-but-stale currencies that are listed under `new`, but are no longer active.
+          schema:
+            type: string
+            enum: [any, new]
+        - platform-currency:
+          name: platform-currency
+          in: query
+          description: |
+            Filter the results by parent platform.
+          schema:
+            type: string
+          example: ETH
+        - sort:
+          name: sort
+          in: query
+          description: |
+            How to sort the returned currencies. `rank` sorts by rank
+            ascending and `first_priced_at` sorts by when each currency
+            was first priced by Nomics descending. Only currencies
+            priced after 2020-10-08 have a `first_priced_at` value so
+            all other currencies have the same weight within the sort.
+          schema:
+            type: string
+            enum: [rank, first_priced_at]
+        - $ref: "#/components/parameters/include-transparency"
+        - $ref: "#/components/parameters/per-page"
+        - $ref: "#/components/parameters/page"
+      responses:
+        "200":
+          description: Price, volume, market cap, and rank for all currencies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    currency:
+                      type: string
+                      deprecated: true
+                      description: Nomics ID of the currency
+                    id:
+                      type: string
+                      description: Unique Nomics ID of the currency
+                    status:
+                      type: string
+                      enum: [active, inactive, dead]
+                      description: Current status
+                    price:
+                      type: string
+                      description: Current price
+                    price_date:
+                      type: string
+                      description: Date of the price
+                    price_timestamp:
+                      type: string
+                      description: Timestamp of the price
+                    symbol:
+                      type: string
+                      description: Display symbol of the currency (may be duplicated)
+                    platform_currency:
+                      type: string
+                      description: Nomics ID of the parent platform currency
+                    circulating_supply:
+                      type: string
+                      description: Current circulating supply
+                    max_supply:
+                      type: string
+                      description: Current maximum supply
+                    name:
+                      type: string
+                      description: Name of the currency
+                    logo_url:
+                      type: string
+                      description: URL to logo of the currency
+                    market_cap:
+                      type: string
+                      description: Current market cap
+                    market_cap_dominance:
+                      type: string
+                      description: Current market cap as a percentage of global market cap. Only available for `active` currencies.
+                    transparent_market_cap:
+                      type: string
+                      description: Current transparent market cap
+                    num_exchanges:
+                      type: string
+                      description: The number of exchanges on which this asset is traded
+                    num_pairs:
+                      type: string
+                      description: Number of currency pairs (markets) this asset is a part of, where both assets are known
+                    num_pairs_unmapped:
+                      type: string
+                      description: Number of currency pairs (markets) this asset is a part of, but where the other asset is unknown
+                    first_candle:
+                      type: string
+                      description: RFC3999 timestamp of the first `1d` candle available via the Nomics API
+                    first_trade:
+                      type: string
+                      description: RFC3999 timestamp of the first trade available via the Nomics API
+                    first_order_book:
+                      type: string
+                      description: RFC3999 timestamp of the first order book snapshot available via the Nomics API
+                    first_priced_at:
+                      type: string
+                      description: RFC3999 timestamp representing the currency was first priced by Nomics
+                    rank:
+                      type: string
+                      description: Rank of the currency by market cap
+                    rank_delta:
+                      type: string
+                      description: Relative rank change based on the first specified `interval` other than `1h`.  This field is only present on `active` currencies.
+                    high:
+                      type: string
+                      description: All time high price
+                    high_timestamp:
+                      type: string
+                      description: RFC3999 timestamp of the all time high
+                    interval:
+                      type: object
+                      description: "Interval-specific ticker attributes. The key will be the name of the interval (IE: `1d` or `365d`) and will occur for every requested interval."
+                      properties:
+                        price_change:
+                          type: string
+                          description: Amount of price change for the given interval in USD
+                        price_change_pct:
+                          type: string
+                          description: Percent change of price for the given interval
+                        volume:
+                          type: string
+                          description: Total volume for the given interval in USD
+                        volume_change:
+                          type: string
+                          description: Amount of volume change for the given interval in USD
+                        volume_change_pct:
+                          type: string
+                          description: Percent change of volume for the given interval
+                        market_cap_change:
+                          type: string
+                          description: Amount of market cap change for the given interval in USD
+                        market_cap_change_pct:
+                          type: string
+                          description: Percent change of market cap for the given interval
+                        transparent_market_cap_change:
+                          type: string
+                          description: Amount of transparent market cap change for the given interval in USD
+                        transparent_market_cap_change_pct:
+                          type: string
+                          description: Percent change of transparent market cap for the given interval
+                        volume_transparency:
+                          type: array
+                          description: An array of `volume`, `volume_change` and `volume_change_pct` by exchange grade
+                        volume_transparency_grade":
+                          type: string
+                          description: The quartile grade assigned to this currency
+                  example:
+                    currency: "BTC"
+                    id: "BTC"
+                    status: "active"
+                    price: "8451.36516421"
+                    price_date: "2019-06-14T00:00:00Z"
+                    price_timestamp: "2019-06-14T12:35:00Z"
+                    symbol: "BTC"
+                    circulating_supply: "17758462"
+                    max_supply: "21000000"
+                    name: "Bitcoin"
+                    logo_url: "https://s3.us-east-2.amazonaws.com/nomics-api/static/images/currencies/btc.svg"
+                    market_cap: "150083247116.70"
+                    market_cap_dominance: "0.4080"
+                    transparent_market_cap: "150003247116.70"
+                    num_exchanges: "357"
+                    num_pairs: "42118"
+                    num_pairs_unmapped: "4591"
+                    first_candle: "2011-08-18T00:00:00Z"
+                    first_trade: "2011-08-18T00:00:00Z"
+                    first_order_book: "2017-01-06T00:00:00Z"
+                    first_priced_at: "2017-08-18T18:22:19Z"
+                    rank: "1"
+                    rank_delta: "0"
+                    high: "19404.81116899"
+                    high_timestamp: "2017-12-16"
+                    1d:
+                      price_change: "269.75208019"
+                      price_change_pct: "0.03297053"
+                      volume: "1110989572.04"
+                      volume_change: "-24130098.49"
+                      volume_change_pct: "-0.02"
+                      market_cap_change: "4805518049.63"
+                      market_cap_change_pct: "0.03"
+                      transparent_market_cap_change: "4800518049.00"
+                      transparent_market_cap_change_pct: "0.0430"
+                      volume_transparency:
+                        - grade: "A"
+                          volume: "2144455081.37"
+                          volume_change: "-235524941.08"
+                          volume_change_pct: "-0.10"
+                        - grade: "B"
+                          volume: "15856762.85"
+                          volume_change: "-6854329.88"
+                          volume_change_pct: "-0.30"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
   /currencies/highlights:
     get:
       tags:
