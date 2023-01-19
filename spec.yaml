@@ -470,7 +470,7 @@ paths:
       description: |
         Price, volume, market cap, rank, and more for all currencies across 1 hour, 1 day, 7 day, 30 day, 365 day, and
         year to date intervals.
-        
+
         Usage on this endpoint **is counted** towards commercial plan API requests.
 
         Update Frequency: 30 seconds
@@ -1530,9 +1530,13 @@ paths:
         represents the sum of the `spot_volume` and
         `derivative_volume` fields.
 
-        Update Frequency: every five minutes for the `1m` interval,
-        every ten minutes for the `1h` interval, and every hour for
-        the rest.
+        Hourly candles are available on a sliding window.  When
+        requesting a time range that spans 48 hours or less, this
+        endpoint returns hourly candles when the `start` time is at
+        most 30 days prior to the current moment.
+
+        Update Frequency: every ten minutes for the `1h` interval, and
+        every hour for the `1d` interval.
       parameters:
         - $ref: "#/components/parameters/exchange"
         - $ref: "#/components/parameters/interval-start"
